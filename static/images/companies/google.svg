@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Google">
+	<rect width="640" height="400" rx="40" fill="#f7f3ec" />
+	<rect x="24" y="24" width="592" height="352" rx="28" fill="#fffdf9" stroke="#e3dacf" />
+	<circle cx="124" cy="122" r="42" fill="#4285f4" opacity="0.18" />
+	<circle cx="176" cy="122" r="42" fill="#34a853" opacity="0.16" />
+	<circle cx="150" cy="168" r="42" fill="#fbbc05" opacity="0.18" />
+	<circle cx="202" cy="168" r="42" fill="#ea4335" opacity="0.16" />
+	<text x="84" y="252" fill="#1f1f1f" font-family="Space Grotesk, sans-serif" font-size="76" font-weight="700">Google</text>
+	<text x="84" y="310" fill="#5d5551" font-family="Space Grotesk, sans-serif" font-size="28">mentorship and interview growth</text>
+</svg>

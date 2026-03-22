@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Crowdpass">
+	<rect width="640" height="400" rx="40" fill="#f1ece6" />
+	<rect x="24" y="24" width="592" height="352" rx="28" fill="#fff" stroke="#d2cbc3" />
+	<circle cx="520" cy="110" r="54" fill="#ea7d4d" opacity="0.14" />
+	<text x="84" y="174" fill="#1d2024" font-family="Space Grotesk, sans-serif" font-size="64" font-weight="700">crowd</text>
+	<text x="84" y="242" fill="#b35c2e" font-family="Space Grotesk, sans-serif" font-size="64" font-weight="700">pass</text>
+	<text x="84" y="306" fill="#5d5551" font-family="Space Grotesk, sans-serif" font-size="28">events and guest experience</text>
+</svg>

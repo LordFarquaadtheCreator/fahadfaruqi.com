@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="FF monogram">
+	<defs>
+		<linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+			<stop offset="0%" stop-color="#d97745" />
+			<stop offset="100%" stop-color="#8f4321" />
+		</linearGradient>
+	</defs>
+	<rect width="128" height="128" rx="30" fill="url(#bg)" />
+	<path
+		fill="#fff9f2"
+		d="M34 33h60v12H48v18h38v12H48v30H34zm35 0h25v12H69z"
+	/>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="NYC Department of Transportation">
+	<rect width="640" height="400" rx="40" fill="#eaf0f5" />
+	<rect x="24" y="24" width="592" height="352" rx="28" fill="#fdfefe" stroke="#c6d4e3" />
+	<rect x="84" y="92" width="120" height="120" rx="20" fill="#1b5f90" opacity="0.14" />
+	<text x="106" y="170" fill="#1b5f90" font-family="Space Grotesk, sans-serif" font-size="48" font-weight="700">NYC</text>
+	<text x="240" y="176" fill="#1b5f90" font-family="Space Grotesk, sans-serif" font-size="50" font-weight="700">DOT</text>
+	<text x="84" y="248" fill="#181419" font-family="Space Grotesk, sans-serif" font-size="46" font-weight="500">Department of Transportation</text>
+	<text x="84" y="308" fill="#5d5551" font-family="Space Grotesk, sans-serif" font-size="28">public-sector software and automation</text>
+</svg>

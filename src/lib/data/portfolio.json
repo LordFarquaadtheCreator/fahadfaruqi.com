@@ -1,0 +1,262 @@
+{
+	"profile": {
+		"name": "Fahad Faruqi",
+		"title": "Software engineer shipping iOS, web, backend, and applied AI products.",
+		"location": "Queens, NYC",
+		"heroIntro": "I turn fast-moving ideas into polished products, from SwiftUI fintech flows and React Native launches to Go services and ML prototypes.",
+		"supportingIntro": "My work spans startups, civic software, and fellowship programs, with a bias toward performance, clear UX, and shipping useful features quickly.",
+		"portraitImage": "",
+		"portraitAlt": "Reserved portrait slot for Fahad Faruqi",
+		"socialLinks": [
+			{
+				"label": "Email",
+				"href": "mailto:fahadfaruqi1@gmail.com"
+			},
+			{
+				"label": "LinkedIn",
+				"href": "https://linkedin.com/in/fahadfaruqi42"
+			},
+			{
+				"label": "GitHub",
+				"href": "https://github.com/lordfarquaadthecreator"
+			}
+		],
+		"metrics": [
+			{
+				"value": "12+",
+				"label": "high-impact features shipped",
+				"detail": "Across .NET, Next.js, iOS, and React Native products"
+			},
+			{
+				"value": "2,000+",
+				"label": "clients supported",
+				"detail": "Operational systems built for enterprise-scale event platforms"
+			},
+			{
+				"value": "97%",
+				"label": "top model accuracy",
+				"detail": "Applied ML projects tuned for image and sign-language classification"
+			}
+		]
+	},
+	"about": {
+		"paragraphs": [
+			"I'm a New York-based engineer who enjoys moving between product polish and technical depth. The work that energizes me most is the kind that asks for taste and range at the same time: speeding up a critical flow, tightening an API, cleaning up deployment, or shaping a more intuitive user experience.",
+			"Across fintech, events, civic tech, and startup MVPs, I've worked with SwiftUI, React Native, Next.js, Go, .NET, PostgreSQL, AWS, and applied ML tooling. I care about making software feel clear and reliable for the people using it."
+		],
+		"education": [
+			{
+				"institution": "CUNY City College of New York",
+				"credential": "B.S. Computer Science, Cum Laude",
+				"dates": "Class of 2025",
+				"location": "New York, NY"
+			},
+			{
+				"institution": "Cornell Tech",
+				"credential": "Certificate in Fundamentals of Machine Learning",
+				"dates": "Aug 2023 - Sep 2023",
+				"location": "New York, NY"
+			}
+		],
+		"highlights": [
+			{
+				"eyebrow": "Leadership",
+				"title": "President, ACM at CCNY",
+				"description": "Mentored emerging engineers and ran biweekly sessions around production-ready web and machine-learning builds."
+			},
+			{
+				"eyebrow": "Open Source",
+				"title": "Google AI Overviews Blocker",
+				"description": "Contributed edge-case detection improvements for a Chromium extension that suppresses AI Overview results in Search.",
+				"href": "https://github.com/zbarnz/Google_AI_Overviews_Blocker/pull/41#event-22803027933",
+				"linkLabel": "View contribution"
+			},
+			{
+				"eyebrow": "Hackathons",
+				"title": "HackPrinceton, HackMIT, and BostonHacks wins",
+				"description": "Built voice AI, accessibility, climate, and civic-tech prototypes that placed at major student hackathons."
+			},
+			{
+				"eyebrow": "Delivery",
+				"title": "From MVPs to production systems",
+				"description": "Comfortable owning architecture, CI/CD, frontend polish, backend services, debugging, and launch readiness."
+			}
+		],
+		"photoCaption": "Drop a real portrait path into portfolio.json whenever you're ready. The section is intentionally wired so no component code changes are needed."
+	},
+	"resume": {
+		"experiences": [
+			{
+				"company": "Tobi Wealth",
+				"companyUrl": "https://tobiwealth.com/",
+				"logo": "/images/companies/tobi-wealth.svg",
+				"role": "Principal Software Engineer",
+				"location": "New York, NY",
+				"start": "Dec 2025",
+				"end": "Present",
+				"summary": "Owning product-facing performance and UX quality across a modern fintech stack.",
+				"highlights": [
+					"Cut critical load times from roughly four seconds to near-instant by introducing targeted caching.",
+					"Fixed high-priority UX issues across SwiftUI iOS surfaces and an Express TypeScript backend.",
+					"Improved the feel of core user journeys by tightening end-to-end performance and polish."
+				],
+				"tools": ["SwiftUI", "Express", "TypeScript", "Caching"],
+				"skills": ["iOS development", "performance optimization", "UX refinement", "full-stack debugging"]
+			},
+			{
+				"company": "Crowdpass",
+				"companyUrl": "https://www.crowdpass.co/",
+				"logo": "/images/companies/crowdpass.svg",
+				"role": "Software Engineer",
+				"location": "New York, NY",
+				"start": "Jul 2025",
+				"end": "Dec 2025",
+				"summary": "Built revenue-driving features and cost-saving infrastructure for an enterprise event platform.",
+				"highlights": [
+					"Reduced per-client Twilio costs by 82% through dependency and messaging optimization work.",
+					"Rewrote client cost-tracking webhooks to unlock clearer financial reporting for 2,000+ clients.",
+					"Launched a CRUD guest-ticketing module used by enterprise customers for registration management.",
+					"Delivered mobile and web improvements across React Native, .NET, and Next.js products."
+				],
+				"tools": [".NET", "Entity Framework", "Next.js", "React Native", "Twilio", "Auth0"],
+				"skills": ["cost optimization", "feature delivery", "mobile development", "enterprise support"]
+			},
+			{
+				"company": "Google",
+				"companyUrl": "https://buildyourfuture.withgoogle.com/",
+				"logo": "/images/companies/google.svg",
+				"role": "Software Engineering Program Mentee (GSWEP)",
+				"location": "New York, NY",
+				"start": "Aug 2024",
+				"end": "Nov 2025",
+				"summary": "Completed intensive mentorship focused on interview performance and software engineering growth.",
+				"highlights": [
+					"Improved coding interview outcomes through one-on-one mentorship with Google software engineers.",
+					"Strengthened problem-solving speed, communication, and interview readiness in a structured program."
+				],
+				"tools": ["Mock interviews", "Mentorship sessions", "Problem sets"],
+				"skills": ["algorithms", "technical communication", "interview readiness", "problem solving"]
+			},
+			{
+				"company": "EasyMeets",
+				"companyUrl": "https://easymeets-app.com/",
+				"logo": "/images/companies/easymeets.svg",
+				"role": "Backend Tech Lead",
+				"location": "New York, NY",
+				"start": "Oct 2024",
+				"end": "Aug 2025",
+				"summary": "Led backend delivery while helping steer product, mobile, and deployment work for a startup MVP.",
+				"highlights": [
+					"Managed weekly sprints while supporting a React Native app aimed at 1,000+ potential users.",
+					"Built and tested a Go Fiber backend covering authentication and data-management workflows.",
+					"Shipped 15+ features across Next.js and React Native while improving release velocity.",
+					"Shortened deployment time by 75% with GitHub Actions, Docker, Linux services, and AWS EC2."
+				],
+				"tools": ["Go Fiber", "React Native", "Next.js", "PostgreSQL", "Docker", "AWS EC2"],
+				"skills": ["technical leadership", "backend engineering", "CI/CD", "MVP delivery"]
+			},
+			{
+				"company": "NYC Department of Transportation",
+				"companyUrl": "https://www.nyc.gov/site/dot/index.page",
+				"logo": "/images/companies/nyc-dot.svg",
+				"role": "Software Engineering Intern",
+				"location": "New York, NY",
+				"start": "Jun 2023",
+				"end": "Aug 2025",
+				"summary": "Supported internal public-sector software with reliability, security, and automation improvements.",
+				"highlights": [
+					"Mitigated security risks across critical C# and Visual Basic .NET applications.",
+					"Built an automated C# email service that reduced missed project deadlines by 75%.",
+					"Refactored a .NET web application to improve stability and cut crash rates for daily users.",
+					"Normalized MySQL schemas to improve key query performance by more than 30%."
+				],
+				"tools": ["C#", "Visual Basic .NET", ".NET", "MySQL"],
+				"skills": ["application hardening", "automation", "maintenance engineering", "database tuning"]
+			},
+			{
+				"company": "Fiindme",
+				"logo": "/images/companies/fiindme.svg",
+				"role": "Software Engineer",
+				"location": "New York, NY",
+				"start": "Mar 2024",
+				"end": "Jun 2024",
+				"summary": "Worked on recommendation logic and product communication in an early-stage startup setting.",
+				"highlights": [
+					"Engineered a friend-recommendation approach using preference weighting, embeddings, and neural models.",
+					"Bridged technical work with business context to help the team and CEO align on product decisions."
+				],
+				"tools": ["LLM embeddings", "Neural networks", "Recommendation modeling"],
+				"skills": ["matching systems", "product translation", "applied AI", "startup execution"]
+			},
+			{
+				"company": "NYC Botanical Garden",
+				"companyUrl": "https://www.nybg.org/",
+				"logo": "/images/companies/nybg.svg",
+				"role": "Breakthrough Tech AI Fellow",
+				"location": "New York, NY",
+				"start": "Jan 2024",
+				"end": "Jun 2024",
+				"summary": "Built a computer-vision pipeline for irregular botanical specimen classification.",
+				"highlights": [
+					"Fine-tuned an image-classification workflow that reached 97% accuracy in a Kaggle competition.",
+					"Explored a wide range of Python computer-vision libraries and techniques for the project."
+				],
+				"tools": ["Python", "OpenCV", "YOLOv8", "Kaggle"],
+				"skills": ["computer vision", "model tuning", "classification", "experimentation"]
+			},
+			{
+				"company": "ASAPP",
+				"companyUrl": "https://www.asapp.com/",
+				"logo": "/images/companies/asapp.svg",
+				"role": "Breakthrough Tech AI Fellow",
+				"location": "New York, NY",
+				"start": "Jun 2023",
+				"end": "Dec 2023",
+				"summary": "Applied natural-language processing to customer-support classification and completed an AI fellowship cohort.",
+				"highlights": [
+					"Classified salient customer-service interactions with pandas, scikit-learn, and Bayesian optimization to reach an 84% F1 score.",
+					"Trained classification and regression NLP models in weekly sprint-based fellowship work.",
+					"Built stronger experimentation habits around data prep, model evaluation, and collaboration."
+				],
+				"tools": ["Python", "pandas", "scikit-learn", "Bayesian optimization", "Jupyter"],
+				"skills": ["NLP", "data science", "model evaluation", "fellowship collaboration"]
+			},
+			{
+				"company": "CUNY Tech Prep",
+				"companyUrl": "https://cunytechprep.nyc/",
+				"logo": "/images/companies/cuny-tech-prep.svg",
+				"role": "Full Stack Fellow",
+				"location": "New York, NY",
+				"start": "Aug 2023",
+				"end": "May 2024",
+				"summary": "Expanded full-stack and AI application work through fellowship projects and shipped prototypes.",
+				"highlights": [
+					"Served outfit recommendations through a MongoDB-backed REST API built with Express.",
+					"Reduced hallucinations in an academic-text assistant through reranking, rewriting, and sentence-windowing techniques.",
+					"Deployed a Python Streamlit prototype to Hugging Face Spaces."
+				],
+				"tools": ["JavaScript", "Express", "MongoDB", "Python", "Streamlit", "Hugging Face Spaces"],
+				"skills": ["full-stack development", "API design", "RAG iteration", "rapid prototyping"]
+			}
+		]
+	},
+	"contact": {
+		"email": "fahadfaruqi1@gmail.com",
+		"subjectPrefix": "Portfolio inquiry",
+		"availability": "Open to product engineering, startup, and collaboration conversations across mobile, web, backend, and AI work.",
+		"links": [
+			{
+				"label": "Email",
+				"href": "mailto:fahadfaruqi1@gmail.com"
+			},
+			{
+				"label": "LinkedIn",
+				"href": "https://linkedin.com/in/fahadfaruqi42"
+			},
+			{
+				"label": "GitHub",
+				"href": "https://github.com/lordfarquaadthecreator"
+			}
+		]
+	}
+}

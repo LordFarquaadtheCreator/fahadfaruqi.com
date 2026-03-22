@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Tobi Wealth">
+	<rect width="640" height="400" rx="40" fill="#f4e7dc" />
+	<rect x="24" y="24" width="592" height="352" rx="28" fill="#fff9f2" stroke="#d3b7a5" />
+	<circle cx="126" cy="110" r="42" fill="#8f4321" opacity="0.12" />
+	<text x="86" y="176" fill="#8f4321" font-family="Space Grotesk, sans-serif" font-size="72" font-weight="700">TOBI</text>
+	<text x="86" y="248" fill="#181419" font-family="Space Grotesk, sans-serif" font-size="56" font-weight="500">Wealth</text>
+	<text x="86" y="310" fill="#6a564a" font-family="Space Grotesk, sans-serif" font-size="28">fintech product engineering</text>
+</svg>
