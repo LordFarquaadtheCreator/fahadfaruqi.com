@@ -295,6 +295,15 @@
 		font-size: 0.6rem;
 		color: var(--on-surface-variant);
 		opacity: 0.4;
+		animation: jitter 2.5s ease-in-out infinite;
+		animation-delay: calc(var(--jitter-delay, 0) * 1s);
+	}
+
+	@keyframes jitter {
+		0%, 100% { transform: translate(0, 0); }
+		25% { transform: translate(0.5px, -0.5px); }
+		50% { transform: translate(-0.5px, 0.5px); }
+		75% { transform: translate(0.5px, 0.5px); }
 	}
 
 	.halftone-overlay {
@@ -424,6 +433,7 @@
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 0.75rem;
 		color: var(--tertiary);
+		animation: jitter 4s ease-in-out infinite;
 	}
 
 	.progress-bar {
@@ -702,6 +712,7 @@
 		font-size: 0.55rem;
 		color: var(--on-surface-variant);
 		opacity: 0.3;
+		animation: jitter 3s ease-in-out infinite;
 	}
 
 	.active-badge {
@@ -957,6 +968,7 @@
 		font-size: 0.7rem;
 		color: var(--on-surface);
 		letter-spacing: -0.02em;
+		animation: jitter 3.5s ease-in-out infinite;
 	}
 
 	.status-ok {

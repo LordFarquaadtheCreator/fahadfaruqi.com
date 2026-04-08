@@ -131,6 +131,14 @@
 		font-size: 0.6rem;
 		color: var(--on-surface-variant);
 		letter-spacing: 0.1em;
+		animation: jitter 3s ease-in-out infinite;
+	}
+
+	@keyframes jitter {
+		0%, 100% { transform: translate(0, 0); }
+		25% { transform: translate(0.5px, -0.5px); }
+		50% { transform: translate(-0.5px, 0.5px); }
+		75% { transform: translate(0.5px, 0.5px); }
 	}
 
 	.mobile-header__signal {
