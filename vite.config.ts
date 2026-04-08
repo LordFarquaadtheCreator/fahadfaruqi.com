@@ -4,7 +4,6 @@ import { svelteTesting } from '@testing-library/svelte/vite';
 
 export default defineConfig({
 	plugins: [sveltekit(), svelteTesting()],
-	base: '/fahadfaruqi.com/',
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
