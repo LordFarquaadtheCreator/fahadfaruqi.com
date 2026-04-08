@@ -30,15 +30,7 @@
 
 	<!-- Section Header -->
 	<div class="uplink-header reveal" use:reveal>
-		<div class="status-line">
-			<span class="status-pip status-active"></span>
-			<span class="tech-label" style="color: var(--tertiary);">SYSTEM_STATUS: OPEN_CHANNEL</span>
-		</div>
-		<h2 class="uplink-title chromatic">UPLINK</h2>
-		<div class="header-meta">
-			<span class="tech-label">ESTABLISHING SECURE CONNECTION...</span>
-			<span class="tech-label">ENCRYPTION: AES-256-GCM</span>
-		</div>
+		<h2 class="uplink-title chromatic">Contact</h2>
 	</div>
 
 	<!-- Main Uplink Interface -->
@@ -204,29 +196,13 @@
 		position: relative;
 	}
 
-	.status-line {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
-	}
-
 	.uplink-title {
-		font-size: clamp(4rem, 12vw, 10rem);
+		font-size: clamp(2rem, 5vw, 3.5rem);
 		font-weight: 900;
-		font-style: italic;
-		letter-spacing: -0.05em;
-		line-height: 0.85;
-		color: var(--primary);
-		mix-blend-mode: screen;
+		letter-spacing: -0.02em;
+		line-height: 1;
+		color: var(--on-surface);
 		margin: 0;
-	}
-
-	.header-meta {
-		display: flex;
-		gap: 2rem;
-		margin-top: 1rem;
-		flex-wrap: wrap;
 	}
 
 	.uplink-grid {
@@ -427,7 +403,6 @@
 		font-family: 'Space Grotesk', sans-serif;
 		font-size: 2rem;
 		font-weight: 900;
-		font-style: italic;
 		color: var(--outline);
 		opacity: 0.1;
 		letter-spacing: -0.02em;

@@ -8,10 +8,10 @@
 
 <section class="ops-log" id="resume">
 	<TacticalSectionHeader
-		ghostText="ARCHIVE"
-		eyebrow="MISSION_LOGS // CLASSIFIED"
-		title="OPERATIONAL_HISTORY"
-		description="Chronological record of field deployments. All entries verified and timestamped."
+		ghostText="Resume"
+		eyebrow=""
+		title="Resume"
+		description=""
 	>
 		{#snippet headerRight()}
 			<div class="header-meta-group">

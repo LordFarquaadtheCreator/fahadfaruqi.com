@@ -9,15 +9,11 @@
 
 <section class="intel-section" id="about">
 	<TacticalSectionHeader
-		ghostText="INTEL"
-		eyebrow="SRC_DIR: /ROOT/PERSONNEL/"
-		title="OPERATOR_DOSSIER"
-		description="Technical specifications and operational history. Decrypted for authorized review."
-	>
-		{#snippet headerRight()}
-			<span class="tech-label classified-badge">CLASSIFIED//NOFORN</span>
-		{/snippet}
-	</TacticalSectionHeader>
+		ghostText="About"
+		eyebrow=""
+		title="About Me"
+		description=""
+	/>
 
 	<div class="intel-grid">
 		<!-- Bio Panel -->
@@ -86,10 +82,6 @@
 		padding: 4rem 0;
 		position: relative;
 		overflow: hidden;
-	}
-
-	.classified-badge {
-		color: var(--outline);
 	}
 
 	:global(.intel-card--bio) {

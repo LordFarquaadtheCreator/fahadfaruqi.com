@@ -231,12 +231,15 @@ textarea {
 .main-content {
 	margin-left: 80px;
 	padding-top: 1rem;
+	padding-bottom: 32px;
 	min-height: 100vh;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 	.main-content {
 		margin-left: 0;
+		padding-top: 3rem;
+		padding-bottom: 64px;
 	}
 }
 
@@ -245,6 +248,13 @@ textarea {
 	width: min(1200px, calc(100% - 2rem));
 	margin: 0 auto;
 	padding: 0 1rem;
+}
+
+@media (max-width: 1024px) {
+	.section-shell {
+		width: 100%;
+		padding: 0 1rem;
+	}
 }
 
 /* Surface Cards */

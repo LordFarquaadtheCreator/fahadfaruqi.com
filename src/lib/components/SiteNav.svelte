@@ -7,10 +7,23 @@
 		activeSection?: string;
 	}>();
 
-	const operatorId = $derived('OPR_' + name.slice(0, 4).toUpperCase().replace(/[^A-Z]/g, '') + '01');
+	const operatorId = $derived('PRO_' + name.slice(0, 4).toUpperCase().replace(/[^A-Z]/g, '') + '01');
+	const sysId = $derived('0x' + Math.floor(Math.random() * 65535).toString(16).toUpperCase().padStart(4, '0'));
 </script>
 
-<!-- Side Navigation Bar -->
+<!-- Mobile Top Header -->
+<header class="mobile-header">
+	<div class="mobile-header__left">
+		<span class="material-symbols-outlined mobile-header__icon">terminal</span>
+		<h1 class="mobile-header__title">TERM_V.4.02</h1>
+	</div>
+	<div class="mobile-header__right">
+		<span class="mobile-header__sysid">SYS_ID: {sysId}</span>
+		<span class="material-symbols-outlined mobile-header__signal">signal_cellular_4_bar</span>
+	</div>
+</header>
+
+<!-- Side Navigation Bar (Desktop) -->
 <aside class="side-nav" aria-label="Primary">
 	<div class="side-nav__top">
 		<!-- Operator Profile -->
@@ -23,21 +36,21 @@
 
 		<!-- Navigation Icons -->
 		<nav class="side-nav__icons">
-			<a href="#top" class="nav-icon" class:active={activeSection === 'ops'} aria-label="Operations">
+			<a href="#top" class="nav-icon" class:active={activeSection === 'home'} aria-label="Home">
 				<span class="material-symbols-outlined">radar</span>
-				<span class="nav-icon__label tech-label">OPS</span>
+				<span class="nav-icon__label tech-label">HOME</span>
 			</a>
-			<a href="#about" class="nav-icon" class:active={activeSection === 'intel'} aria-label="Intel">
+			<a href="#about" class="nav-icon" class:active={activeSection === 'about'} aria-label="About">
 				<span class="material-symbols-outlined">dataset</span>
-				<span class="nav-icon__label tech-label">INTEL</span>
+				<span class="nav-icon__label tech-label">ABOUT</span>
 			</a>
-			<a href="#resume" class="nav-icon" class:active={activeSection === 'archive'} aria-label="Archive">
+			<a href="#resume" class="nav-icon" class:active={activeSection === 'resume'} aria-label="Resume">
 				<span class="material-symbols-outlined">folder_open</span>
-				<span class="nav-icon__label tech-label">ARCHIVE</span>
+				<span class="nav-icon__label tech-label">RESUME</span>
 			</a>
-			<a href="#contact" class="nav-icon" class:active={activeSection === 'uplink'} aria-label="Comm Link">
+			<a href="#contact" class="nav-icon" class:active={activeSection === 'contact'} aria-label="Contact">
 				<span class="material-symbols-outlined">hub</span>
-				<span class="nav-icon__label tech-label">UPLINK</span>
+				<span class="nav-icon__label tech-label">CONTACT</span>
 			</a>
 		</nav>
 	</div>
@@ -50,7 +63,81 @@
 	</div>
 </aside>
 
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+	<a href="#top" class="mobile-nav__item" class:active={activeSection === 'home'}>
+		<span class="material-symbols-outlined mobile-nav__icon">grid_view</span>
+		<span class="mobile-nav__label">HOME</span>
+	</a>
+	<a href="#about" class="mobile-nav__item" class:active={activeSection === 'about'}>
+		<span class="material-symbols-outlined mobile-nav__icon">code</span>
+		<span class="mobile-nav__label">ABOUT</span>
+	</a>
+	<a href="#resume" class="mobile-nav__item" class:active={activeSection === 'resume'}>
+		<span class="material-symbols-outlined mobile-nav__icon">memory</span>
+		<span class="mobile-nav__label">RESUME</span>
+	</a>
+	<a href="#contact" class="mobile-nav__item" class:active={activeSection === 'contact'}>
+		<span class="material-symbols-outlined mobile-nav__icon">settings_input_component</span>
+		<span class="mobile-nav__label">CONTACT</span>
+	</a>
+</nav>
+
 <style>
+	/* Mobile Top Header */
+	.mobile-header {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 50;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.5rem 1rem;
+		background: rgba(18, 19, 20, 0.9);
+		backdrop-filter: blur(12px);
+	}
+
+	.mobile-header__left {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.mobile-header__icon {
+		font-size: 1.25rem;
+		color: var(--primary);
+	}
+
+	.mobile-header__title {
+		font-family: 'Space Grotesk', sans-serif;
+		font-size: 0.75rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--primary);
+		font-weight: 700;
+		margin: 0;
+	}
+
+	.mobile-header__right {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.mobile-header__sysid {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.6rem;
+		color: var(--on-surface-variant);
+		letter-spacing: 0.1em;
+	}
+
+	.mobile-header__signal {
+		font-size: 1rem;
+		color: var(--primary);
+	}
+
 	/* Side Navigation */
 	.side-nav {
 		position: fixed;
@@ -165,10 +252,69 @@
 		gap: 0.25rem;
 	}
 
-	/* Hide on mobile */
-	@media (max-width: 768px) {
+	/* Mobile Bottom Navigation */
+	.mobile-nav {
+		display: none;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 50;
+		height: 64px;
+		background: var(--background);
+		box-shadow: 0 -4px 20px rgba(255, 179, 178, 0.05);
+		justify-content: space-around;
+		align-items: stretch;
+	}
+
+	.mobile-nav__item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.25rem;
+		flex: 1;
+		padding: 0.75rem;
+		color: var(--on-surface-variant);
+		opacity: 0.5;
+		transition: all 150ms ease;
+		text-decoration: none;
+	}
+
+	.mobile-nav__item:hover {
+		color: var(--primary);
+		opacity: 0.8;
+		background: rgba(255, 179, 178, 0.05);
+	}
+
+	.mobile-nav__item.active {
+		background: var(--primary);
+		color: var(--on-primary);
+		opacity: 1;
+	}
+
+	.mobile-nav__icon {
+		font-size: 1.25rem;
+	}
+
+	.mobile-nav__label {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.6rem;
+		letter-spacing: 0.1em;
+	}
+
+	/* Responsive - Mobile */
+	@media (max-width: 1024px) {
+		.mobile-header {
+			display: flex;
+		}
+
 		.side-nav {
 			display: none;
+		}
+
+		.mobile-nav {
+			display: flex;
 		}
 	}
 

@@ -61,7 +61,6 @@
 		left: -2rem;
 		font-size: clamp(8rem, 20vw, 16rem);
 		font-weight: 900;
-		font-style: italic;
 		color: var(--on-surface);
 		opacity: 0.03;
 		pointer-events: none;
@@ -102,8 +101,7 @@
 	.section-title {
 		font-size: clamp(2rem, 5vw, 3.5rem);
 		font-weight: 900;
-		font-style: italic;
-		letter-spacing: -0.03em;
+		letter-spacing: -0.02em;
 		margin: 0;
 		color: var(--on-surface);
 	}
