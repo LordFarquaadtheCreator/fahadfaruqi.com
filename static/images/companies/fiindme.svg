@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Fiindme">
-	<rect width="640" height="400" rx="40" fill="#f4efe9" />
-	<rect x="24" y="24" width="592" height="352" rx="28" fill="#fffefd" stroke="#d9cec5" />
-	<path d="M494 92l56 56-56 56-56-56z" fill="#d97745" opacity="0.16" />
-	<text x="84" y="190" fill="#181419" font-family="Space Grotesk, sans-serif" font-size="72" font-weight="700">Fiindme</text>
-	<text x="84" y="254" fill="#b35c2e" font-family="Space Grotesk, sans-serif" font-size="34" font-weight="500">recommendation systems</text>
-	<text x="84" y="308" fill="#5d5551" font-family="Space Grotesk, sans-serif" font-size="28">early-stage product collaboration</text>
-</svg>
