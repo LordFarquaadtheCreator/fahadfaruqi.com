@@ -89,7 +89,7 @@
 			{
 				"company": "Tobi Wealth",
 				"companyUrl": "https://tobiwealth.com/",
-				"logo": "/images/companies/tobi-wealth.svg",
+				"logo": "/images/companies/tobi-wealth.png",
 				"role": "Principal Software Engineer",
 				"location": "New York, NY",
 				"start": "Dec 2025",
@@ -106,7 +106,7 @@
 			{
 				"company": "Crowdpass",
 				"companyUrl": "https://www.crowdpass.co/",
-				"logo": "/images/companies/crowdpass.svg",
+				"logo": "/images/companies/crowdpass.png",
 				"role": "Software Engineer",
 				"location": "New York, NY",
 				"start": "Jul 2025",
@@ -124,7 +124,7 @@
 			{
 				"company": "Google",
 				"companyUrl": "https://buildyourfuture.withgoogle.com/",
-				"logo": "/images/companies/google.svg",
+				"logo": "/images/companies/google.png",
 				"role": "Software Engineering Program Mentee (GSWEP)",
 				"location": "New York, NY",
 				"start": "Aug 2024",
@@ -140,7 +140,7 @@
 			{
 				"company": "EasyMeets",
 				"companyUrl": "https://easymeets-app.com/",
-				"logo": "/images/companies/easymeets.svg",
+				"logo": "/images/companies/easy-meets.png",
 				"role": "Backend Tech Lead",
 				"location": "New York, NY",
 				"start": "Oct 2024",
@@ -158,7 +158,7 @@
 			{
 				"company": "NYC Department of Transportation",
 				"companyUrl": "https://www.nyc.gov/site/dot/index.page",
-				"logo": "/images/companies/nyc-dot.svg",
+				"logo": "/images/companies/nyc-dot.png",
 				"role": "Software Engineering Intern",
 				"location": "New York, NY",
 				"start": "Jun 2023",
@@ -175,7 +175,7 @@
 			},
 			{
 				"company": "Fiindme",
-				"logo": "/images/companies/fiindme.svg",
+				"logo": "/images/companies/fiindme.png",
 				"role": "Software Engineer",
 				"location": "New York, NY",
 				"start": "Mar 2024",
@@ -191,7 +191,7 @@
 			{
 				"company": "NYC Botanical Garden",
 				"companyUrl": "https://www.nybg.org/",
-				"logo": "/images/companies/nybg.svg",
+				"logo": "/images/companies/nybg.png",
 				"role": "Breakthrough Tech AI Fellow",
 				"location": "New York, NY",
 				"start": "Jan 2024",
@@ -207,7 +207,7 @@
 			{
 				"company": "ASAPP",
 				"companyUrl": "https://www.asapp.com/",
-				"logo": "/images/companies/asapp.svg",
+				"logo": "/images/companies/asapp.png",
 				"role": "Breakthrough Tech AI Fellow",
 				"location": "New York, NY",
 				"start": "Jun 2023",
@@ -224,7 +224,7 @@
 			{
 				"company": "CUNY Tech Prep",
 				"companyUrl": "https://cunytechprep.nyc/",
-				"logo": "/images/companies/cuny-tech-prep.svg",
+				"logo": "/images/companies/cuny-tech-prep.png",
 				"role": "Full Stack Fellow",
 				"location": "New York, NY",
 				"start": "Aug 2023",

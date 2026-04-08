@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="CUNY Tech Prep">
-	<rect width="640" height="400" rx="40" fill="#f3efe8" />
-	<rect x="24" y="24" width="592" height="352" rx="28" fill="#fffdf9" stroke="#d9cec5" />
-	<rect x="84" y="92" width="160" height="96" rx="22" fill="#0f5e8b" opacity="0.16" />
-	<text x="104" y="154" fill="#0f5e8b" font-family="Space Grotesk, sans-serif" font-size="42" font-weight="700">CUNY</text>
-	<text x="84" y="244" fill="#181419" font-family="Space Grotesk, sans-serif" font-size="58" font-weight="700">Tech Prep</text>
-	<text x="84" y="306" fill="#5d5551" font-family="Space Grotesk, sans-serif" font-size="28">full-stack and AI fellowship</text>
-</svg>

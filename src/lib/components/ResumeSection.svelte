@@ -1,44 +1,61 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
 	import type { ResumeData } from '$lib/data/portfolio';
-	import MediaFrame from './MediaFrame.svelte';
-	import SectionHeading from './SectionHeading.svelte';
+	import TacticalSectionHeader from './TacticalSectionHeader.svelte';
 
 	let { resume } = $props<{ resume: ResumeData }>();
 </script>
 
-<section class="resume section-shell" id="resume">
-	<div class="resume__header reveal" use:reveal>
-		<SectionHeading
-			eyebrow="Resume"
-			title="Experience across startups, product teams, civic software, and AI fellowships."
-			copy="Every entry below is driven from the JSON source of truth so you can revise copy, imagery, and skills without touching the Svelte components."
-		/>
+<section class="ops-log" id="resume">
+	<TacticalSectionHeader
+		ghostText="ARCHIVE"
+		eyebrow="MISSION_LOGS // CLASSIFIED"
+		title="OPERATIONAL_HISTORY"
+		description="Chronological record of field deployments. All entries verified and timestamped."
+	>
+		{#snippet headerRight()}
+			<div class="header-meta-group">
+				<span class="tech-label" style="color: var(--tertiary);">ALL_SYSTEMS_NOMINAL</span>
+				{#if resume.downloadUrl}
+					<a href={resume.downloadUrl} class="download-btn" target="_blank" rel="noreferrer">
+						<span class="material-symbols-outlined">download</span>
+						<span class="tech-label">DOWNLOAD_DAT</span>
+					</a>
+				{/if}
+			</div>
+		{/snippet}
+	</TacticalSectionHeader>
 
-		{#if resume.downloadUrl}
-			<a class="button button--ghost" href={resume.downloadUrl} target="_blank" rel="noreferrer">
-				Download resume
-			</a>
-		{/if}
-	</div>
+	<!-- Operations Grid -->
+	<div class="ops-grid">
+		{#each resume.experiences as experience, i}
+			<article class="op-card reveal" use:reveal data-testid="experience-card">
+				<div class="op-header">
+					<div class="op-meta">
+						<span class="tech-label op-index">OP_{(i + 1).toString().padStart(3, '0')}</span>
+						<span class="op-date">{experience.start} — {experience.end}</span>
+					</div>
+					<div class="status-indicator">
+						{#if experience.end === 'Present'}
+							<span class="status-pip status-active"></span>
+							<span class="tech-label" style="color: var(--tertiary);">ACTIVE</span>
+						{:else}
+							<span class="status-pip status-idle"></span>
+							<span class="tech-label" style="color: var(--outline);">ARCHIVED</span>
+						{/if}
+					</div>
+				</div>
 
-	<ol class="resume__timeline">
-		{#each resume.experiences as experience}
-			<li class="resume__item">
-				<article class="surface resume__card reveal" use:reveal data-testid="experience-card">
-					<div class="resume__identity">
-						<div class="resume__logo">
-							<MediaFrame
-								src={experience.logo}
-								alt={`${experience.company} logo`}
-								label={experience.company}
-							/>
-						</div>
-
-						<div class="resume__meta">
-							<p class="resume__dates">{experience.start} - {experience.end}</p>
-							<h3>{experience.role}</h3>
-							<p class="resume__company">
+				<div class="op-body">
+					<div class="op-identity">
+						{#if experience.logo}
+							<div class="op-logo">
+								<img src={experience.logo} alt="{experience.company} logo" />
+							</div>
+						{/if}
+						<div class="op-titles">
+							<h3 class="op-role">{experience.role}</h3>
+							<div class="op-org">
 								{#if experience.companyUrl}
 									<a href={experience.companyUrl} target="_blank" rel="noreferrer">
 										{experience.company}
@@ -46,192 +63,279 @@
 								{:else}
 									<span>{experience.company}</span>
 								{/if}
-								<span>· {experience.location}</span>
-							</p>
-							{#if experience.summary}
-								<p class="resume__summary">{experience.summary}</p>
-							{/if}
+								<span class="op-location">· {experience.location}</span>
+							</div>
 						</div>
 					</div>
 
-					<ul class="resume__highlights">
-						{#each experience.highlights as highlight}
-							<li>{highlight}</li>
-						{/each}
-					</ul>
+					{#if experience.summary}
+						<p class="op-summary">{experience.summary}</p>
+					{/if}
 
-					<div class="resume__tags">
-						<div>
-							<h4>Tools</h4>
-							<div class="resume__chips">
+					<div class="op-highlights">
+						{#each experience.highlights as highlight}
+							<div class="highlight-item">
+								<span class="material-symbols-outlined bullet">chevron_right</span>
+								<span>{highlight}</span>
+							</div>
+						{/each}
+					</div>
+
+					<div class="op-tags">
+						<div class="tag-group">
+							<span class="tech-label tag-label">TOOLS</span>
+							<div class="tag-list">
 								{#each experience.tools as tool}
 									<span class="chip">{tool}</span>
 								{/each}
 							</div>
 						</div>
-
-						<div>
-							<h4>Skills</h4>
-							<div class="resume__chips">
+						<div class="tag-group">
+							<span class="tech-label tag-label">SKILLS</span>
+							<div class="tag-list">
 								{#each experience.skills as skill}
 									<span class="chip">{skill}</span>
 								{/each}
 							</div>
 						</div>
 					</div>
-				</article>
-			</li>
+				</div>
+
+				<div class="hud-bracket-bl"></div>
+				<div class="hud-bracket-br"></div>
+			</article>
 		{/each}
-	</ol>
+	</div>
 </section>
 
 <style>
-	.resume {
-		padding: 2.5rem 0;
+	.ops-log {
+		padding: 4rem 0;
+		position: relative;
+		overflow: hidden;
 	}
 
-	.resume__header {
+	.header-meta-group {
 		display: flex;
-		flex-wrap: wrap;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.download-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1rem;
+		background: var(--surface-container-high);
+		border: 1px solid var(--outline-variant);
+		color: var(--on-surface);
+		transition: all 150ms ease;
+	}
+
+	.download-btn:hover {
+		border-color: var(--primary);
+		color: var(--primary);
+	}
+
+	.download-btn .material-symbols-outlined {
+		font-size: 18px;
+	}
+
+	.ops-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.op-card {
+		background: var(--surface-container-low);
+		border: 1px solid rgba(175, 135, 134, 0.15);
+		position: relative;
+		overflow: hidden;
+		transition: all 200ms ease;
+	}
+
+	.op-card:hover {
+		border-color: rgba(211, 251, 255, 0.4);
+		box-shadow: 0 0 30px rgba(211, 251, 255, 0.08);
+		animation: glitch 0.3s ease-in-out;
+	}
+
+	@keyframes glitch {
+		0% { transform: translate(0); }
+		20% { transform: translate(-1px, 1px); }
+		40% { transform: translate(1px, -1px); }
+		60% { transform: translate(-1px, -1px); }
+		80% { transform: translate(1px, 1px); }
+		100% { transform: translate(0); }
+	}
+
+	.op-header {
+		display: flex;
 		justify-content: space-between;
+		align-items: center;
+		padding: 1rem 1.5rem;
+		background: var(--surface-container);
+		border-bottom: 1px solid rgba(175, 135, 134, 0.1);
+	}
+
+	.op-meta {
+		display: flex;
+		align-items: center;
 		gap: 1rem;
-		align-items: end;
 	}
 
-	.resume__timeline {
-		position: relative;
-		padding: 2rem 0 0 1.1rem;
-		margin: 0;
-		list-style: none;
-	}
-
-	.resume__timeline::before {
-		content: '';
-		position: absolute;
-		left: 0.22rem;
-		top: 2.6rem;
-		bottom: 1rem;
-		width: 1px;
-		background: rgba(45, 32, 23, 0.16);
-	}
-
-	.resume__item {
-		position: relative;
-		padding-left: 1.5rem;
-	}
-
-	.resume__item + .resume__item {
-		margin-top: 1.3rem;
-	}
-
-	.resume__item::before {
-		content: '';
-		position: absolute;
-		top: 2rem;
-		left: -0.16rem;
-		width: 0.8rem;
-		height: 0.8rem;
-		border: 2px solid rgba(179, 92, 46, 0.5);
-		border-radius: 50%;
-		background: var(--bg-soft);
-		box-shadow: 0 0 0 6px rgba(246, 239, 230, 0.92);
-	}
-
-	.resume__card {
-		padding: clamp(1.2rem, 2vw, 1.7rem);
-	}
-
-	.resume__identity {
-		display: grid;
-		grid-template-columns: minmax(10rem, 13rem) 1fr;
-		gap: 1.15rem;
-		align-items: start;
-	}
-
-	.resume__logo {
-		max-width: 13rem;
-	}
-
-	.resume__dates {
-		margin: 0;
-		color: var(--accent-deep);
-		font-size: 0.83rem;
+	.op-index {
+		color: var(--secondary);
 		font-weight: 700;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
 	}
 
-	.resume__meta h3 {
-		margin: 0.65rem 0 0;
-		font-size: clamp(1.45rem, 2vw, 1.8rem);
-		line-height: 1.05;
+	.op-date {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.75rem;
+		color: var(--on-surface);
 	}
 
-	.resume__company {
+	.status-indicator {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		margin: 0.55rem 0 0;
-		font-weight: 600;
-		color: var(--text-soft);
+		align-items: center;
+		gap: 0.5rem;
 	}
 
-	.resume__company a {
-		color: var(--text);
+	.op-body {
+		padding: 1.5rem;
 	}
 
-	.resume__summary {
-		margin: 0.85rem 0 0;
-		color: var(--text-soft);
-	}
-
-	.resume__highlights {
-		display: grid;
-		gap: 0.75rem;
-		padding-left: 1rem;
-		margin: 1.25rem 0 0;
-		color: var(--text-soft);
-	}
-
-	.resume__tags {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
+	.op-identity {
+		display: flex;
 		gap: 1rem;
-		margin-top: 1.35rem;
+		align-items: flex-start;
+		margin-bottom: 1rem;
 	}
 
-	.resume__tags h4 {
-		margin: 0 0 0.7rem;
-		font-size: 0.86rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--accent-deep);
+	.op-logo {
+		width: 48px;
+		height: 48px;
+		background: var(--surface-container-high);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
 	}
 
-	.resume__chips {
+	.op-logo img {
+		max-width: 32px;
+		max-height: 32px;
+		filter: grayscale(100%) brightness(1.2);
+	}
+
+	.op-titles {
+		flex: 1;
+	}
+
+	.op-role {
+		font-size: 1.35rem;
+		font-weight: 700;
+		color: var(--on-surface);
+		margin: 0 0 0.25rem;
+	}
+
+	.op-org {
+		font-size: 0.9rem;
+		color: var(--on-surface-variant);
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.op-org a {
+		color: var(--primary);
+		transition: color 150ms ease;
+	}
+
+	.op-org a:hover {
+		color: var(--primary-container);
+	}
+
+	.op-location {
+		color: var(--outline);
+	}
+
+	.op-summary {
+		color: var(--on-surface-variant);
+		font-size: 0.9rem;
+		margin-bottom: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid rgba(175, 135, 134, 0.1);
+	}
+
+	.op-highlights {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.highlight-item {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.5rem;
+		color: var(--on-surface-variant);
+		font-size: 0.85rem;
+		line-height: 1.6;
+	}
+
+	.highlight-item .bullet {
+		font-size: 16px;
+		color: var(--secondary);
+		flex-shrink: 0;
+		margin-top: 0.1rem;
+	}
+
+	.op-tags {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid rgba(175, 135, 134, 0.1);
+	}
+
+	.tag-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.tag-label {
+		color: var(--primary);
+	}
+
+	.tag-list {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.6rem;
+		gap: 0.5rem;
 	}
 
-	@media (max-width: 860px) {
-		.resume__identity,
-		.resume__tags {
+	/* Responsive */
+	@media (max-width: 768px) {
+		.op-header {
+			flex-direction: column;
+			gap: 0.75rem;
+			align-items: flex-start;
+		}
+
+		.op-meta {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.25rem;
+		}
+
+		.op-identity {
+			flex-direction: column;
+		}
+
+		.op-tags {
 			grid-template-columns: 1fr;
-		}
-
-		.resume__logo {
-			max-width: 100%;
-		}
-	}
-
-	@media (max-width: 640px) {
-		.resume__timeline {
-			padding-left: 0.9rem;
-		}
-
-		.resume__item {
-			padding-left: 1.1rem;
 		}
 	}
 </style>

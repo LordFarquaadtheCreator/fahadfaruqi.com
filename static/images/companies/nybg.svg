@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="New York Botanical Garden">
-	<rect width="640" height="400" rx="40" fill="#eef3eb" />
-	<rect x="24" y="24" width="592" height="352" rx="28" fill="#fbfff8" stroke="#cfddca" />
-	<path d="M528 94c-52 10-78 49-82 104 54-6 94-31 118-78-6-13-18-22-36-26zm-116 46c-40 7-70 38-78 86 47-3 79-27 98-70-3-8-9-13-20-16z" fill="#4a7b4a" opacity="0.18" />
-	<text x="84" y="176" fill="#2f6132" font-family="Space Grotesk, sans-serif" font-size="54" font-weight="700">New York</text>
-	<text x="84" y="236" fill="#181419" font-family="Space Grotesk, sans-serif" font-size="48" font-weight="600">Botanical Garden</text>
-	<text x="84" y="302" fill="#5d5551" font-family="Space Grotesk, sans-serif" font-size="28">computer vision fellowship</text>
-</svg>

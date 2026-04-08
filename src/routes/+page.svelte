@@ -2,71 +2,123 @@
 	import AboutSection from '$lib/components/AboutSection.svelte';
 	import ContactSection from '$lib/components/ContactSection.svelte';
 	import HeroSection from '$lib/components/HeroSection.svelte';
-	import PhotoSection from '$lib/components/PhotoSection.svelte';
 	import ResumeSection from '$lib/components/ResumeSection.svelte';
 	import SiteNav from '$lib/components/SiteNav.svelte';
 	import portfolio from '$lib/data/portfolio';
+	import { onMount } from 'svelte';
 
-	const navLinks = [
-		{ label: 'About', href: '#about' },
-		{ label: 'Photo', href: '#photo' },
-		{ label: 'Resume', href: '#resume' },
-		{ label: 'Contact', href: '#contact' }
-	];
+	let activeSection = $state('ops');
+
+	onMount(() => {
+		if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+
+		const sections = [
+			{ id: 'top', key: 'ops' },
+			{ id: 'about', key: 'intel' },
+			{ id: 'resume', key: 'archive' },
+			{ id: 'contact', key: 'uplink' }
+		];
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						const section = sections.find((s) => s.id === entry.target.id);
+						if (section) activeSection = section.key;
+					}
+				});
+			},
+			{ threshold: 0.3, rootMargin: '-10% 0px -50% 0px' }
+		);
+
+		sections.forEach((s) => {
+			const el = document.getElementById(s.id);
+			if (el) observer.observe(el);
+		});
+
+		return () => observer.disconnect();
+	});
 </script>
 
 <svelte:head>
-	<title>{portfolio.profile.name} | Portfolio</title>
+	<title>{portfolio.profile.name.toLowerCase().replace(/\s+/g, '')}.com</title>
 	<meta name="description" content={portfolio.profile.heroIntro} />
 </svelte:head>
 
-<SiteNav name={portfolio.profile.name} links={navLinks} socialLinks={portfolio.profile.socialLinks} />
+<SiteNav name={portfolio.profile.name} {activeSection} />
 
-<main>
-	<div class="page-glow page-glow--warm" aria-hidden="true"></div>
-	<div class="page-glow page-glow--cool" aria-hidden="true"></div>
+<main class="main-content">
+	<div class="section-shell">
+		<HeroSection profile={portfolio.profile} resumeDownloadUrl={portfolio.resume.downloadUrl} />
+	</div>
 
-	<HeroSection profile={portfolio.profile} resumeDownloadUrl={portfolio.resume.downloadUrl} />
-	<AboutSection about={portfolio.about} />
-	<PhotoSection profile={portfolio.profile} caption={portfolio.about.photoCaption} />
-	<ResumeSection resume={portfolio.resume} />
-	<ContactSection contact={portfolio.contact} />
+	<div class="section-shell">
+		<AboutSection about={portfolio.about} />
+	</div>
+
+	<div class="section-shell">
+		<ResumeSection resume={portfolio.resume} />
+	</div>
+
+	<div class="section-shell">
+		<ContactSection contact={portfolio.contact} />
+	</div>
 </main>
 
+<!-- Footer -->
+<footer class="tactical-footer">
+	<div class="footer-content">
+		<span class="tech-label" style="color: var(--inverse-primary);">
+			©2499_TACTICAL_ARCHIVE_V.01
+		</span>
+		<div class="footer-links">
+			<a href="#top" class="tech-label footer-link">DECRYPT</a>
+			<a href="#resume" class="tech-label footer-link">SYSTEM_LOGS</a>
+		</div>
+	</div>
+</footer>
+
 <style>
-	main {
-		position: relative;
-		overflow: clip;
-		padding-bottom: 5rem;
+	.tactical-footer {
+		position: fixed;
+		bottom: 0;
+		left: 80px;
+		right: 0;
+		height: 32px;
+		background: rgba(13, 14, 15, 0.8);
+		backdrop-filter: blur(10px);
+		border-top: 1px solid rgba(255, 0, 60, 0.1);
+		display: flex;
+		align-items: center;
+		padding: 0 1.5rem;
+		z-index: 30;
 	}
 
-	.page-glow {
-		position: absolute;
-		z-index: -1;
-		filter: blur(12px);
-		opacity: 0.75;
-		pointer-events: none;
+	.footer-content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
 	}
 
-	.page-glow--warm {
-		top: 7rem;
-		right: -12rem;
-		width: 34rem;
-		height: 34rem;
-		border-radius: 50%;
-		background:
-			radial-gradient(circle at 40% 40%, rgba(242, 170, 123, 0.55), transparent 56%),
-			radial-gradient(circle at 70% 65%, rgba(222, 119, 74, 0.28), transparent 42%);
+	.footer-links {
+		display: flex;
+		gap: 1.5rem;
 	}
 
-	.page-glow--cool {
-		top: 64rem;
-		left: -14rem;
-		width: 28rem;
-		height: 28rem;
-		border-radius: 50%;
-		background:
-			radial-gradient(circle at 35% 50%, rgba(83, 126, 158, 0.24), transparent 54%),
-			radial-gradient(circle at 70% 30%, rgba(133, 82, 55, 0.18), transparent 50%);
+	.footer-link {
+		opacity: 0.4;
+		transition: opacity 150ms ease;
+		color: var(--inverse-primary);
+	}
+
+	.footer-link:hover {
+		opacity: 1;
+	}
+
+	@media (max-width: 768px) {
+		.tactical-footer {
+			left: 0;
+		}
 	}
 </style>

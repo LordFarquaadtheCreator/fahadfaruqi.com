@@ -2,7 +2,6 @@
 	import { reveal } from '$lib/actions/reveal';
 	import type { ContactData } from '$lib/data/portfolio';
 	import { buildMailtoHref } from '$lib/utils/mailto';
-	import SectionHeading from './SectionHeading.svelte';
 
 	let { contact } = $props<{ contact: ContactData }>();
 
@@ -19,137 +18,449 @@
 			message
 		})
 	);
+
+	const packetSize = $derived((name.length + fromEmail.length + message.length) / 1024);
 </script>
 
-<section class="contact section-shell reveal" id="contact" use:reveal>
-	<div class="surface contact__panel">
-		<div class="contact__intro">
-			<SectionHeading
-				eyebrow="Contact"
-				title="Let’s make something excellent."
-				copy={contact.availability}
-			/>
+<section class="uplink-section" id="contact">
+	<!-- Background Coordinates -->
+	<div class="bg-coords" aria-hidden="true">
+		<span class="coords-text">40.7128° N<br/>74.0060° W</span>
+	</div>
 
-			<ul class="contact__links">
-				{#each contact.links as link}
-					<li>
-						<a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
-							{link.label}
-						</a>
-					</li>
-				{/each}
-			</ul>
+	<!-- Section Header -->
+	<div class="uplink-header reveal" use:reveal>
+		<div class="status-line">
+			<span class="status-pip status-active"></span>
+			<span class="tech-label" style="color: var(--tertiary);">SYSTEM_STATUS: OPEN_CHANNEL</span>
+		</div>
+		<h2 class="uplink-title chromatic">UPLINK</h2>
+		<div class="header-meta">
+			<span class="tech-label">ESTABLISHING SECURE CONNECTION...</span>
+			<span class="tech-label">ENCRYPTION: AES-256-GCM</span>
+		</div>
+	</div>
+
+	<!-- Main Uplink Interface -->
+	<div class="uplink-grid">
+		<!-- Left Panel - Registry -->
+		<div class="uplink-panel panel-registry reveal" use:reveal>
+			<div class="hud-bracket-tl"></div>
+			<div class="hud-bracket-tr"></div>
+			<div class="hud-bracket-bl"></div>
+			<div class="hud-bracket-br"></div>
+
+			<div class="panel-header">
+				<span class="material-symbols-outlined" style="color: var(--secondary);">database</span>
+				<span class="tech-label">COMMS_REGISTRY</span>
+			</div>
+
+			<div class="registry-data">
+				<div class="registry-row">
+					<span class="tech-label registry-key">OPERATOR_SIG</span>
+					<span class="registry-value" style="color: var(--secondary);">#ARCHIVE_01</span>
+				</div>
+				<div class="registry-row">
+					<span class="tech-label registry-key">UPLINK_STRENGTH</span>
+					<span class="registry-value" style="color: var(--tertiary);">98.4%</span>
+				</div>
+				<div class="registry-row">
+					<span class="tech-label registry-key">RESPONSE_ETA</span>
+					<span class="registry-value" style="color: var(--primary);">24_HRS_MAX</span>
+				</div>
+			</div>
+
+			<div class="feed-panel">
+				<span class="tech-label feed-label">Global_Status_Feed</span>
+				<div class="feed-content">
+					<p><span class="feed-time">[14:02:11]</span> INITIALIZING HANDSHAKE...</p>
+					<p><span class="feed-time">[14:02:12]</span> AUTH_TOKEN_VALIDATED</p>
+					<p><span class="feed-time">[14:02:15]</span> PACKET_FILTER_BYPASS: OK</p>
+					<p><span class="feed-time">[14:02:18]</span> NODE_09_RESPONDING</p>
+					<p><span class="feed-time">[14:02:22]</span> SYNCING_TIME_PROTOCOLS...</p>
+					<p class="feed-blink"><span class="feed-time">[14:02:25]</span> READY_FOR_INPUT_</p>
+				</div>
+			</div>
 		</div>
 
-		<form class="contact__form">
-			<label>
-				<span>Your name</span>
-				<input bind:value={name} name="name" placeholder="What should I call you?" type="text" />
-			</label>
-
-			<label>
-				<span>Your email</span>
-				<input bind:value={fromEmail} name="email" placeholder="Where should I reply?" type="email" />
-			</label>
-
-			<label>
-				<span>Your message</span>
-				<textarea
-					bind:value={message}
-					name="message"
-					rows="7"
-					placeholder="Tell me a little about the role, team, or project."
-				></textarea>
-			</label>
-
-			<div class="contact__actions">
-				<a class="button" data-testid="contact-draft-link" href={mailtoHref}>
-					Open email draft
-				</a>
-				<a class="button button--ghost" href={`mailto:${contact.email}`}>Email directly</a>
+		<!-- Right Panel - Transmission Form -->
+		<div class="uplink-panel panel-transmission reveal" use:reveal>
+			<div class="panel-header">
+				<span class="material-symbols-outlined" style="color: var(--primary);">send</span>
+				<span class="tech-label">TRANSMISSION_FORM</span>
 			</div>
-		</form>
+
+			<form class="transmission-form">
+				<div class="form-row">
+					<div class="form-field">
+						<label for="identity" class="field-label">
+							<span class="tech-label">IDENTITY_STRING</span>
+							<span class="required-tag" style="color: var(--primary);">REQUIRED</span>
+						</label>
+						<input
+							id="identity"
+							type="text"
+							class="input-terminal"
+							placeholder="ENTER_DESIGNATION..."
+							bind:value={name}
+						/>
+					</div>
+
+					<div class="form-field">
+						<label for="email" class="field-label">
+							<span class="tech-label">COMM_PROTOCOL</span>
+							<span class="required-tag" style="color: var(--primary);">REQUIRED</span>
+						</label>
+						<input
+							id="email"
+							type="email"
+							class="input-terminal"
+							placeholder="ENTER_EMAIL..."
+							bind:value={fromEmail}
+						/>
+					</div>
+				</div>
+
+				<div class="form-field">
+					<label for="message" class="field-label">
+						<span class="tech-label">TRANSMISSION_CONTENT</span>
+						<span class="required-tag" style="color: var(--primary);">REQUIRED</span>
+					</label>
+					<textarea
+						id="message"
+						class="input-terminal"
+						rows="5"
+						placeholder="INPUT_DATA_PACKAGE..."
+						bind:value={message}
+					></textarea>
+				</div>
+
+				<div class="form-footer">
+					<div class="transmission-meta">
+						<div class="meta-item">
+							<span class="status-pip status-active"></span>
+							<span class="tech-label" style="color: var(--tertiary);">SIGNAL: SECURE</span>
+						</div>
+						<span class="tech-label" style="color: var(--outline);">|</span>
+						<span class="tech-label">PACKET_SIZE: {packetSize.toFixed(1)}KB</span>
+					</div>
+
+					<a href={mailtoHref} class="button" data-testid="contact-draft-link">
+						SEND_TRANSMISSION
+					</a>
+				</div>
+			</form>
+
+			<!-- Corner Coordinates -->
+			<div class="corner-coords tech-label">
+				X: 99.0029 // Y: 14.2881
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer Archive Note -->
+	<div class="archive-footer reveal" use:reveal>
+		<div class="footer-left">
+			<div class="qr-placeholder">
+				<span class="material-symbols-outlined">qr_code</span>
+			</div>
+			<div class="footer-meta">
+				<span class="tech-label">ENCRYPTED_SIGNATURE:</span>
+				<span class="tech-label" style="color: var(--outline);">9f8a-221c-bd00-ee41</span>
+				<span class="tech-label">ARCHIVE_VER: 0.9.2-BETA</span>
+			</div>
+		</div>
+		<div class="footer-right">
+			<span class="ghost-label">TACTICAL_CONTACT</span>
+		</div>
 	</div>
 </section>
 
 <style>
-	.contact {
-		padding: 2rem 0 0;
+	.uplink-section {
+		padding: 4rem 0;
+		position: relative;
+		overflow: hidden;
 	}
 
-	.contact__panel {
+	.bg-coords {
+		position: absolute;
+		top: 2rem;
+		right: 0;
+		opacity: 0.1;
+		pointer-events: none;
+	}
+
+	.coords-text {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: clamp(3rem, 8vw, 6rem);
+		line-height: 1;
+		color: var(--on-surface);
+		user-select: none;
+	}
+
+	.uplink-header {
+		margin-bottom: 3rem;
+		position: relative;
+	}
+
+	.status-line {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.uplink-title {
+		font-size: clamp(4rem, 12vw, 10rem);
+		font-weight: 900;
+		font-style: italic;
+		letter-spacing: -0.05em;
+		line-height: 0.85;
+		color: var(--primary);
+		mix-blend-mode: screen;
+		margin: 0;
+	}
+
+	.header-meta {
+		display: flex;
+		gap: 2rem;
+		margin-top: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.uplink-grid {
 		display: grid;
-		grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-		gap: 1.4rem;
-		padding: clamp(1.4rem, 3vw, 2.2rem);
+		grid-template-columns: 1fr 2fr;
+		gap: 1.5rem;
 	}
 
-	.contact__intro {
+	.uplink-panel {
+		background: var(--surface-container-low);
+		border: 1px solid rgba(175, 135, 134, 0.15);
+		padding: 1.5rem;
+		position: relative;
+		transition: all 200ms ease;
+	}
+
+	.uplink-panel:hover {
+		border-color: rgba(42, 229, 0, 0.3);
+		box-shadow: 0 0 30px rgba(42, 229, 0, 0.08);
+	}
+
+	.panel-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.5rem;
+		padding-bottom: 0.75rem;
+		border-bottom: 1px solid rgba(175, 135, 134, 0.1);
+	}
+
+	.panel-header .material-symbols-outlined {
+		font-size: 20px;
+	}
+
+	/* Registry Panel */
+	.registry-data {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
-		gap: 1.2rem;
+		gap: 0.75rem;
+		margin-bottom: 1.5rem;
 	}
 
-	.contact__links {
+	.registry-row {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.85rem;
-		padding: 0;
+		justify-content: space-between;
+		align-items: center;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid var(--outline-variant);
+	}
+
+	.registry-key {
+		color: var(--on-surface-variant);
+	}
+
+	.registry-value {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.7rem;
+	}
+
+	.feed-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.feed-label {
+		color: var(--outline);
+	}
+
+	.feed-content {
+		background: var(--surface-container-lowest);
+		padding: 1rem;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.65rem;
+		color: var(--on-surface-variant);
+		line-height: 1.8;
+		max-height: 160px;
+		overflow: hidden;
+	}
+
+	.feed-content p {
 		margin: 0;
-		list-style: none;
 	}
 
-	.contact__links a {
-		display: inline-flex;
-		padding: 0.65rem 0.92rem;
-		border: 1px solid var(--line);
-		border-radius: var(--radius-sm);
-		background: rgba(255, 255, 255, 0.66);
-		font-weight: 600;
-		color: var(--text-soft);
+	.feed-time {
+		color: var(--error);
 	}
 
-	.contact__form {
+	.feed-blink {
+		animation: blink 1s step-end infinite;
+	}
+
+	@keyframes blink {
+		50% { opacity: 0; }
+	}
+
+	/* Transmission Panel */
+	.transmission-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.form-row {
 		display: grid;
+		grid-template-columns: repeat(2, 1fr);
 		gap: 1rem;
 	}
 
-	.contact__form label {
-		display: grid;
-		gap: 0.45rem;
-	}
-
-	.contact__form span {
-		font-size: 0.92rem;
-		font-weight: 700;
-	}
-
-	.contact__form input,
-	.contact__form textarea {
-		width: 100%;
-		padding: 0.95rem 1rem;
-		border: 1px solid rgba(45, 32, 23, 0.12);
-		border-radius: 1.1rem;
-		background: rgba(255, 255, 255, 0.8);
-		color: var(--text);
-	}
-
-	.contact__form textarea {
-		resize: vertical;
-		min-height: 12rem;
-	}
-
-	.contact__actions {
+	.form-field {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.8rem;
-		padding-top: 0.3rem;
+		flex-direction: column;
+		gap: 0.5rem;
 	}
 
-	@media (max-width: 900px) {
-		.contact__panel {
+	.field-label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.required-tag {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.6rem;
+	}
+
+	.form-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid rgba(175, 135, 134, 0.1);
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.transmission-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.meta-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.corner-coords {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		background: var(--background);
+		padding: 0.25rem 0.5rem;
+		color: var(--outline-variant);
+	}
+
+	/* Archive Footer */
+	.archive-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		margin-top: 2rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid rgba(175, 135, 134, 0.1);
+	}
+
+	.footer-left {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+	}
+
+	.qr-placeholder {
+		width: 64px;
+		height: 64px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--surface-container);
+		border: 1px solid var(--outline-variant);
+		opacity: 0.3;
+	}
+
+	.qr-placeholder .material-symbols-outlined {
+		font-size: 32px;
+		color: var(--on-surface);
+	}
+
+	.footer-meta {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.ghost-label {
+		font-family: 'Space Grotesk', sans-serif;
+		font-size: 2rem;
+		font-weight: 900;
+		font-style: italic;
+		color: var(--outline);
+		opacity: 0.1;
+		letter-spacing: -0.02em;
+	}
+
+	/* Responsive */
+	@media (max-width: 1024px) {
+		.uplink-grid {
 			grid-template-columns: 1fr;
+		}
+
+		.uplink-title {
+			font-size: clamp(3rem, 15vw, 6rem);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.form-row {
+			grid-template-columns: 1fr;
+		}
+
+		.bg-coords {
+			display: none;
+		}
+
+		.archive-footer {
+			flex-direction: column;
+			gap: 1rem;
+			align-items: flex-start;
+		}
+
+		.ghost-label {
+			display: none;
 		}
 	}
 </style>
