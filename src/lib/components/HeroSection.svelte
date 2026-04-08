@@ -10,7 +10,32 @@
 		resumeDownloadUrl?: string;
 	}>();
 
-	const sysStatus = $derived(Math.floor(94 + Math.random() * 5));
+	let sysStatus = $state(72 + Math.random() * 31.21);
+
+	// Stream data jitter state
+	let bitrate = $state(0.5 + Math.random() * 1.567);
+	let packets = $state(98 + Math.random() * 1.9873);
+	let latency = $state(0.01 + Math.random() * 0.2456);
+	let vizBars = $state([20, 60, 80, 45, 90, 70].map(h => h + Math.random() * 20 - 10));
+
+	// Sys Status jitter
+	$effect(() => {
+		const interval = setInterval(() => {
+			sysStatus = 72 + Math.random() * 31.21;
+		}, 1000 + Math.random() * 3000);
+		return () => clearInterval(interval);
+	});
+
+	// Stream data jitter
+	$effect(() => {
+		const interval = setInterval(() => {
+			bitrate = 0.8 + Math.random() * 0.8;
+			packets = 98 + Math.random() * 2;
+			latency = 0.01 + Math.random() * 0.03;
+			vizBars = vizBars.map(() => 30 + Math.random() * 70);
+		}, 300 + Math.random() * 3000);
+		return () => clearInterval(interval);
+	});
 </script>
 
 <section class="hero" id="top">
@@ -18,24 +43,24 @@
 	<div class="sys-meta">
 		<div class="sys-meta__item">
 			<span class="tech-label">SYS_STATUS</span>
-			<span class="sys-meta__value" style="color: var(--tertiary);">{sysStatus}.2%</span>
+			<span class="sys-meta__value" style="color: var(--tertiary);">{sysStatus.toFixed(2)}%</span>
 		</div>
 		<div class="sys-meta__item">
 			<span class="tech-label">ARCHIVE_VOL</span>
-			<span class="sys-meta__value">4.8TB</span>
+			<span class="sys-meta__value">6.7TB</span>
 		</div>
 		<div class="sys-meta__item">
 			<span class="tech-label">LOC</span>
-			<span class="sys-meta__value">40.7128° N, 74.0060° W</span>
+			<span class="sys-meta__value">P292+W9 New York</span>
 		</div>
 	</div>
 
 	<!-- Main Hero Content -->
 	<div class="hero__main reveal" use:reveal>
-		<p class="eyebrow">{profile.location} // OPS_CENTER</p>
+		<p class="eyebrow">{profile.location} // HOME_TOWN</p>
 		<h1 class="hero__title chromatic">
 			{profile.name.toUpperCase().replace(/ /g, '_')}
-			<span class="hero__title-suffix">.SYS</span>
+			<span class="hero__title-suffix">.MD</span>
 		</h1>
 		<p class="hero__role">{profile.title}</p>
 		<p class="hero__intro">{profile.heroIntro}</p>
@@ -96,24 +121,24 @@
 			<div class="stream-data">
 				<div class="stream-row">
 					<span class="tech-label">BITRATE</span>
-					<span style="color: var(--on-surface);">1.2 GB/S</span>
+					<span style="color: var(--on-surface);">{bitrate.toFixed(1)} GB/S</span>
 				</div>
 				<div class="stream-row">
 					<span class="tech-label">PACKETS</span>
-					<span style="color: var(--on-surface);">99.8%</span>
+					<span style="color: var(--on-surface);">{packets.toFixed(1)}%</span>
 				</div>
 				<div class="stream-row">
 					<span class="tech-label">LATENCY</span>
-					<span style="color: var(--on-surface);">0.02ms</span>
+					<span style="color: var(--on-surface);">{latency.toFixed(2)}ms</span>
 				</div>
 			</div>
 
 			<div class="stream-viz">
-				<div class="viz-bar" style="height: 60%;"></div>
-				<div class="viz-bar" style="height: 80%;"></div>
-				<div class="viz-bar" style="height: 45%;"></div>
-				<div class="viz-bar" style="height: 90%;"></div>
-				<div class="viz-bar" style="height: 70%;"></div>
+				<div class="viz-bar" style="height: {vizBars[0]}%;"></div>
+				<div class="viz-bar" style="height: {vizBars[1]}%;"></div>
+				<div class="viz-bar" style="height: {vizBars[2]}%;"></div>
+				<div class="viz-bar" style="height: {vizBars[3]}%;"></div>
+				<div class="viz-bar" style="height: {vizBars[4]}%;"></div>
 			</div>
 		</div>
 
