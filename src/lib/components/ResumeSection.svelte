@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
 	import type { ResumeData } from '$lib/data/portfolio';
+	import Icon from './Icon.svelte';
 	import TacticalSectionHeader from './TacticalSectionHeader.svelte';
 
 	let { resume } = $props<{ resume: ResumeData }>();
@@ -18,7 +19,7 @@
 				<span class="tech-label" style="color: var(--tertiary);">ALL_SYSTEMS_NOMINAL</span>
 				{#if resume.downloadUrl}
 					<a href={resume.downloadUrl} class="download-btn" target="_blank" rel="noreferrer">
-						<span class="material-symbols-outlined">download</span>
+						<Icon name="download" class="download-btn__icon" />
 						<span class="tech-label">DOWNLOAD_DAT</span>
 					</a>
 				{/if}
@@ -75,7 +76,7 @@
 					<div class="op-highlights">
 						{#each experience.highlights as highlight}
 							<div class="highlight-item">
-								<span class="material-symbols-outlined bullet">chevron_right</span>
+								<Icon name="chevron_right" class="bullet" />
 								<span>{highlight}</span>
 							</div>
 						{/each}
@@ -137,7 +138,7 @@
 		color: var(--primary);
 	}
 
-	.download-btn .material-symbols-outlined {
+	:global(.download-btn__icon) {
 		font-size: 18px;
 	}
 
@@ -285,7 +286,7 @@
 		line-height: 1.6;
 	}
 
-	.highlight-item .bullet {
+	.highlight-item :global(.bullet) {
 		font-size: 16px;
 		color: var(--secondary);
 		flex-shrink: 0;

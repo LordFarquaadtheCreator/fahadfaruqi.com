@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Icon from '$lib/components/Icon.svelte';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
@@ -11,7 +12,7 @@
 <!-- Fallback content while redirecting -->
 <div class="redirect-container">
 	<div class="redirect-content">
-		<span class="material-symbols-outlined redirect-icon">radar</span>
+		<Icon name="radar" class="redirect-icon" />
 		<p class="redirect-text">REROUTING...</p>
 	</div>
 </div>
@@ -33,7 +34,7 @@
 		color: var(--on-surface-variant);
 	}
 
-	.redirect-icon {
+	:global(.redirect-icon) {
 		font-size: 3rem;
 		color: var(--primary);
 		animation: pulse 1s ease-in-out infinite;

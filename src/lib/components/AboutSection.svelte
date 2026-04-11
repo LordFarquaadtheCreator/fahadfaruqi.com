@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
 	import type { AboutData } from '$lib/data/portfolio';
+	import Icon from './Icon.svelte';
 	import TacticalCard from './TacticalCard.svelte';
 	import TacticalSectionHeader from './TacticalSectionHeader.svelte';
 
@@ -69,7 +70,7 @@
 				{#if item.href && item.linkLabel}
 					<a href={item.href} class="highlight-link" target="_blank" rel="noreferrer">
 						<span class="link-text">{item.linkLabel.toUpperCase()}</span>
-						<span class="material-symbols-outlined">arrow_outward</span>
+						<Icon name="arrow_outward" class="highlight-link__icon" />
 					</a>
 				{/if}
 			</TacticalCard>
@@ -195,7 +196,7 @@
 		color: var(--primary-container);
 	}
 
-	.highlight-link .material-symbols-outlined {
+	:global(.highlight-link__icon) {
 		font-size: 14px;
 	}
 

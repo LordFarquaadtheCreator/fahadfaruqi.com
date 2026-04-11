@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
 	import type { ProfileData } from '$lib/data/portfolio';
+	import Icon from './Icon.svelte';
 
 	let {
 		profile,
@@ -47,7 +48,7 @@
 		<a href="#resume" class="hub-card hub-card--resume">
 			<div class="ref-label">TYPE: DOC_X</div>
 			<div class="card-content-vertical">
-				<span class="material-symbols-outlined resume-icon">description</span>
+				<Icon name="description" class="resume-icon" />
 				<h3 class="card-title-sm chromatic">Resume</h3>
 			</div>
 			<div class="card-meta">LOGGED_EXP: 09_YEARS</div>
@@ -56,7 +57,7 @@
 		<!-- CONTACT: Small Square -->
 		<a href="#contact" class="hub-card hub-card--small">
 			<div class="card-content-center">
-				<span class="material-symbols-outlined contact-icon">alternate_email</span>
+				<Icon name="alternate_email" class="contact-icon" />
 				<span class="card-label chromatic">Contact</span>
 			</div>
 		</a>
@@ -149,7 +150,7 @@
 					</div>
 				</div>
 				<span class="init-button">
-					INITIALIZE <span class="material-symbols-outlined">arrow_forward_ios</span>
+					INITIALIZE <Icon name="arrow_forward_ios" class="init-button__icon" />
 				</span>
 			</div>
 			
@@ -175,7 +176,7 @@
 			<div class="ref-label-mobile">COMMS_LINK_ENCRYPTED</div>
 			<div class="contact-content">
 				<div class="satellite-icon">
-					<span class="material-symbols-outlined">satellite_alt</span>
+					<Icon name="satellite_alt" class="satellite-icon__glyph" />
 				</div>
 				<div class="contact-info">
 					<h3 class="contact-title">CONTACT_OPERATOR</h3>
@@ -403,13 +404,13 @@
 		z-index: 1;
 	}
 
-	.resume-icon {
+	:global(.resume-icon) {
 		font-size: 1.5rem;
 		color: var(--secondary);
 		margin-bottom: 0.5rem;
 	}
 
-	.contact-icon {
+	:global(.contact-icon) {
 		font-size: 1.5rem;
 		color: var(--primary);
 		display: block;
@@ -792,7 +793,7 @@
 		font-size: 0.75rem;
 	}
 
-	.init-button .material-symbols-outlined {
+	:global(.init-button__icon) {
 		font-size: 0.875rem;
 	}
 
@@ -882,7 +883,7 @@
 		flex-shrink: 0;
 	}
 
-	.satellite-icon .material-symbols-outlined {
+	:global(.satellite-icon__glyph) {
 		font-size: 1.5rem;
 		color: var(--primary);
 	}

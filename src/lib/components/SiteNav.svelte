@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Icon from './Icon.svelte';
+
 	let {
 		name,
 		activeSection = 'ops'
@@ -14,12 +16,12 @@
 <!-- Mobile Top Header -->
 <header class="mobile-header">
 	<div class="mobile-header__left">
-		<span class="material-symbols-outlined mobile-header__icon">terminal</span>
+		<Icon name="terminal" class="mobile-header__icon" />
 		<h1 class="mobile-header__title">TERM_V.4.02</h1>
 	</div>
 	<div class="mobile-header__right">
 		<span class="mobile-header__sysid">SYS_ID: {sysId}</span>
-		<span class="material-symbols-outlined mobile-header__signal">signal_cellular_4_bar</span>
+		<Icon name="signal_cellular_4_bar" class="mobile-header__signal" />
 	</div>
 </header>
 
@@ -29,7 +31,7 @@
 		<!-- Operator Profile -->
 		<div class="operator-badge">
 			<div class="operator-avatar">
-				<span class="material-symbols-outlined">person</span>
+				<Icon name="person" class="operator-avatar__icon" />
 			</div>
 			<span class="operator-id tech-label">{operatorId}</span>
 		</div>
@@ -37,19 +39,19 @@
 		<!-- Navigation Icons -->
 		<nav class="side-nav__icons">
 			<a href="#top" class="nav-icon" class:active={activeSection === 'home'} aria-label="Home">
-				<span class="material-symbols-outlined">radar</span>
+				<Icon name="radar" class="nav-icon__glyph" />
 				<span class="nav-icon__label tech-label">HOME</span>
 			</a>
 			<a href="#about" class="nav-icon" class:active={activeSection === 'about'} aria-label="About">
-				<span class="material-symbols-outlined">dataset</span>
+				<Icon name="dataset" class="nav-icon__glyph" />
 				<span class="nav-icon__label tech-label">ABOUT</span>
 			</a>
 			<a href="#resume" class="nav-icon" class:active={activeSection === 'resume'} aria-label="Resume">
-				<span class="material-symbols-outlined">folder_open</span>
+				<Icon name="folder_open" class="nav-icon__glyph" />
 				<span class="nav-icon__label tech-label">RESUME</span>
 			</a>
 			<a href="#contact" class="nav-icon" class:active={activeSection === 'contact'} aria-label="Contact">
-				<span class="material-symbols-outlined">hub</span>
+				<Icon name="hub" class="nav-icon__glyph" />
 				<span class="nav-icon__label tech-label">CONTACT</span>
 			</a>
 		</nav>
@@ -66,19 +68,19 @@
 <!-- Mobile Bottom Navigation -->
 <nav class="mobile-nav">
 	<a href="#top" class="mobile-nav__item" class:active={activeSection === 'home'}>
-		<span class="material-symbols-outlined mobile-nav__icon">grid_view</span>
+		<Icon name="grid_view" class="mobile-nav__icon" />
 		<span class="mobile-nav__label">HOME</span>
 	</a>
 	<a href="#about" class="mobile-nav__item" class:active={activeSection === 'about'}>
-		<span class="material-symbols-outlined mobile-nav__icon">code</span>
+		<Icon name="code" class="mobile-nav__icon" />
 		<span class="mobile-nav__label">ABOUT</span>
 	</a>
 	<a href="#resume" class="mobile-nav__item" class:active={activeSection === 'resume'}>
-		<span class="material-symbols-outlined mobile-nav__icon">memory</span>
+		<Icon name="memory" class="mobile-nav__icon" />
 		<span class="mobile-nav__label">RESUME</span>
 	</a>
 	<a href="#contact" class="mobile-nav__item" class:active={activeSection === 'contact'}>
-		<span class="material-symbols-outlined mobile-nav__icon">settings_input_component</span>
+		<Icon name="settings_input_component" class="mobile-nav__icon" />
 		<span class="mobile-nav__label">CONTACT</span>
 	</a>
 </nav>
@@ -105,7 +107,7 @@
 		gap: 0.5rem;
 	}
 
-	.mobile-header__icon {
+	:global(.mobile-header__icon) {
 		font-size: 1.25rem;
 		color: var(--primary);
 	}
@@ -141,7 +143,7 @@
 		75% { transform: translate(0.5px, 0.5px); }
 	}
 
-	.mobile-header__signal {
+	:global(.mobile-header__signal) {
 		font-size: 1rem;
 		color: var(--primary);
 	}
@@ -187,7 +189,7 @@
 		color: var(--on-surface-variant);
 	}
 
-	.operator-avatar .material-symbols-outlined {
+	:global(.operator-avatar__icon) {
 		font-size: 24px;
 	}
 
@@ -237,7 +239,7 @@
 		background: var(--primary);
 	}
 
-	.nav-icon .material-symbols-outlined {
+	:global(.nav-icon__glyph) {
 		font-size: 20px;
 	}
 
@@ -301,7 +303,7 @@
 		opacity: 1;
 	}
 
-	.mobile-nav__icon {
+	:global(.mobile-nav__icon) {
 		font-size: 1.25rem;
 	}
 
@@ -326,9 +328,4 @@
 		}
 	}
 
-	/* Material Symbols Base */
-	:global(.material-symbols-outlined) {
-		font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-		font-family: 'Material Symbols Outlined';
-	}
 </style>

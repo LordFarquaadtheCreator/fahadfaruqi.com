@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
+	import Icon from './Icon.svelte';
 
 	let {
 		children,
@@ -38,7 +39,11 @@
 		<div class="card-header">
 			<div class="header-left">
 				{#if headerIcon}
-					<span class="material-symbols-outlined" style="color: var(--primary);">{headerIcon}</span>
+					<Icon
+						name={headerIcon}
+						class="card-header__icon"
+						style="color: var(--primary);"
+					/>
 				{/if}
 				<span class="tech-label">{headerLabel}</span>
 			</div>
@@ -107,7 +112,7 @@
 		gap: 0.75rem;
 	}
 
-	.card-header .material-symbols-outlined {
+	.card-header__icon {
 		font-size: 20px;
 	}
 </style>

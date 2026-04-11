@@ -2,6 +2,7 @@
 	import { reveal } from '$lib/actions/reveal';
 	import type { ContactData } from '$lib/data/portfolio';
 	import { buildMailtoHref } from '$lib/utils/mailto';
+	import Icon from './Icon.svelte';
 
 	let { contact } = $props<{ contact: ContactData }>();
 
@@ -43,7 +44,7 @@
 			<div class="hud-bracket-br"></div>
 
 			<div class="panel-header">
-				<span class="material-symbols-outlined" style="color: var(--secondary);">database</span>
+				<Icon name="database" class="panel-header__icon" style="color: var(--secondary);" />
 				<span class="tech-label">COMMS_REGISTRY</span>
 			</div>
 
@@ -78,7 +79,7 @@
 		<!-- Right Panel - Transmission Form -->
 		<div class="uplink-panel panel-transmission reveal" use:reveal>
 			<div class="panel-header">
-				<span class="material-symbols-outlined" style="color: var(--primary);">send</span>
+				<Icon name="send" class="panel-header__icon" style="color: var(--primary);" />
 				<span class="tech-label">TRANSMISSION_FORM</span>
 			</div>
 
@@ -154,7 +155,7 @@
 	<div class="archive-footer reveal" use:reveal>
 		<div class="footer-left">
 			<div class="qr-placeholder">
-				<span class="material-symbols-outlined">qr_code</span>
+				<Icon name="qr_code" class="qr-placeholder__icon" />
 			</div>
 			<div class="footer-meta">
 				<span class="tech-label">ENCRYPTED_SIGNATURE:</span>
@@ -233,7 +234,7 @@
 		border-bottom: 1px solid rgba(175, 135, 134, 0.1);
 	}
 
-	.panel-header .material-symbols-outlined {
+	:global(.panel-header__icon) {
 		font-size: 20px;
 	}
 
@@ -388,7 +389,7 @@
 		opacity: 0.3;
 	}
 
-	.qr-placeholder .material-symbols-outlined {
+	:global(.qr-placeholder__icon) {
 		font-size: 32px;
 		color: var(--on-surface);
 	}
