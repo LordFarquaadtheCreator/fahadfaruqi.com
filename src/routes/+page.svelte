@@ -9,6 +9,13 @@
 
     let activeSection = $state("home");
 
+    // Dynamic page title based on active section
+    const pageTitle = $derived(
+        activeSection === "home"
+            ? "Fahad Faruqi"
+            : `${activeSection.charAt(0).toUpperCase() + activeSection.slice(1)} | Fahad Faruqi`
+    );
+
     // Easter egg: Track clicks on the brand logo area
     let clickCount = $state(0);
     const MAX_CLICKS = 5;
@@ -120,6 +127,10 @@
         event.stopPropagation();
     }
 </script>
+
+<svelte:head>
+    <title>{pageTitle}</title>
+</svelte:head>
 
 <SiteNav name={portfolio.profile.name} {activeSection} />
 
