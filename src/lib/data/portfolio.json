@@ -4,7 +4,7 @@
 		"title": "Software engineer shipping iOS, web, backend, and applied AI products.",
 		"location": "Queens, NYC",
 		"heroIntro": "I turn fast-moving ideas into polished products, from SwiftUI fintech flows and React Native launches to Go services and ML prototypes.",
-		"supportingIntro": "My work spans startups, civic software, and fellowship programs with a bias toward performance, clear UX, and shipping useful features quickly.",
+		"supportingIntro": "My work spans startups, civic software, and fellowship programs with a bias toward performance, clear UX, and shipping useful features quickly. Systems I've built have reached thousands of users across enterprise event platforms, fintech applications, and civic tech initiatives.",
 		"portraitImage": "",
 		"portraitAlt": "Reserved portrait slot for Fahad Faruqi",
 		"socialLinks": [
@@ -25,7 +25,7 @@
 	"about": {
 		"paragraphs": [
 			"I'm a New York-based engineer who enjoys moving between product polish and technical depth. The work that energizes me most is the kind that asks for taste and range at the same time: speeding up a critical flow, tightening an API, cleaning up deployment, or shaping a more intuitive user experience.",
-			"Across fintech, events, civic tech, and startup MVPs, I've worked with SwiftUI, React Native, Next.js, Go, .NET, PostgreSQL, AWS, and applied ML tooling. I care about making software feel clear and reliable for the people using it."
+			"Across fintech, events, civic tech, and startup MVPs, I've worked with SwiftUI, React Native, Next.js, Go, .NET, PostgreSQL, AWS, and applied ML tooling. I've architected and deployed systems that serve thousands of clients daily, from enterprise-scale event platforms to production fintech applications. I care about making software feel clear and reliable for the people using it."
 		],
 		"education": [
 			{
@@ -45,7 +45,9 @@
 			{
 				"eyebrow": "Leadership",
 				"title": "President, ACM at CCNY",
-				"description": "Mentored emerging engineers and ran weekly sessions around production-ready web and machine-learning applications."
+				"description": "Mentored emerging engineers and ran weekly sessions around production-ready web and machine-learning applications.",
+				"href": "https://www.linkedin.com/company/byte-ccny/?viewAsMember=true",
+				"linkLabel": "View Linkedin"
 			},
 			{
 				"eyebrow": "Open Source",
@@ -57,12 +59,14 @@
 			{
 				"eyebrow": "Hackathons",
 				"title": "HackPrinceton, Div Hacks (Columbia University), and BostonHacks wins",
-				"description": "Built voice AI, accessibility, climate, and civic-tech prototypes that placed at major student hackathons."
+				"description": "Built voice AI, accessibility, climate, and civic-tech prototypes that placed at major student hackathons.",
+				"href": "https://www.linkedin.com/in/fahadfaruqi42/recent-activity/all/",
+				"linkLabel": "See Linkedin Posts"
 			},
 			{
-				"eyebrow": "Delivery",
-				"title": "From MVPs to production systems",
-				"description": "Comfortable owning architecture, CI/CD, frontend polish, backend services, debugging, and launch readiness."
+				"eyebrow": "Impact",
+				"title": "Production systems at scale",
+				"description": "Systems I've architected and deployed serve thousands of clients daily across enterprise event platforms, fintech applications, and civic tech initiatives."
 			}
 		],
 		"photoCaption": "Drop a real portrait path into portfolio.json whenever you're ready. The section is intentionally wired so no component code changes are needed."
