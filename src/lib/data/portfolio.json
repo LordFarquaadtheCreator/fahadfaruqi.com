@@ -4,7 +4,7 @@
 		"title": "Software engineer shipping iOS, web, backend, and applied AI products.",
 		"location": "Queens, NYC",
 		"heroIntro": "I turn fast-moving ideas into polished products, from SwiftUI fintech flows and React Native launches to Go services and ML prototypes.",
-		"supportingIntro": "My work spans startups, civic software, and fellowship programs, with a bias toward performance, clear UX, and shipping useful features quickly.",
+		"supportingIntro": "My work spans startups, civic software, and fellowship programs with a bias toward performance, clear UX, and shipping useful features quickly.",
 		"portraitImage": "",
 		"portraitAlt": "Reserved portrait slot for Fahad Faruqi",
 		"socialLinks": [
@@ -19,23 +19,6 @@
 			{
 				"label": "GitHub",
 				"href": "https://github.com/lordfarquaadthecreator"
-			}
-		],
-		"metrics": [
-			{
-				"value": "12+",
-				"label": "high-impact features shipped",
-				"detail": "Across .NET, Next.js, iOS, and React Native products"
-			},
-			{
-				"value": "2,000+",
-				"label": "clients supported",
-				"detail": "Operational systems built for enterprise-scale event platforms"
-			},
-			{
-				"value": "97%",
-				"label": "top model accuracy",
-				"detail": "Applied ML projects tuned for image and sign-language classification"
 			}
 		]
 	},
@@ -54,7 +37,7 @@
 			{
 				"institution": "Cornell Tech",
 				"credential": "Certificate in Fundamentals of Machine Learning",
-				"dates": "Aug 2023 - Sep 2023",
+				"dates": "Summer 2023",
 				"location": "New York, NY"
 			}
 		],
@@ -62,7 +45,7 @@
 			{
 				"eyebrow": "Leadership",
 				"title": "President, ACM at CCNY",
-				"description": "Mentored emerging engineers and ran biweekly sessions around production-ready web and machine-learning builds."
+				"description": "Mentored emerging engineers and ran weekly sessions around production-ready web and machine-learning applications."
 			},
 			{
 				"eyebrow": "Open Source",
@@ -73,7 +56,7 @@
 			},
 			{
 				"eyebrow": "Hackathons",
-				"title": "HackPrinceton, HackMIT, and BostonHacks wins",
+				"title": "HackPrinceton, Div Hacks (Columbia University), and BostonHacks wins",
 				"description": "Built voice AI, accessibility, climate, and civic-tech prototypes that placed at major student hackathons."
 			},
 			{

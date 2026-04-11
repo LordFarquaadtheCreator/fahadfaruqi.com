@@ -5,12 +5,6 @@ export interface PortfolioLink {
 	href: string;
 }
 
-export interface Metric {
-	value: string;
-	label: string;
-	detail: string;
-}
-
 export interface ProfileData {
 	name: string;
 	title: string;
@@ -20,7 +14,6 @@ export interface ProfileData {
 	portraitImage?: string;
 	portraitAlt: string;
 	socialLinks: PortfolioLink[];
-	metrics: Metric[];
 }
 
 export interface EducationItem {
@@ -144,16 +137,7 @@ function validatePortfolio(data: unknown): PortfolioData {
 			supportingIntro: readString(profileRecord.supportingIntro, 'profile.supportingIntro'),
 			portraitImage: readOptionalString(profileRecord.portraitImage, 'profile.portraitImage'),
 			portraitAlt: readString(profileRecord.portraitAlt, 'profile.portraitAlt'),
-			socialLinks: readLinks(profileRecord.socialLinks, 'profile.socialLinks'),
-			metrics: readArray(profileRecord.metrics, 'profile.metrics').map((entry, index) => {
-				const record = asRecord(entry, `profile.metrics[${index}]`);
-
-				return {
-					value: readString(record.value, `profile.metrics[${index}].value`),
-					label: readString(record.label, `profile.metrics[${index}].label`),
-					detail: readString(record.detail, `profile.metrics[${index}].detail`)
-				};
-			})
+			socialLinks: readLinks(profileRecord.socialLinks, 'profile.socialLinks')
 		},
 		about: {
 			paragraphs: readStringArray(aboutRecord.paragraphs, 'about.paragraphs'),
