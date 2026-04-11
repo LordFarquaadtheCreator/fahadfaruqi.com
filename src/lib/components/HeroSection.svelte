@@ -90,10 +90,11 @@
 					</div>
 					<div class="coordinates">COORDINATES: 34.0522° N, 118.2437° W</div>
 				</div>
+				<p>my image image placeholder</p>
 				<div class="hud-bottom">
 					<div class="manifesto-box">
 						<div class="manifesto-label">Core_Manifesto</div>
-						<p class="manifesto-text">Technology is an artifact of intent. This archive serves as a repository for high-fidelity interactive deployments within the Signal Core framework.</p>
+						<p class="manifesto-text">In conjunction with generative tools, anything is possible as long as the human is centered in development and mind.</p>
 					</div>
 					<div class="ghost-text chromatic">SIGNAL</div>
 				</div>
