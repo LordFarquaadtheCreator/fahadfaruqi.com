@@ -85,8 +85,8 @@
 			<div class="hud-overlay">
 				<div class="hud-top">
 					<div class="targeting-box">
-						<div class="target-label">Targeting_Active</div>
-						<div class="target-value chromatic">X-99 // SECTOR_G</div>
+						<div class="target-label">Target_Selected</div>
+						<div class="target-value chromatic">FAHAD FARUQI // DEFAULT_PHOTO</div>
 					</div>
 					<div class="coordinates">COORDINATES: 34.0522° N, 118.2437° W</div>
 				</div>

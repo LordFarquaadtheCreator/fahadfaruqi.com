@@ -6,6 +6,13 @@ const config = {
 		adapter: adapter(),
 		paths: {
 			base: process.env.BASE_PATH || '/fahadfaruqi.com'
+		},
+		prerender: {
+			handleMissingId: 'ignore',
+			handleHttpError: ({ path, message }) => {
+				if (path === '/[...path]') return;
+				console.warn(message);
+			}
 		}
 	},
 	vitePlugin: {
