@@ -31,5 +31,10 @@
 		"vite": "^7.3.1",
 		"vitest": "^4.1.0",
 		"vitest-browser-svelte": "^2.0.2"
+	},
+	"dependencies": {
+		"@fontsource/jetbrains-mono": "^5.2.8",
+		"@fontsource/space-grotesk": "^5.2.10",
+		"@fontsource/work-sans": "^5.2.8"
 	}
 }
