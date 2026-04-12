@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from './Icon.svelte';
-	import faviconImg from '$lib/assets/favicon.png';
+	import faviconImg from '$lib/assets/favicon.svg';
 
 	let {
 		name,
