@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import favicon from '$lib/assets/favicon.svg';
+	import favicon from '$lib/assets/favicon.png';
 	import '@fontsource/space-grotesk/400.css';
 	import '@fontsource/space-grotesk/500.css';
 	import '@fontsource/space-grotesk/600.css';

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from './Icon.svelte';
+	import faviconImg from '$lib/assets/favicon.png';
 
 	let {
 		name,
@@ -16,7 +17,7 @@
 <!-- Mobile Top Header -->
 <header class="mobile-header">
 	<div class="mobile-header__left">
-		<Icon name="terminal" class="mobile-header__icon" />
+		<img src={faviconImg} alt="Logo" class="mobile-header__icon" />
 		<h1 class="mobile-header__title">TERM_V.4.02</h1>
 	</div>
 	<div class="mobile-header__right">
@@ -31,7 +32,7 @@
 		<!-- Operator Profile -->
 		<div class="operator-badge">
 			<div class="operator-avatar">
-				<Icon name="person" class="operator-avatar__icon" />
+				<img src={faviconImg} alt="Logo" class="operator-avatar__icon" />
 			</div>
 			<span class="operator-id tech-label">{operatorId}</span>
 		</div>
@@ -107,9 +108,10 @@
 		gap: 0.5rem;
 	}
 
-	:global(.mobile-header__icon) {
-		font-size: 1.25rem;
-		color: var(--primary);
+	.mobile-header__icon {
+		width: 1.25rem;
+		height: 1.25rem;
+		object-fit: contain;
 	}
 
 	.mobile-header__title {
@@ -189,8 +191,10 @@
 		color: var(--on-surface-variant);
 	}
 
-	:global(.operator-avatar__icon) {
-		font-size: 24px;
+	.operator-avatar__icon {
+		width: 24px;
+		height: 24px;
+		object-fit: contain;
 	}
 
 	.operator-id {
