@@ -5,7 +5,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		paths: {
-			base: process.env.BASE_PATH || '/fahadfaruqi.com'
+			base: process.env.BASE_PATH || ''
 		},
 		prerender: {
 			handleMissingId: 'ignore',
