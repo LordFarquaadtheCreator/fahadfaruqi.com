@@ -114,21 +114,19 @@ interface PortfolioData {
     location: string;
     heroIntro: string;
     supportingIntro: string;
-    portraitImage: string;    // Path or empty
+    portraitImage?: string;   // Optional path; empty treated as missing
     portraitAlt: string;
     socialLinks: PortfolioLink[];
-    metrics: Metric[];
-    downloadUrl?: string;     // Resume PDF link
   };
   about: {
     paragraphs: string[];
-    education: Education[];
-    highlights: Highlight[];
+    education: EducationItem[];
+    highlights: HighlightItem[];
     photoCaption: string;
   };
   resume: {
-    experiences: Experience[];  // Each with company, role, highlights, tools, skills
-    downloadUrl?: string;
+    downloadUrl?: string;       // Optional URL to resume PDF
+    experiences: ExperienceItem[];  // Each with company, role, highlights, tools, skills
   };
   contact: {
     email: string;
@@ -173,13 +171,15 @@ Add to `resume.experiences` array in `portfolio.json`:
 
 | Component | Purpose | Data Prop |
 |-----------|---------|-----------|
-| `HeroSection` | Name, title, intro, CTA buttons, metrics | `profile` |
-| `AboutSection` | Bio paragraphs, education, highlights | `about` |
-| `ResumeSection` | Work history timeline | `resume` |
-| `ContactSection` | Contact form + social links | `contact` |
-| `SiteNav` | Side navigation with scroll-based highlighting | `name`, `activeSection` |
-| `TacticalCard` | Reusable card component with HUD brackets | various |
-| `TacticalSectionHeader` | Reusable section header with ghost text | various |
+| `HeroSection` | Bento-grid nav hub (desktop + mobile layouts) | `profile`, `resumeDownloadUrl?` |
+| `AboutSection` | Bio paragraphs, education records, highlights grid | `about` |
+| `ResumeSection` | Work experience cards with scroll reveal | `resume` |
+| `ContactSection` | Registry panel + mailto transmission form | `contact` |
+| `SiteNav` | Fixed side nav (desktop) / top+bottom nav (mobile) | `name`, `activeSection` |
+| `TacticalCard` | Card surface with optional HUD brackets, header, variants | various |
+| `TacticalSectionHeader` | Section header with ghost background text | various |
+
+> **Note**: `PhotoSection`, `SectionHeading`, and `MediaFrame` exist in the codebase but are not used in the current page. Do not add them back without review.
 
 ### Shared Components
 
@@ -270,7 +270,7 @@ The `reveal` Svelte action (`src/lib/actions/reveal.ts`) uses IntersectionObserv
 
 The side navigation automatically highlights the active section based on scroll position:
 - Uses IntersectionObserver to track section visibility
-- Maps section IDs to nav keys: `top→ops`, `about→intel`, `resume→archive`, `contact→uplink`
+- Maps section IDs to nav keys: `top→home`, `about→about`, `resume→resume`, `contact→contact`
 - Updates `activeSection` prop on `SiteNav` component
 
 ### Hover Effects (Glitch Animation)
@@ -287,13 +287,13 @@ All information cards feature a tactical glitch effect on hover:
 
 1. **Tactical Archive Aesthetic** — Dark high-contrast UI with acidic signal colors
 2. **Content-First Architecture** — All copy in JSON, zero component edits for content updates
-3. **Scroll-Based Navigation** — Side nav highlights active section automatically
+3. **Scroll-Based Navigation** — Side nav highlights active section automatically via IntersectionObserver
 4. **Glitch Hover Effects** — Tactical shake animation on all interactive cards
-5. **Graceful Image Fallbacks** — MediaFrame shows placeholder initials if image fails/missing
-6. **Contact Form** — Client-side form generates mailto: link with pre-filled subject/body
-7. **Static Generation** — Pre-rendered HTML for fast loads and easy hosting
-8. **Accessibility** — Semantic HTML, reduced-motion support, proper contrast ratios
-9. **Mobile-First Responsive** — Breakpoints at 768px, 900px, 1024px
+5. **Contact Form** — Client-side form generates mailto: link with pre-filled subject/body
+6. **Static Generation** — Pre-rendered HTML for fast loads and easy hosting
+7. **Accessibility** — Semantic HTML, reduced-motion support, proper ARIA labels
+8. **Mobile-First Responsive** — Breakpoints at 768px and 1024px
+9. **Easter Egg** — Footer brand (`TACTICAL_ARCHIVE`) is clickable; 5 clicks triggers a redirect
 
 ---
 
@@ -389,7 +389,8 @@ Add to `portfolio.json`:
 ```json
 {
   "resume": {
-    "downloadUrl": "/resume.pdf"
+    "downloadUrl": "/resume.pdf",
+    "experiences": [...]
   }
 }
 ```
@@ -415,9 +416,11 @@ npx sv@latest create --template minimal --types ts \
 ### v2.0 — Tactical Archive Redesign
 - Complete visual overhaul to dark tactical theme
 - Removed top navigation, moved brand to vertical side nav
-- Added scroll-based navigation highlighting
+- Added scroll-based navigation highlighting with IntersectionObserver
 - Added glitch hover effects on all cards
 - Created reusable `TacticalCard` and `TacticalSectionHeader` components
-- Dynamic title and domain from `portfolio.json` name field
-- All card content now data-driven from JSON
+- Dynamic page title derived from `portfolio.json` profile name
+- All card content data-driven from `portfolio.json`
+- HeroSection desktop/mobile dual layouts (portrait area is WIP)
+- Added easter egg: 5-click footer brand trigger
 
