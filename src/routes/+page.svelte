@@ -1,483 +1,352 @@
 <script lang="ts">
-    import AboutSection from "$lib/components/AboutSection.svelte";
-    import ContactSection from "$lib/components/ContactSection.svelte";
-    import HeroSection from "$lib/components/HeroSection.svelte";
-    import ResumeSection from "$lib/components/ResumeSection.svelte";
-    import SiteNav from "$lib/components/SiteNav.svelte";
+    import GothicNavPanel from "$lib/components/GothicNavPanel.svelte";
     import portfolio from "$lib/data/portfolio";
-    import { onMount } from "svelte";
-
-    let activeSection = $state("home");
-
-    // Dynamic page title based on active section
-    const pageTitle = $derived(
-        activeSection === "home"
-            ? "Fahad Faruqi"
-            : `${activeSection.charAt(0).toUpperCase() + activeSection.slice(1)} | Fahad Faruqi`
-    );
-
-    // Easter egg: Track clicks on the brand logo area
-    let clickCount = $state(0);
-    const MAX_CLICKS = 5;
-    const EASTER_EGG_URL =
-        "https://www.youtube.com/watch?v=TMCYSjSN_mw&pp=ygUXc2hhcnVrIGtoYW4gdGlnZXIgc2NlbmU%3D";
-    let showRedirectOverlay = $state(false);
-    let showSuccessMessage = $state(false);
-
-    onMount(() => {
-        if (
-            typeof window === "undefined" ||
-            !("IntersectionObserver" in window)
-        )
-            return;
-
-        const sections = [
-            { id: "top", key: "home" },
-            { id: "about", key: "about" },
-            { id: "resume", key: "resume" },
-            { id: "contact", key: "contact" },
-        ];
-
-        const visibilityState = new Map<string, number>();
-        let rafId: number | null = null;
-
-        const updateActiveSection = () => {
-            let bestKey = "home";
-            let bestRatio = 0;
-
-            for (const [key, ratio] of visibilityState) {
-                if (ratio > bestRatio) {
-                    bestRatio = ratio;
-                    bestKey = key;
-                }
-            }
-
-            if (bestRatio > 0) {
-                activeSection = bestKey;
-            }
-        };
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                for (const entry of entries) {
-                    const section = sections.find(
-                        (s) => s.id === entry.target.id,
-                    );
-                    if (section) {
-                        visibilityState.set(
-                            section.key,
-                            entry.isIntersecting ? entry.intersectionRatio : 0,
-                        );
-                    }
-                }
-
-                if (rafId) cancelAnimationFrame(rafId);
-                rafId = requestAnimationFrame(updateActiveSection);
-            },
-            {
-                threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-                rootMargin: "-50px 0px -50px 0px",
-            },
-        );
-
-        sections.forEach((s) => {
-            const el = document.getElementById(s.id);
-            if (el) {
-                visibilityState.set(s.key, 0);
-                observer.observe(el);
-            }
-        });
-
-        return () => {
-            if (rafId) cancelAnimationFrame(rafId);
-            observer.disconnect();
-            visibilityState.clear();
-        };
-    });
-
-    // Handle the hidden click trigger on brand logo area
-    function handleBrandClick(event: MouseEvent | KeyboardEvent) {
-        clickCount++;
-
-        // Show subtle visual feedback (flash effect)
-        const target = event.currentTarget as HTMLElement;
-        if (target) {
-            target.style.filter = "brightness(1.5)";
-            setTimeout(() => {
-                target.style.filter = "";
-            }, 100);
-        }
-
-        if (clickCount >= MAX_CLICKS) {
-            clickCount = 0;
-            showSuccessMessage = true;
-
-            // Wait for success message, then redirect
-            setTimeout(() => {
-                window.location.href = EASTER_EGG_URL;
-            }, 1500);
-        } else if (clickCount > 0) {
-            // Show progress indicator (subtle dots appear below brand)
-            target.style.cursor = "pointer";
-            setTimeout(() => {
-                target.style.cursor = "";
-            }, 500);
-        }
-
-        event.stopPropagation();
-    }
 </script>
 
 <svelte:head>
-    <title>{pageTitle}</title>
+    <title>Fahad Faruqi</title>
 </svelte:head>
 
-<SiteNav name={portfolio.profile.name} {activeSection} />
-
-<main class="main-content">
-    <div class="section-shell">
-        <HeroSection
-            profile={portfolio.profile}
-            resumeDownloadUrl={portfolio.resume.downloadUrl}
-        />
-    </div>
-
-    <div class="section-shell">
-        <AboutSection about={portfolio.about} />
-    </div>
-
-    <div class="section-shell">
-        <ResumeSection resume={portfolio.resume} />
-    </div>
-
-    <div class="section-shell">
-        <ContactSection contact={portfolio.contact} />
-    </div>
-</main>
-
-<!-- Footer -->
-<footer class="tactical-footer">
-    <div class="footer-content">
-        <span
-            class="footer-brand tech-label"
-            onclick={handleBrandClick}
-            onkeydown={(e) => {
-                if (e.key === "Enter" || e.key === " ") handleBrandClick(e);
-            }}
-            role="button"
-            aria-label="Secret mission trigger - click 5 times"
-            tabindex="0"
-            data-easter-egg-trigger
-        >
-            <span class="copyright">©2499_</span>
-            <span class="brand-primary">TACTICAL_ARCHIVE</span>
-            <span class="version">_V.4.02</span>
-        </span>
-
-        <!-- Progress dots for easter egg (hidden until clicked) -->
-        {#if clickCount > 0}
-            <div class="easter-egg-progress">
-                {#each Array(5) as _, i}
-                    <span class={i < clickCount ? "dot active" : "dot"}></span>
+<div class="gothic-portal">
+    <!-- Top metadata strip -->
+    <div class="top-strip">
+        <span class="tech-label strip-left">{portfolio.profile.location} · SOFTWARE_ENGINEER</span>
+        <div class="barcode-wrap" aria-hidden="true">
+            <svg class="barcode" viewBox="0 0 80 18" xmlns="http://www.w3.org/2000/svg">
+                {#each Array(38) as _, i}
+                    <rect
+                        x={i * 2.05 + (i % 4 === 0 ? 0.4 : 0)}
+                        y="0"
+                        width={i % 5 === 0 ? 1.5 : 0.9}
+                        height="18"
+                        fill="rgba(157,78,221,0.5)"
+                    />
                 {/each}
+            </svg>
+        </div>
+    </div>
+
+    <!-- Main poster grid -->
+    <div class="poster-grid">
+        <!-- Left column -->
+        <div class="col-side col-left">
+            <GothicNavPanel href="/about" label="ABOUT_ME" />
+            <div class="col-deco">
+                <span class="sparkle">✦</span>
+                <span class="hindi-text">फ़हाद</span>
+                <span class="sparkle small">✧</span>
             </div>
-        {/if}
-
-        <div class="footer-links">
-            <a href="#top" class="tech-label footer-link">DECRYPT</a>
-            <a href="#resume" class="tech-label footer-link">SYSTEM_LOGS</a>
+            <GothicNavPanel href="/projects" label="PROJECTS" />
         </div>
-    </div>
-</footer>
 
-<!-- Success Message Overlay -->
-{#if showSuccessMessage}
-    <div class="easter-egg-overlay">
-        <div class="success-message">
-            <span class="message-icon">🐯</span>
-            <h2>MISSION ACCOMPLISHED!</h2>
-            <p>Finding the hidden tiger...</p>
+        <!-- Center column -->
+        <div class="col-center">
+            <div class="title-wrap">
+                <h1 class="gothic-title">Fahad<br />Faruqi</h1>
+            </div>
+            <div class="hero-frame">
+                <div class="hud-bracket-tl"></div>
+                <div class="hud-bracket-tr"></div>
+                <div class="hud-bracket-bl"></div>
+                <div class="hud-bracket-br"></div>
+                <div class="hero-img-wrap">
+                    <div class="hero-placeholder">
+                        <span class="placeholder-text tech-label">HERO_IMAGE_PENDING</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-{/if}
 
-<!-- Mobile Footer -->
-<footer class="mobile-footer">
-    <div class="mobile-footer-content">
-        <span
-            class="mobile-footer-brand"
-            onclick={handleBrandClick}
-            onkeydown={(e) => {
-                if (e.key === "Enter" || e.key === " ") handleBrandClick(e);
-            }}
-            role="button"
-            aria-label="Secret mission trigger - click 5 times"
-            tabindex="0"
-        >
-            TACTICAL_ARCHIVE_V.4
-        </span>
-        <div class="mobile-footer-divider"></div>
-        <div class="mobile-footer-links">
-            <a href="#top" class="mobile-footer-link">HOME</a>
-            <a href="#resume" class="mobile-footer-link">LOGS</a>
-        </div>
-    </div>
-</footer>
+        <!-- Right column -->
+        <div class="col-side col-right">
+            <GothicNavPanel href="/resume" label="RESUME" />
+            <div class="col-deco col-deco-right">
+                <span class="media-controls">◄◄ ◄ ■ ► ►►</span>
+                <p class="deco-quote">{portfolio.profile.title}</p>
+            </div>
+    			<GothicNavPanel href="/contact" label="CONTACT" />
+		</div>
+	</div>
+
+	<!-- Bottom strip -->
+	<div class="bottom-strip">
+		<span class="advisory tech-label">CLASSIFIED_PORTFOLIO</span>
+		<p class="bottom-quote">{portfolio.profile.title}</p>
+		<span class="tech-label bottom-tag">NYC · 2025</span>
+	</div>
+</div>
 
 <style>
-    .tactical-footer {
-        position: fixed;
-        bottom: 0;
-        left: 80px;
-        right: 0;
-        height: 32px;
-        background: rgba(13, 14, 15, 0.8);
-        backdrop-filter: blur(10px);
-        border-top: 1px solid rgba(255, 0, 60, 0.1);
-        display: flex;
-        align-items: center;
-        padding: 0 1.5rem;
-        z-index: 30;
-    }
+	.gothic-portal {
+		min-height: 100vh;
+		background: #09090b;
+		display: flex;
+		flex-direction: column;
+		overflow-x: hidden;
+	}
 
-    .footer-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        gap: 2rem;
-    }
+	/* Top strip */
+	.top-strip {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.4rem 1.25rem;
+		border-bottom: 1px solid rgba(157, 78, 221, 0.25);
+		background: rgba(9, 9, 11, 0.8);
+	}
 
-    .footer-brand {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        cursor: pointer;
-        user-select: none;
-        position: relative;
-        padding: 4px 8px;
-        border-radius: 4px;
-        transition:
-            filter 100ms ease,
-            transform 100ms ease;
-    }
+	.strip-left {
+		color: rgba(157, 78, 221, 0.6);
+		font-size: 0.55rem;
+	}
 
-    .footer-brand:focus {
-        outline: 2px solid var(--primary);
-        outline-offset: 4px;
-    }
+	.barcode-wrap {
+		display: flex;
+		align-items: center;
+	}
 
-    .footer-brand:hover {
-        filter: brightness(1.2);
-        transform: scale(1.02);
-    }
+	.barcode {
+		width: 72px;
+		height: 16px;
+	}
 
-    .copyright {
-        color: var(--on-surface-variant);
-        opacity: 0.5;
-    }
+	/* Three-column poster grid */
+	.poster-grid {
+		display: grid;
+		grid-template-columns: 1fr 2fr 1fr;
+		flex: 1;
+		border-bottom: 1px solid rgba(157, 78, 221, 0.2);
+	}
 
-    .brand-primary {
-        color: var(--primary);
-    }
+	/* Side columns */
+	.col-side {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		border-right: 1px solid rgba(157, 78, 221, 0.2);
+	}
 
-    .version {
-        color: var(--tertiary);
-        opacity: 0.7;
-    }
+	.col-right {
+		border-right: none;
+		border-left: 1px solid rgba(157, 78, 221, 0.2);
+	}
 
-    /* Progress dots indicator */
-    .easter-egg-progress {
-        display: flex;
-        gap: 4px;
-        align-items: center;
-        padding-left: 1rem;
-        border-left: 1px solid rgba(255, 0, 60, 0.3);
-    }
+	.col-deco {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 1.5rem 1rem;
+		gap: 0.75rem;
+		border-top: 1px solid rgba(157, 78, 221, 0.15);
+		border-bottom: 1px solid rgba(157, 78, 221, 0.15);
+	}
 
-    .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--on-surface-variant);
-        opacity: 0.3;
-        transition: all 200ms ease;
-    }
+	.col-deco-right {
+		text-align: center;
+	}
 
-    .dot.active {
-        background: var(--primary);
-        opacity: 1;
-        box-shadow: 0 0 8px var(--primary);
-    }
+	.sparkle {
+		font-size: 1.25rem;
+		color: rgba(157, 78, 221, 0.6);
+	}
 
-    .footer-links {
-        display: flex;
-        gap: 1.5rem;
-    }
+	.sparkle.small {
+		font-size: 0.85rem;
+		opacity: 0.5;
+	}
 
-    .footer-link {
-        opacity: 0.4;
-        transition: opacity 150ms ease;
-        color: var(--inverse-primary);
-        text-decoration: none;
-    }
+	.hindi-text {
+		font-family: 'Space Grotesk', sans-serif;
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: rgba(157, 78, 221, 0.15);
+		line-height: 1;
+		letter-spacing: 0.05em;
+	}
 
-    .footer-link:hover {
-        opacity: 1;
-        color: var(--primary);
-    }
+	.media-controls {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.6rem;
+		color: rgba(157, 78, 221, 0.5);
+		letter-spacing: 0.15em;
+	}
 
-    /* Mobile Footer */
-    .mobile-footer {
-        display: none;
-        padding: 3rem 1rem;
-        margin-top: 2rem;
-        border-top: 1px solid rgba(255, 179, 178, 0.1);
-    }
+	.deco-quote {
+		font-family: 'Work Sans', sans-serif;
+		font-style: italic;
+		font-size: 0.65rem;
+		color: rgba(232, 213, 245, 0.3);
+		line-height: 1.5;
+		text-align: center;
+		padding: 0 0.5rem;
+	}
 
-    .mobile-footer-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
+	/* Center column */
+	.col-center {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+	}
 
-    .mobile-footer-brand {
-        font-family: "Space Grotesk", sans-serif;
-        font-size: 0.75rem;
-        letter-spacing: 0.15em;
-        color: var(--on-surface);
-        opacity: 0.5;
-        cursor: pointer;
-        user-select: none;
-    }
+	.title-wrap {
+		position: relative;
+		z-index: 2;
+		padding: 1rem 1.25rem 0;
+	}
 
-    .mobile-footer-brand:hover {
-        opacity: 0.8;
-    }
+	.gothic-title {
+		font-family: 'Pirata One', cursive;
+		font-size: clamp(3rem, 8vw, 7.5rem);
+		font-weight: 400;
+		line-height: 0.88;
+		color: #c084fc;
+		text-transform: capitalize;
+		text-shadow:
+			3px 0 rgba(255, 0, 255, 0.45),
+			-3px 0 rgba(0, 255, 255, 0.45),
+			0 0 40px rgba(157, 78, 221, 0.3);
+		margin: 0;
+	}
 
-    .mobile-footer-brand:focus {
-        outline: 2px solid var(--primary);
-        outline-offset: 4px;
-    }
+	.hero-frame {
+		position: relative;
+		flex: 1;
+		margin: -0.5rem 1.25rem 1.25rem;
+		min-height: 320px;
+	}
 
-    .mobile-footer-divider {
-        width: 2rem;
-        height: 1px;
-        background: rgba(255, 179, 178, 0.3);
-    }
+	.hero-img-wrap {
+		width: 100%;
+		height: 100%;
+		background: rgba(157, 78, 221, 0.08);
+		border: 1px solid rgba(157, 78, 221, 0.3);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-    .mobile-footer-links {
-        display: flex;
-        gap: 2rem;
-    }
+	.hero-placeholder {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 2rem;
+		height: 100%;
+		min-height: 320px;
+		background: repeating-linear-gradient(
+			45deg,
+			rgba(157, 78, 221, 0.04) 0px,
+			rgba(157, 78, 221, 0.04) 1px,
+			transparent 1px,
+			transparent 10px
+		);
+	}
 
-    .mobile-footer-link {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.65rem;
-        letter-spacing: 0.1em;
-        color: var(--on-surface-variant);
-        opacity: 0.6;
-        text-decoration: none;
-        transition: all 150ms ease;
-    }
+	.placeholder-text {
+		color: rgba(157, 78, 221, 0.35);
+		font-size: 0.55rem;
+		letter-spacing: 0.2em;
+	}
 
-    .mobile-footer-link:hover {
-        color: var(--primary);
-        opacity: 1;
-    }
+	/* HUD bracket overrides for hero */
+	.hero-frame :global(.hud-bracket-tl),
+	.hero-frame :global(.hud-bracket-tr),
+	.hero-frame :global(.hud-bracket-bl),
+	.hero-frame :global(.hud-bracket-br) {
+		border-color: rgba(157, 78, 221, 0.6);
+		width: 16px;
+		height: 16px;
+		z-index: 3;
+	}
 
-    /* Easter Egg Overlay */
-    .easter-egg-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.95);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        animation: fadeIn 300ms ease;
-    }
+	/* Bottom strip */
+	.bottom-strip {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.6rem 1.25rem;
+		border-top: 1px solid rgba(157, 78, 221, 0.25);
+		background: rgba(9, 9, 11, 0.9);
+		gap: 1rem;
+	}
 
-    .success-message {
-        text-align: center;
-        padding: 2rem;
-        color: var(--primary);
-        font-family: "JetBrains Mono", monospace;
-    }
+	.advisory {
+		color: rgba(157, 78, 221, 0.5);
+		font-size: 0.55rem;
+		white-space: nowrap;
+	}
 
-    .message-icon {
-        font-size: 4rem;
-        display: block;
-        margin-bottom: 1rem;
-        animation: bounce 500ms ease;
-    }
+	.bottom-quote {
+		font-family: 'Work Sans', sans-serif;
+		font-style: italic;
+		font-size: 0.65rem;
+		color: rgba(232, 213, 245, 0.3);
+		margin: 0;
+		text-align: center;
+		flex: 1;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 
-    .success-message h2 {
-        font-size: 1.5rem;
-        margin: 0 0 0.5rem 0;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        background: linear-gradient(90deg, var(--primary), var(--tertiary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
+	.bottom-tag {
+		color: rgba(157, 78, 221, 0.5);
+		font-size: 0.55rem;
+		white-space: nowrap;
+	}
 
-    .success-message p {
-        color: var(--on-surface-variant);
-        font-size: 0.9rem;
-        margin: 0;
-        animation: pulse 1s ease infinite;
-    }
+	/* Mobile */
+	@media (max-width: 768px) {
+		.poster-grid {
+			grid-template-columns: 1fr;
+		}
 
-    /* Responsive */
-    @media (max-width: 1024px) {
-        .tactical-footer {
-            display: none;
-        }
+		.col-side {
+			border-right: none;
+			border-left: none;
+			border-top: 1px solid rgba(157, 78, 221, 0.2);
+		}
 
-        .mobile-footer {
-            display: flex;
-            justify-content: center;
-        }
-    }
+		.col-right {
+			border-left: none;
+		}
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
+		.col-deco {
+			flex-direction: row;
+			padding: 1rem;
+		}
 
-    @keyframes bounce {
-        0%,
-        20%,
-        50%,
-        80%,
-        100% {
-            transform: translateY(0);
-        }
-        40% {
-            transform: translateY(-20px);
-        }
-        60% {
-            transform: translateY(-10px);
-        }
-    }
+		.hindi-text {
+			font-size: 1.5rem;
+		}
 
-    @keyframes pulse {
-        0%,
-        100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.5;
-        }
-    }
+		.gothic-title {
+			font-size: clamp(2.5rem, 14vw, 4rem);
+		}
+
+		.col-left {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.col-left .col-deco {
+			grid-column: 1 / -1;
+		}
+
+		.col-right {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.col-right .col-deco {
+			grid-column: 1 / -1;
+		}
+
+		.bottom-quote {
+			display: none;
+		}
+	}
 </style>

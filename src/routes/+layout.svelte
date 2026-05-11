@@ -10,6 +10,7 @@
 	import '@fontsource/work-sans/600.css';
 	import '@fontsource/jetbrains-mono/400.css';
 	import '@fontsource/jetbrains-mono/700.css';
+	import '@fontsource/pirata-one/400.css';
 
 	let { children } = $props();
 </script>

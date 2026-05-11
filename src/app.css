@@ -16,16 +16,16 @@
 	--surface-container-highest: #343536;
 	--surface-variant: #343536;
 	
-	/* Signal Colors */
-	--primary: #ffb3b2;
-	--on-primary: #680012;
-	--primary-container: #ff525c;
-	--on-primary-container: #5b000f;
-	--inverse-primary: #bf002a;
-	--primary-fixed: #ffdad8;
-	--primary-fixed-dim: #ffb3b2;
-	--on-primary-fixed: #410008;
-	--on-primary-fixed-variant: #92001e;
+	/* Gothic Purple */
+	--primary: #c084fc;
+	--on-primary: #3b0764;
+	--primary-container: #9d4edd;
+	--on-primary-container: #2e0650;
+	--inverse-primary: #7c3aed;
+	--primary-fixed: #e9d5ff;
+	--primary-fixed-dim: #c084fc;
+	--on-primary-fixed: #2e0650;
+	--on-primary-fixed-variant: #5b21b6;
 	
 	/* Electric Blue - Data Streams */
 	--secondary: #d3fbff;
@@ -56,14 +56,14 @@
 	/* Text Colors */
 	--on-background: #e4e2e3;
 	--on-surface: #e4e2e3;
-	--on-surface-variant: #e9bcba;
+	--on-surface-variant: #e9d5ff;
 	--inverse-surface: #e4e2e3;
 	--inverse-on-surface: #303031;
 	
 	/* Structural */
-	--outline: #af8786;
-	--outline-variant: #5f3e3e;
-	--surface-tint: #ffb3b2;
+	--outline: #a855f7;
+	--outline-variant: #581c87;
+	--surface-tint: #c084fc;
 	
 	/* Hard Corners - 0px radius */
 	--radius: 0px;
@@ -98,7 +98,7 @@ body::before {
 	inset: 0;
 	z-index: 9999;
 	pointer-events: none;
-	opacity: 0.05;
+	opacity: 0.10;
 	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
@@ -110,7 +110,7 @@ body::after {
 	z-index: -1;
 	pointer-events: none;
 	background-image: 
-		radial-gradient(rgba(255, 179, 178, 0.03) 1px, transparent 1px);
+		radial-gradient(rgba(157, 78, 221, 0.03) 1px, transparent 1px);
 	background-size: 20px 20px;
 }
 
@@ -260,7 +260,7 @@ textarea {
 /* Surface Cards */
 .surface {
 	background: var(--surface-container-low);
-	border: 1px solid rgba(175, 135, 134, 0.15);
+	border: 1px solid rgba(157, 78, 221, 0.15);
 }
 
 .surface-high {
@@ -300,7 +300,7 @@ textarea {
 
 .button:hover {
 	transform: translateY(-1px);
-	box-shadow: 0 4px 20px rgba(255, 179, 178, 0.2);
+	box-shadow: 0 4px 20px rgba(157, 78, 221, 0.2);
 }
 
 .button:hover::before {
@@ -319,7 +319,7 @@ textarea {
 }
 
 .button--ghost:hover {
-	background: rgba(175, 135, 134, 0.1);
+	background: rgba(157, 78, 221, 0.08);
 	border-color: var(--outline);
 }
 
@@ -352,7 +352,7 @@ textarea {
 	align-items: center;
 	padding: 0.4rem 0.75rem;
 	background: var(--surface-container-high);
-	border: 1px solid rgba(175, 135, 134, 0.2);
+	border: 1px solid rgba(157, 78, 221, 0.2);
 	color: var(--on-surface-variant);
 	font-family: 'JetBrains Mono', monospace;
 	font-size: 0.7rem;
