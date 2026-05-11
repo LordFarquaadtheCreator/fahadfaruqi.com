@@ -1,53 +1,56 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Icon from '$lib/components/Icon.svelte';
+	import logo from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		// Immediate redirect to home
 		goto('/');
 	});
 </script>
 
-<!-- Fallback content while redirecting -->
-<div class="redirect-container">
+<main class="redirect-container">
 	<div class="redirect-content">
-		<Icon name="radar" class="redirect-icon" />
-		<p class="redirect-text">REROUTING...</p>
+		<img src={logo} alt="" aria-hidden="true" />
+		<p>Returning home...</p>
 	</div>
-</div>
+</main>
 
 <style>
 	.redirect-container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
 		min-height: 100vh;
-		background: var(--surface-container-lowest);
+		display: grid;
+		place-items: center;
+		background: var(--background);
 	}
 
 	.redirect-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+		display: grid;
+		justify-items: center;
 		gap: 1rem;
 		color: var(--on-surface-variant);
-	}
-
-	:global(.redirect-icon) {
-		font-size: 3rem;
-		color: var(--primary);
-		animation: pulse 1s ease-in-out infinite;
-	}
-
-	.redirect-text {
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		text-transform: uppercase;
 		letter-spacing: 0.1em;
 	}
 
-	@keyframes pulse {
-		0%, 100% { opacity: 1; transform: scale(1); }
-		50% { opacity: 0.5; transform: scale(0.95); }
+	img {
+		width: 56px;
+		height: 56px;
+		border: 1px solid var(--hairline);
+		background: var(--surface-container-lowest);
+		animation: mark-in 700ms ease both;
+	}
+
+	@keyframes mark-in {
+		from {
+			opacity: 0;
+			transform: scale(0.9);
+		}
+
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
 	}
 </style>

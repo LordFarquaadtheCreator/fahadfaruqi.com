@@ -1,335 +1,178 @@
 <script lang="ts">
-	import Icon from './Icon.svelte';
-	import faviconImg from '$lib/assets/favicon.svg';
+	import { page } from '$app/state';
+	import logo from '$lib/assets/favicon.svg';
+	import type { NavigationData, PortfolioLink } from '$lib/data/portfolio';
 
 	let {
 		name,
-		activeSection = 'ops'
+		navigation
 	} = $props<{
 		name: string;
-		activeSection?: string;
+		navigation: NavigationData;
 	}>();
 
-	const operatorId = $derived('PRO_' + name.slice(0, 4).toUpperCase().replace(/[^A-Z]/g, '') + '01');
-	const sysId = $derived('0x' + Math.floor(Math.random() * 65535).toString(16).toUpperCase().padStart(4, '0'));
+	const pathname = $derived(page.url.pathname);
+
+	function isActive(href: string) {
+		if (href === '/') return pathname === '/';
+		return pathname === href || pathname.startsWith(`${href}/`);
+	}
 </script>
 
-<!-- Mobile Top Header -->
-<header class="mobile-header">
-	<div class="mobile-header__left">
-		<img src={faviconImg} alt="Logo" class="mobile-header__icon" />
-		<h1 class="mobile-header__title">TERM_V.4.02</h1>
-	</div>
-	<div class="mobile-header__right">
-		<span class="mobile-header__sysid">SYS_ID: {sysId}</span>
-		<Icon name="signal_cellular_4_bar" class="mobile-header__signal" />
-	</div>
+<header class="site-header" style={`--active-index: ${Math.max(0, navigation.links.findIndex((item: PortfolioLink) => isActive(item.href)))}`}>
+	<a class="brand-mark" href="/" aria-label="{name} home">
+		<img src={logo} alt="" aria-hidden="true" />
+		<span class="brand-mark__serif">{name}</span>
+	</a>
+
+	<nav class="site-nav slider-nav" aria-label="Primary">
+		<span class="slider-indicator" aria-hidden="true"></span>
+		{#each navigation.links as item}
+			<a class="nav-link" class:active={isActive(item.href)} href={item.href}>
+				{item.label}
+			</a>
+		{/each}
+	</nav>
 </header>
 
-<!-- Side Navigation Bar (Desktop) -->
-<aside class="side-nav" aria-label="Primary">
-	<div class="side-nav__top">
-		<!-- Operator Profile -->
-		<div class="operator-badge">
-			<div class="operator-avatar">
-				<img src={faviconImg} alt="Logo" class="operator-avatar__icon" />
-			</div>
-			<span class="operator-id tech-label">{operatorId}</span>
-		</div>
-
-		<!-- Navigation Icons -->
-		<nav class="side-nav__icons">
-			<a href="#top" class="nav-icon" class:active={activeSection === 'home'} aria-label="Home">
-				<Icon name="radar" class="nav-icon__glyph" />
-				<span class="nav-icon__label tech-label">HOME</span>
-			</a>
-			<a href="#about" class="nav-icon" class:active={activeSection === 'about'} aria-label="About">
-				<Icon name="dataset" class="nav-icon__glyph" />
-				<span class="nav-icon__label tech-label">ABOUT</span>
-			</a>
-			<a href="#resume" class="nav-icon" class:active={activeSection === 'resume'} aria-label="Resume">
-				<Icon name="folder_open" class="nav-icon__glyph" />
-				<span class="nav-icon__label tech-label">RESUME</span>
-			</a>
-			<a href="#contact" class="nav-icon" class:active={activeSection === 'contact'} aria-label="Contact">
-				<Icon name="hub" class="nav-icon__glyph" />
-				<span class="nav-icon__label tech-label">CONTACT</span>
-			</a>
-		</nav>
-	</div>
-
-	<div class="side-nav__bottom">
-		<div class="status-indicator">
-			<span class="status-pip status-active"></span>
-			<span class="tech-label" style="color: var(--tertiary);">LIVE</span>
-		</div>
-	</div>
-</aside>
-
-<!-- Mobile Bottom Navigation -->
-<nav class="mobile-nav">
-	<a href="#top" class="mobile-nav__item" class:active={activeSection === 'home'}>
-		<Icon name="grid_view" class="mobile-nav__icon" />
-		<span class="mobile-nav__label">HOME</span>
-	</a>
-	<a href="#about" class="mobile-nav__item" class:active={activeSection === 'about'}>
-		<Icon name="code" class="mobile-nav__icon" />
-		<span class="mobile-nav__label">ABOUT</span>
-	</a>
-	<a href="#resume" class="mobile-nav__item" class:active={activeSection === 'resume'}>
-		<Icon name="memory" class="mobile-nav__icon" />
-		<span class="mobile-nav__label">RESUME</span>
-	</a>
-	<a href="#contact" class="mobile-nav__item" class:active={activeSection === 'contact'}>
-		<Icon name="settings_input_component" class="mobile-nav__icon" />
-		<span class="mobile-nav__label">CONTACT</span>
-	</a>
-</nav>
-
 <style>
-	/* Mobile Top Header */
-	.mobile-header {
-		display: none;
-		position: fixed;
+	.site-header {
+		position: sticky;
 		top: 0;
-		left: 0;
-		right: 0;
 		z-index: 50;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0.5rem 1rem;
-		background: rgba(18, 19, 20, 0.9);
-		backdrop-filter: blur(12px);
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: stretch;
+		border-bottom: 1px solid var(--hairline);
+		background: color-mix(in srgb, var(--surface) 90%, transparent);
+		backdrop-filter: blur(18px);
 	}
 
-	.mobile-header__left {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.mobile-header__icon {
-		width: 1.25rem;
-		height: 1.25rem;
-		object-fit: contain;
-	}
-
-	.mobile-header__title {
-		font-family: 'Space Grotesk', sans-serif;
-		font-size: 0.75rem;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--primary);
-		font-weight: 700;
-		margin: 0;
-	}
-
-	.mobile-header__right {
+	.brand-mark {
 		display: flex;
 		align-items: center;
 		gap: 1rem;
+		padding: 1rem var(--safe-margin);
+		border-right: 1px solid var(--hairline);
 	}
 
-	.mobile-header__sysid {
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 0.6rem;
-		color: var(--on-surface-variant);
-		letter-spacing: 0.1em;
-		animation: jitter 3s ease-in-out infinite;
-	}
-
-	@keyframes jitter {
-		0%, 100% { transform: translate(0, 0); }
-		25% { transform: translate(0.5px, -0.5px); }
-		50% { transform: translate(-0.5px, 0.5px); }
-		75% { transform: translate(0.5px, 0.5px); }
-	}
-
-	:global(.mobile-header__signal) {
-		font-size: 1rem;
-		color: var(--primary);
-	}
-
-	/* Side Navigation */
-	.side-nav {
-		position: fixed;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		width: 80px;
-		z-index: 40;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		padding: 1.5rem 0;
+	.brand-mark img {
+		width: 28px;
+		height: 28px;
+		border: 1px solid var(--hairline);
 		background: var(--surface-container-lowest);
-		border-right: 1px solid rgba(255, 0, 60, 0.1);
 	}
 
-	.side-nav__top {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1.5rem;
-	}
-
-	.operator-badge {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.operator-avatar {
-		width: 40px;
-		height: 40px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: var(--surface-container-high);
-		border: 1px solid rgba(255, 0, 60, 0.2);
-		color: var(--on-surface-variant);
-	}
-
-	.operator-avatar__icon {
-		width: 24px;
-		height: 24px;
-		object-fit: contain;
-	}
-
-	.operator-id {
-		color: var(--inverse-primary);
+	.brand-mark__serif {
+		font-family: var(--font-display);
+		font-size: 1.35rem;
+		font-style: italic;
 		font-weight: 700;
+		line-height: 1;
 	}
 
-	.side-nav__icons {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-		width: 100%;
-		padding: 0 0.75rem;
-	}
-
-	.nav-icon {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.25rem;
-		padding: 0.75rem 0.25rem;
+	.brand-mark__mono {
 		color: var(--on-surface-variant);
-		transition: all 150ms ease;
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.site-nav {
 		position: relative;
-		cursor: pointer;
+		display: flex;
+		align-items: stretch;
+		border-left: 1px solid var(--hairline);
 	}
 
-	.nav-icon:hover {
-		background: var(--surface-container-high);
+	.slider-indicator {
+		position: absolute;
+		inset: 0 auto 0 0;
+		width: calc(100% / 3);
+		background: color-mix(in srgb, var(--primary) 9%, transparent);
+		border-bottom: 1px solid var(--secondary);
+		transform: translateX(calc(var(--active-index) * 100%));
+		transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+		pointer-events: none;
+	}
+
+	.nav-link {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		place-items: center;
+		min-width: 6.5rem;
+		padding: 1rem 1.25rem;
+		border-right: 1px solid var(--hairline);
+		color: var(--on-surface-variant);
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.35em;
+		transition:
+			color 160ms ease,
+			background-color 160ms ease,
+			border-color 160ms ease;
+	}
+
+	.nav-link:hover,
+	.nav-link:focus-visible,
+	.nav-link.active {
 		color: var(--primary);
+		outline: none;
+		text-decoration: underline;
+		text-decoration-color: var(--secondary);
 	}
 
-	.nav-icon.active {
-		background: var(--inverse-primary);
-		color: white;
-	}
-
-	.nav-icon.active::before {
+	.nav-link::after {
 		content: '';
 		position: absolute;
-		left: -0.75rem;
-		top: 50%;
-		transform: translateY(-50%);
-		width: 3px;
-		height: 60%;
-		background: var(--primary);
+		inset: 0;
+		opacity: 0;
+		pointer-events: none;
+		background-image: var(--grain-texture);
+		mix-blend-mode: multiply;
+		transition: opacity 180ms ease;
 	}
 
-	:global(.nav-icon__glyph) {
-		font-size: 20px;
+	.nav-link:hover::after,
+	.nav-link:focus-visible::after {
+		opacity: 0.18;
 	}
 
-	.nav-icon__label {
-		font-size: 0.5rem;
-		letter-spacing: 0.08em;
-	}
-
-	.side-nav__bottom {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.status-indicator {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.25rem;
-	}
-
-	/* Mobile Bottom Navigation */
-	.mobile-nav {
-		display: none;
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		z-index: 50;
-		height: 64px;
-		background: var(--background);
-		box-shadow: 0 -4px 20px rgba(255, 179, 178, 0.05);
-		justify-content: space-around;
-		align-items: stretch;
-	}
-
-	.mobile-nav__item {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.25rem;
-		flex: 1;
-		padding: 0.75rem;
-		color: var(--on-surface-variant);
-		opacity: 0.5;
-		transition: all 150ms ease;
-		text-decoration: none;
-	}
-
-	.mobile-nav__item:hover {
-		color: var(--primary);
-		opacity: 0.8;
-		background: rgba(255, 179, 178, 0.05);
-	}
-
-	.mobile-nav__item.active {
-		background: var(--primary);
-		color: var(--on-primary);
-		opacity: 1;
-	}
-
-	:global(.mobile-nav__icon) {
-		font-size: 1.25rem;
-	}
-
-	.mobile-nav__label {
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 0.6rem;
-		letter-spacing: 0.1em;
-	}
-
-	/* Responsive - Mobile */
-	@media (max-width: 1024px) {
-		.mobile-header {
-			display: flex;
+	@media (max-width: 820px) {
+		.site-header {
+			grid-template-columns: 1fr;
 		}
 
-		.side-nav {
-			display: none;
+		.brand-mark {
+			justify-content: space-between;
+			border-right: 0;
 		}
 
-		.mobile-nav {
-			display: flex;
+		.site-nav {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			border-top: 1px solid var(--hairline);
+		}
+
+		.slider-indicator {
+			width: calc(100% / 3);
+		}
+
+		.nav-link {
+			min-width: 0;
+			padding: 0.8rem 0.35rem;
+			border-right: 1px solid var(--hairline);
+			font-size: 0.65rem;
+		}
+
+		.nav-link:last-child {
+			border-right: 0;
 		}
 	}
-
 </style>

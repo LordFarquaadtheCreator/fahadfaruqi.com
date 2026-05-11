@@ -5,37 +5,29 @@ export interface PortfolioLink {
 	href: string;
 }
 
+export interface NavigationData {
+	links: PortfolioLink[];
+}
+
 export interface ProfileData {
 	name: string;
 	title: string;
 	location: string;
-	heroIntro: string;
-	supportingIntro: string;
-	portraitImage?: string;
-	portraitAlt: string;
-	socialLinks: PortfolioLink[];
 }
 
-export interface EducationItem {
-	institution: string;
-	credential: string;
-	dates: string;
-	location: string;
+export interface HomeSlide {
+	label: string;
+	title: string;
+	description: string;
+	href: string;
+	meta: string;
 }
 
-export interface HighlightItem {
+export interface HomeData {
 	eyebrow: string;
 	title: string;
 	description: string;
-	href?: string;
-	linkLabel?: string;
-}
-
-export interface AboutData {
-	paragraphs: string[];
-	education: EducationItem[];
-	highlights: HighlightItem[];
-	photoCaption: string;
+	slides: HomeSlide[];
 }
 
 export interface ExperienceItem {
@@ -54,20 +46,26 @@ export interface ExperienceItem {
 
 export interface ResumeData {
 	downloadUrl?: string;
+	title: string;
+	description: string;
 	experiences: ExperienceItem[];
+}
+
+export interface BlogData {
+	title: string;
+	description: string;
 }
 
 export interface ContactData {
 	email: string;
-	subjectPrefix: string;
-	availability: string;
-	links: PortfolioLink[];
 }
 
 export interface PortfolioData {
+	navigation: NavigationData;
 	profile: ProfileData;
-	about: AboutData;
+	home: HomeData;
 	resume: ResumeData;
+	blog: BlogData;
 	contact: ContactData;
 }
 
@@ -123,49 +121,42 @@ function readLinks(value: unknown, path: string): PortfolioLink[] {
 function validatePortfolio(data: unknown): PortfolioData {
 	const root = asRecord(data, 'portfolio');
 
+	const navigationRecord = asRecord(root.navigation, 'navigation');
 	const profileRecord = asRecord(root.profile, 'profile');
-	const aboutRecord = asRecord(root.about, 'about');
+	const homeRecord = asRecord(root.home, 'home');
 	const resumeRecord = asRecord(root.resume, 'resume');
+	const blogRecord = asRecord(root.blog, 'blog');
 	const contactRecord = asRecord(root.contact, 'contact');
 
 	return {
+		navigation: {
+			links: readLinks(navigationRecord.links, 'navigation.links')
+		},
 		profile: {
 			name: readString(profileRecord.name, 'profile.name'),
 			title: readString(profileRecord.title, 'profile.title'),
-			location: readString(profileRecord.location, 'profile.location'),
-			heroIntro: readString(profileRecord.heroIntro, 'profile.heroIntro'),
-			supportingIntro: readString(profileRecord.supportingIntro, 'profile.supportingIntro'),
-			portraitImage: readOptionalString(profileRecord.portraitImage, 'profile.portraitImage'),
-			portraitAlt: readString(profileRecord.portraitAlt, 'profile.portraitAlt'),
-			socialLinks: readLinks(profileRecord.socialLinks, 'profile.socialLinks')
+			location: readString(profileRecord.location, 'profile.location')
 		},
-		about: {
-			paragraphs: readStringArray(aboutRecord.paragraphs, 'about.paragraphs'),
-			education: readArray(aboutRecord.education, 'about.education').map((entry, index) => {
-				const record = asRecord(entry, `about.education[${index}]`);
+		home: {
+			eyebrow: readString(homeRecord.eyebrow, 'home.eyebrow'),
+			title: readString(homeRecord.title, 'home.title'),
+			description: readString(homeRecord.description, 'home.description'),
+			slides: readArray(homeRecord.slides, 'home.slides').map((entry, index) => {
+				const record = asRecord(entry, `home.slides[${index}]`);
 
 				return {
-					institution: readString(record.institution, `about.education[${index}].institution`),
-					credential: readString(record.credential, `about.education[${index}].credential`),
-					dates: readString(record.dates, `about.education[${index}].dates`),
-					location: readString(record.location, `about.education[${index}].location`)
+					label: readString(record.label, `home.slides[${index}].label`),
+					title: readString(record.title, `home.slides[${index}].title`),
+					description: readString(record.description, `home.slides[${index}].description`),
+					href: readString(record.href, `home.slides[${index}].href`),
+					meta: readString(record.meta, `home.slides[${index}].meta`)
 				};
-			}),
-			highlights: readArray(aboutRecord.highlights, 'about.highlights').map((entry, index) => {
-				const record = asRecord(entry, `about.highlights[${index}]`);
-
-				return {
-					eyebrow: readString(record.eyebrow, `about.highlights[${index}].eyebrow`),
-					title: readString(record.title, `about.highlights[${index}].title`),
-					description: readString(record.description, `about.highlights[${index}].description`),
-					href: readOptionalString(record.href, `about.highlights[${index}].href`),
-					linkLabel: readOptionalString(record.linkLabel, `about.highlights[${index}].linkLabel`)
-				};
-			}),
-			photoCaption: readString(aboutRecord.photoCaption, 'about.photoCaption')
+			})
 		},
 		resume: {
 			downloadUrl: readOptionalString(resumeRecord.downloadUrl, 'resume.downloadUrl'),
+			title: readString(resumeRecord.title, 'resume.title'),
+			description: readString(resumeRecord.description, 'resume.description'),
 			experiences: readArray(resumeRecord.experiences, 'resume.experiences').map((entry, index) => {
 				const record = asRecord(entry, `resume.experiences[${index}]`);
 
@@ -184,11 +175,12 @@ function validatePortfolio(data: unknown): PortfolioData {
 				};
 			})
 		},
+		blog: {
+			title: readString(blogRecord.title, 'blog.title'),
+			description: readString(blogRecord.description, 'blog.description')
+		},
 		contact: {
-			email: readString(contactRecord.email, 'contact.email'),
-			subjectPrefix: readString(contactRecord.subjectPrefix, 'contact.subjectPrefix'),
-			availability: readString(contactRecord.availability, 'contact.availability'),
-			links: readLinks(contactRecord.links, 'contact.links')
+			email: readString(contactRecord.email, 'contact.email')
 		}
 	};
 }

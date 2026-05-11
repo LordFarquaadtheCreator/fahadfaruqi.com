@@ -16,7 +16,7 @@ npm run check      # svelte-check + tsc
 
 - **SvelteKit 2** / **Svelte 5** — Runes syntax throughout (`$props`, `$state`, `$derived`, `$effect`)
 - **TypeScript** — strict types, no `any`
-- **CSS Custom Properties** — single dark theme, no CSS framework
+- **CSS Custom Properties** — tri-state theme (system/light/dark), no CSS framework
 - **unplugin-icons** — Material Symbols, bundled at build time via `Icon.svelte` registry
 - **Vitest** + `@testing-library/svelte` — component and unit tests
 - **GitHub Actions** — `.github/workflows/deploy.yaml` auto-deploys on `main` push
@@ -30,6 +30,7 @@ npm run check      # svelte-check + tsc
 - Icons must be registered in `Icon.svelte` before use. Adding a new icon = add import + registry entry there.
 - `use:reveal` action on elements that should fade in on scroll. Requires `.reveal` CSS class in scope.
 - `.tech-label` = JetBrains Mono uppercase label. `.chromatic` = chromatic aberration text effect. `.chip` = tag pill. These are global utility classes in `app.css`.
+- **Theme system**: Tri-state (system/light/dark) via `data-theme` attribute on `<html>`. Slider in footer: 0=light, 1=system, 2=dark (left to right). State persisted in `localStorage.theme`. Inline script in `app.html` prevents FOUC by applying theme before paint. CSS uses `:root[data-theme='dark']` selectors with `@media (prefers-color-scheme: dark)` fallback for JS-disabled. Store in `src/lib/theme.svelte.ts`.
 
 ## File Map
 
@@ -44,6 +45,8 @@ src/
 │   └── page.svelte.spec.ts  # Renders page, asserts experience cards match JSON
 ├── lib/
 │   ├── index.ts             # Re-exports portfolio + types from data/portfolio.ts
+│   ├── theme.svelte.ts      # Theme store (system/light/dark tri-state)
+│   ├── theme.spec.ts        # Theme store unit tests
 │   ├── actions/
 │   │   └── reveal.ts        # IntersectionObserver scroll-reveal Svelte action
 │   ├── assets/
@@ -62,14 +65,10 @@ static/
 
 ## Layout & Navigation
 
-- **Desktop (>1024px)**: Fixed 80px side nav on left (`SiteNav`). Main content `margin-left: 80px`. Fixed 32px footer bar at bottom.
-- **Mobile (≤1024px)**: Fixed top header + fixed bottom nav bar. Side nav hidden. Tactical footer hidden; mobile footer shown inline.
-- `activeSection` state in `+page.svelte` drives nav highlighting via `IntersectionObserver` watching `#top`, `#about`, `#resume`, `#contact`.
-- Section keys: `home` / `about` / `resume` / `contact`.
-
-## Easter Egg
-
-Footer brand (`TACTICAL_ARCHIVE`) is a hidden button. 5 clicks → progress dots appear → redirect to a YouTube URL. Both desktop and mobile footers share the same `handleBrandClick` handler defined in `+page.svelte`.
+- **Sticky header**: `SiteNav` component provides three-part slider navigation (Home, CV, Blog) with active state highlighting.
+- **Home page**: Centered nav with title, navigation links, and social icons. No SiteNav on home.
+- **Sub-routes**: SiteNav sticky at top, main content below.
+- Footer fixed at bottom with location, social links, email copy, and theme toggle.
 
 ## Deployment
 

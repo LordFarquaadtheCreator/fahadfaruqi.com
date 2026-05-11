@@ -2,125 +2,72 @@
 
 ## Single Source of Truth
 
-**All portfolio content lives in `portfolio.json`.** Zero component edits needed for content updates.
+Portfolio metadata, navigation, CV content, and the email address live in `portfolio.json`.
+Blog articles live as Markdown files in `/blogs`.
 
-`portfolio.ts` imports the JSON, runs `validatePortfolio()`, and exports the typed result as the default export. Validation throws at module load time — a malformed JSON field will crash the build immediately with a descriptive error path (e.g. `Invalid portfolio data at resume.experiences[0].role`).
+`portfolio.ts` imports the JSON, validates it at module load, and exports typed data. Bad content should fail the build with a descriptive path.
 
-## TypeScript Interfaces
+## Content Shape
 
 ```typescript
 interface PortfolioData {
-  profile:  ProfileData;
-  about:    AboutData;
-  resume:   ResumeData;
-  contact:  ContactData;
+  navigation: NavigationData;
+  profile: ProfileData;
+  home: HomeData;
+  resume: ResumeData;
+  blog: BlogData;
+  contact: ContactData;
 }
 
-interface ProfileData {
-  name:             string;
-  title:            string;
-  location:         string;
-  heroIntro:        string;   // Not currently rendered in HeroSection
-  supportingIntro:  string;   // Not currently rendered in HeroSection
-  portraitImage?:   string;   // Optional; empty string treated as missing
-  portraitAlt:      string;
-  socialLinks:      PortfolioLink[];
+interface NavigationData {
+  links: PortfolioLink[]; // Home, CV, Blog
 }
 
-interface AboutData {
-  paragraphs:   string[];
-  education:    EducationItem[];
-  highlights:   HighlightItem[];
-  photoCaption: string;
-}
-
-interface EducationItem {
-  institution: string;
-  credential:  string;
-  dates:       string;
-  location:    string;
-}
-
-interface HighlightItem {
-  eyebrow:     string;
-  title:       string;
+interface HomeData {
+  eyebrow: string;
+  title: string;
   description: string;
-  href?:       string;       // Optional external link
-  linkLabel?:  string;       // Required if href is set
+  slides: HomeSlide[]; // Home, CV, Blog
 }
 
 interface ResumeData {
-  downloadUrl?:  string;         // Optional URL to resume PDF
-  experiences:   ExperienceItem[];
+  downloadUrl?: string;
+  title: string;
+  description: string;
+  experiences: ExperienceItem[];
 }
 
-interface ExperienceItem {
-  company:     string;
-  companyUrl?: string;
-  logo?:       string;       // Path under /static/, e.g. /images/companies/foo.svg
-  role:        string;
-  location:    string;
-  start:       string;       // e.g. "Jan 2020"
-  end:         string;       // e.g. "Present" or "Dec 2022"
-  summary?:    string;
-  highlights:  string[];
-  tools:       string[];
-  skills:      string[];
+interface BlogData {
+  title: string;
+  description: string;
 }
 
 interface ContactData {
-  email:          string;
-  subjectPrefix:  string;
-  availability:   string;
-  links:          PortfolioLink[];
-}
-
-interface PortfolioLink {
-  label: string;
-  href:  string;
+  email: string;
 }
 ```
 
-## Common Edits
+## Blog Posts
 
-**Add a job** — append to `resume.experiences`:
-```json
-{
-  "company": "Acme Corp",
-  "companyUrl": "https://acme.com",
-  "logo": "/images/companies/acme.svg",
-  "role": "Senior Engineer",
-  "location": "Remote",
-  "start": "Jan 2024",
-  "end": "Present",
-  "summary": "Optional one-liner.",
-  "highlights": ["Built X", "Led Y"],
-  "tools": ["React", "Go"],
-  "skills": ["frontend", "backend"]
-}
-```
+Add presentation or production posts by creating `blogs/my-slug.md` with frontmatter:
 
-**Add a resume download** — set `resume.downloadUrl` to a URL or `/resume.pdf` (place PDF in `static/`).
+```md
+---
+title: Example Post
+category: Practice
+date: May 2026
+excerpt: Short card description.
+imageAlt: Abstract editorial image description
+codeTitle: code sample label
+codeSnippet: const example = true;
+pullQuote: A short pull quote.
+---
 
-**Add a highlight card** — append to `about.highlights`:
-```json
-{
-  "eyebrow": "CATEGORY",
-  "title": "Card Title",
-  "description": "Supporting text.",
-  "href": "https://...",
-  "linkLabel": "View"
-}
-```
-
-**Add a social link** — append to `profile.socialLinks`:
-```json
-{ "label": "GitHub", "href": "https://github.com/..." }
+Markdown body goes here.
 ```
 
 ## Validation Rules
 
-- All string fields must be non-empty (trimmed). Empty string → throws.
-- Optional fields: `portraitImage`, `companyUrl`, `logo`, `summary`, `downloadUrl`, `href`, `linkLabel` — these accept `null`, `undefined`, or `""` and will be returned as `undefined`.
-- Arrays must exist and be arrays; each element is fully validated with path info in the error message.
-- `readStringArray` validates every item in array fields like `highlights`, `tools`, `skills`.
+- Required string fields must be non-empty.
+- Optional fields: `downloadUrl`, `companyUrl`, `logo`, and `summary`.
+- Arrays must exist and be arrays.
