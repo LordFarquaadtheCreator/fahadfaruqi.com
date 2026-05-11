@@ -26,10 +26,13 @@
 			<p>{data.post.excerpt}</p>
 		</header>
 
-		<div class="hero-image" role="img" aria-label={data.post.imageAlt}></div>
+		{#if data.post.image}
+			<img src={data.post.image} alt={data.post.imageAlt} class="hero-image" />
+		{:else}
+			<div class="hero-image" role="img" aria-label={data.post.imageAlt}></div>
+		{/if}
 
 		<div class="post-body">
-			<pre aria-label={data.post.codeTitle}><code>{data.post.codeSnippet}</code></pre>
 			<blockquote>{data.post.pullQuote}</blockquote>
 			{@html data.post.html}
 		</div>
@@ -89,6 +92,11 @@
 		aspect-ratio: 16 / 7;
 		margin: 4rem 0;
 		border: 1px solid var(--hairline);
+		width: 100%;
+		height: 100%;
+	}
+
+	.hero-image:not(img) {
 		background:
 			radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--primary) 20%, transparent), transparent 32%),
 			radial-gradient(circle at 84% 68%, color-mix(in srgb, var(--secondary) 16%, transparent), transparent 36%),
@@ -97,17 +105,12 @@
 		filter: grayscale(1);
 	}
 
-	.post-body {
-		grid-column: 4 / span 6;
+	.hero-image:is(img) {
+		object-fit: cover;
 	}
 
-	pre {
-		margin: 0 0 3rem;
-		overflow-x: auto;
-		background: var(--surface-container-low);
-		padding: 1.25rem;
-		font-family: var(--font-mono);
-		font-size: 0.86rem;
+	.post-body {
+		grid-column: 4 / span 6;
 	}
 
 	blockquote {

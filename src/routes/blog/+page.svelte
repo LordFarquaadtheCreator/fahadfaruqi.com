@@ -16,11 +16,15 @@
 		<p>{portfolio.blog.description}</p>
 	</header>
 
-	<section class="dispatch-grid" aria-label="Dispatches">
+	<section class="dispatch-grid" aria-label="Blogs">
 		{#each blogPosts as post, index}
 			<article class:featured={index === 0} class="reveal" use:reveal>
 				<a href={`/blog/${post.slug}`} aria-label={post.title}>
-					<div class="image-panel" role="img" aria-label={post.imageAlt}></div>
+					{#if post.image}
+						<img src={post.image} alt={post.imageAlt} class="image-panel" />
+					{:else}
+						<div class="image-panel" role="img" aria-label={post.imageAlt}></div>
+					{/if}
 					<div class="post-copy">
 						<div class="post-meta">
 							<span class="tech-label">{post.category}</span>
@@ -28,7 +32,6 @@
 						</div>
 						<h2>{post.title}</h2>
 						<p>{post.excerpt}</p>
-						<pre aria-label={post.codeTitle}><code>{post.codeSnippet}</code></pre>
 					</div>
 				</a>
 			</article>
@@ -121,13 +124,26 @@
 	.image-panel {
 		aspect-ratio: 16 / 10;
 		border-bottom: 1px solid var(--hairline);
+		width: 100%;
+		height: 100%;
+	}
+
+	.image-panel:not(img) {
 		background:
 			radial-gradient(circle at 22% 18%, color-mix(in srgb, var(--primary) 24%, transparent), transparent 30%),
 			radial-gradient(circle at 78% 70%, color-mix(in srgb, var(--secondary) 18%, transparent), transparent 34%),
 			linear-gradient(180deg, color-mix(in srgb, var(--surface-container-lowest) 20%, transparent), transparent),
 			var(--surface-container-high);
 		filter: grayscale(1);
-		transition: filter 240ms ease;
+	}
+
+	.image-panel:is(img) {
+		object-fit: cover;
+	}
+
+	article:hover .image-panel:not(img),
+	article:focus-within .image-panel:not(img) {
+		filter: grayscale(0);
 	}
 
 	article:hover .image-panel,
@@ -164,16 +180,6 @@
 	.post-copy p {
 		margin-top: 1rem;
 		color: var(--on-surface-variant);
-	}
-
-	pre {
-		margin: 2rem 0 0;
-		overflow-x: auto;
-		background: var(--surface-container-low);
-		padding: 1rem;
-		color: var(--on-surface);
-		font-family: var(--font-mono);
-		font-size: 0.82rem;
 	}
 
 	@media (max-width: 960px) {

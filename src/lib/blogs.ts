@@ -4,9 +4,8 @@ export interface BlogPost {
 	category: string;
 	date: string;
 	excerpt: string;
+	image?: string;
 	imageAlt: string;
-	codeTitle: string;
-	codeSnippet: string;
 	pullQuote: string;
 	markdown: string;
 	html: string;
@@ -53,14 +52,17 @@ function readFrontmatter(source: string, slug: string): Omit<BlogPost, 'slug' | 
 		return value;
 	}
 
+	function optional(key: string): string | undefined {
+		return fields.get(key);
+	}
+
 	return {
 		title: required('title'),
 		category: required('category'),
 		date: required('date'),
 		excerpt: required('excerpt'),
+		image: optional('image'),
 		imageAlt: required('imageAlt'),
-		codeTitle: required('codeTitle'),
-		codeSnippet: required('codeSnippet'),
 		pullQuote: required('pullQuote'),
 		markdown: match[2].trim()
 	};
