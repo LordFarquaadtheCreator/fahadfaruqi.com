@@ -72,6 +72,20 @@ export function toListItem(raw: unknown): ListItem {
       primary: r.name as string,
     };
   }
+  if ('title' in r && typeof r.title === 'string') {
+    return {
+      id: ('id' in r && typeof r.id === 'string') ? r.id : slugify(r.title as string),
+      primary: r.title as string,
+      secondary: 'description' in r ? String(r.description) : undefined,
+    };
+  }
+  if ('email' in r && typeof r.email === 'string') {
+    return {
+      id: ('id' in r && typeof r.id === 'string') ? r.id : 'contact',
+      primary: 'contact',
+      secondary: r.email as string,
+    };
+  }
   return {
     id: 'unknown',
     primary: String(r),
