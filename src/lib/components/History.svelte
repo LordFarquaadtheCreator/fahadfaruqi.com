@@ -27,6 +27,7 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     gap: 10px;
     padding-bottom: 8px;
     scrollbar-width: thin;
