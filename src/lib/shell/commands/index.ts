@@ -50,7 +50,19 @@ export function dispatch(cwd: string, raw: string): DispatchResult {
         'hotdogstand', 'campfire', 'vaporwave',
       ];
       if (!args[0] || !valid.includes(args[0])) {
-        return { output: { type: 'error', payload: `unknown theme "${args[0]}". try: ${valid.join(', ')}` } };
+        return {
+          output: {
+            type: 'text',
+            payload: [
+              'usage: theme <name>',
+              '',
+              `unrecognized: "${args[0] ?? '(none)'}"`,
+              '',
+              'available themes:',
+              ...valid.map(v => `  ${v}`),
+            ].join('\n'),
+          },
+        };
       }
       return { output: { type: 'success', payload: `theme set to ${args[0]}` } };
     }

@@ -76,10 +76,11 @@ describe('execute — theme', () => {
     terminal.execute('theme gruvbox-hard');
     expect(get(terminal).theme).toBe('gruvbox-hard');
   });
-  it('rejects invalid theme', () => {
+  it('rejects invalid theme with help text', () => {
     terminal.execute('theme solarized');
     const last = get(terminal).history.at(-1)!;
-    expect(last.output.type).toBe('error');
+    expect(last.output.type).toBe('text');
+    expect((last.output.payload as string)).toContain('usage: theme <name>');
   });
 });
 
