@@ -31,9 +31,6 @@
 		"vitest-browser-svelte": "^2.0.2"
 	},
 	"dependencies": {
-		"@fontsource/jetbrains-mono": "^5.2.8",
-		"@fontsource/montserrat": "^5.2.8",
-		"@fontsource/playfair-display": "^5.2.8",
-		"@fontsource/work-sans": "^5.2.8"
+		"@fontsource/jetbrains-mono": "^5.2.8"
 	}
 }
