@@ -35,6 +35,26 @@ export function complete(cwd: string, input: string): CompletionResult {
   const verb    = tokens[0];
   const partial = tokens[tokens.length - 1];  // the token being typed
 
+  // Theme argument completion
+  if (verb === 'theme') {
+    const THEMES = [
+      'gruvbox-dark', 'gruvbox-hard', 'gruvbox-soft',
+      'one-dark', 'dracula', 'nord', 'monokai',
+      'solarized-dark', 'tokyo-night',
+      'cyberpunk', 'synthwave', 'matrix',
+      'hotdogstand', 'campfire', 'vaporwave',
+      'fallout', 'portal', 'ironman',
+      'bioshock', 'skyrim', 'metroid',
+      'zelda', 'minecraft', 'deus-ex',
+      'mass-effect',
+    ];
+    const candidates = match(partial, THEMES);
+    const fill = candidates.length === 1 ? candidates[0] : longestCommonPrefix(candidates);
+    const prefix = tokens.slice(0, -1).join(' ');
+    const completed = `${prefix} ${fill}${candidates.length === 1 ? ' ' : ''}`.trimStart();
+    return { completed, candidates };
+  }
+
   // Split partial into directory part and filename part
   // e.g. 'resume/exp' → dir='~/resume', file='exp'
   // e.g. 'exp'        → dir=cwd,         file='exp'
@@ -84,7 +104,7 @@ export function complete(cwd: string, input: string): CompletionResult {
  */
 export function deriveHints(cwd: string): string[] {
   const children = listChildren(cwd);
-  const ALWAYS   = ['help', 'clear'];
+  const ALWAYS   = ['help', 'clear', 'theme'];
 
   const childHints = children.map(c => {
     const node = getNode(cwd === '~' ? `~/${c}` : `${cwd}/${c}`);

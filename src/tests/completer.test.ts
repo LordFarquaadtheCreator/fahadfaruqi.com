@@ -14,6 +14,12 @@ describe('complete — path completion', () => {
   it('no match unchanged',   () => expect(complete('~', 'cd zzz').completed).toBe('cd zzz'));
 });
 
+describe('complete — theme argument', () => {
+  it('theme gru → gruvbox-dark', () => expect(complete('~', 'theme gru').candidates).toContain('gruvbox-dark'));
+  it('theme matrix → exact', () => expect(complete('~', 'theme matrix').completed).toBe('theme matrix '));
+  it('theme zzz → no match', () => expect(complete('~', 'theme zzz').candidates).toEqual([]));
+});
+
 describe('deriveHints', () => {
   it('root has cd resume and cat blog', () => {
     const h = deriveHints('~');
@@ -29,5 +35,8 @@ describe('deriveHints', () => {
   });
   it('subdirectory has cd .. hint', () => {
     expect(deriveHints('~/resume')).toContain('cd ..');
+  });
+  it('always has theme hint', () => {
+    expect(deriveHints('~')).toContain('theme');
   });
 });

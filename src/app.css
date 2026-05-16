@@ -258,6 +258,186 @@ body {
   --gb-blue:    #01cdfe;
 }
 
+/* ── Fallout (Pip-Boy) ── */
+.terminal.fallout {
+  --gb-bg:      #0a1a0a;
+  --gb-bg-hard: #051005;
+  --gb-fg:      #4af626;
+  --gb-fg2:     #2d8a1a;
+  --gb-fg3:     #0d3d00;
+  --gb-border:  #1a5c00;
+  --gb-border2: #0a2200;
+  --gb-green:   #4af626;
+  --gb-aqua:    #4af626;
+  --gb-purple:  #4af626;
+  --gb-yellow:  #ccff00;
+  --gb-orange:  #55ff00;
+  --gb-red:     #ff3300;
+  --gb-blue:    #4af626;
+}
+
+/* ── Portal (Aperture) ── */
+.terminal.portal {
+  --gb-bg:      #1a1a1a;
+  --gb-bg-hard: #0f0f0f;
+  --gb-fg:      #d4d4d4;
+  --gb-fg2:     #ff6600;
+  --gb-fg3:     #444444;
+  --gb-border:  #444444;
+  --gb-border2: #222222;
+  --gb-green:   #00aa00;
+  --gb-aqua:    #0066ff;
+  --gb-purple:  #ff6600;
+  --gb-yellow:  #ffaa00;
+  --gb-orange:  #ff6600;
+  --gb-red:     #ff3333;
+  --gb-blue:    #0066ff;
+}
+
+/* ── Iron Man (JARVIS) ── */
+.terminal.ironman {
+  --gb-bg:      #080e14;
+  --gb-bg-hard: #04070a;
+  --gb-fg:      #aaddff;
+  --gb-fg2:     #4a90d9;
+  --gb-fg3:     #1a3a5c;
+  --gb-border:  #1a3a5c;
+  --gb-border2: #0a1520;
+  --gb-green:   #aaddff;
+  --gb-aqua:    #aaddff;
+  --gb-purple:  #00ddee;
+  --gb-yellow:  #aaddff;
+  --gb-orange:  #00ddee;
+  --gb-red:     #ff4444;
+  --gb-blue:    #aaddff;
+}
+
+/* ── BioShock (Art Deco) ── */
+.terminal.bioshock {
+  --gb-bg:      #1a1510;
+  --gb-bg-hard: #0f0c08;
+  --gb-fg:      #c9a84c;
+  --gb-fg2:     #8b6914;
+  --gb-fg3:     #4a3518;
+  --gb-border:  #6b5230;
+  --gb-border2: #2e2214;
+  --gb-green:   #5f9ea0;
+  --gb-aqua:    #66cdaa;
+  --gb-purple:  #9370db;
+  --gb-yellow:  #ffd700;
+  --gb-orange:  #ff8c00;
+  --gb-red:     #cd5c5c;
+  --gb-blue:    #5f9ea0;
+}
+
+/* ── Skyrim (Nordic) ── */
+.terminal.skyrim {
+  --gb-bg:      #1a1c20;
+  --gb-bg-hard: #121417;
+  --gb-fg:      #c0c8d0;
+  --gb-fg2:     #5a7d9a;
+  --gb-fg3:     #3a4555;
+  --gb-border:  #5a4a3a;
+  --gb-border2: #1e1e24;
+  --gb-green:   #8fbc8f;
+  --gb-aqua:    #87ceeb;
+  --gb-purple:  #9370db;
+  --gb-yellow:  #ffd700;
+  --gb-orange:  #d2691e;
+  --gb-red:     #8b0000;
+  --gb-blue:    #4682b4;
+}
+
+/* ── Metroid (Chozo) ── */
+.terminal.metroid {
+  --gb-bg:      #0f0a14;
+  --gb-bg-hard: #0a060e;
+  --gb-fg:      #ff8800;
+  --gb-fg2:     #ff3300;
+  --gb-fg3:     #4a1a1a;
+  --gb-border:  #aa3300;
+  --gb-border2: #1a0808;
+  --gb-green:   #ffaa00;
+  --gb-aqua:    #00ccff;
+  --gb-purple:  #ff6600;
+  --gb-yellow:  #ffdd00;
+  --gb-orange:  #ff8800;
+  --gb-red:     #ff0033;
+  --gb-blue:    #00ccff;
+}
+
+/* ── Zelda (Hyrule) ── */
+.terminal.zelda {
+  --gb-bg:      #0a1a0e;
+  --gb-bg-hard: #050f08;
+  --gb-fg:      #e8d8b0;
+  --gb-fg2:     #4a7c3a;
+  --gb-fg3:     #2a4a1e;
+  --gb-border:  #6b8e3a;
+  --gb-border2: #0f2a0f;
+  --gb-green:   #7fff00;
+  --gb-aqua:    #00ced1;
+  --gb-purple:  #9370db;
+  --gb-yellow:  #ffd700;
+  --gb-orange:  #ff8c00;
+  --gb-red:     #dc143c;
+  --gb-blue:    #00ced1;
+}
+
+/* ── Minecraft ── */
+.terminal.minecraft {
+  --gb-bg:      #2d2d2d;
+  --gb-bg-hard: #1f1f1f;
+  --gb-fg:      #aaaaaa;
+  --gb-fg2:     #555555;
+  --gb-fg3:     #3d3d3d;
+  --gb-border:  #555555;
+  --gb-border2: #2d2d2d;
+  --gb-green:   #55aa55;
+  --gb-aqua:    #55aaaa;
+  --gb-purple:  #aa55aa;
+  --gb-yellow:  #ffff55;
+  --gb-orange:  #ffaa00;
+  --gb-red:     #ff5555;
+  --gb-blue:    #5555ff;
+}
+
+/* ── Deus Ex ── */
+.terminal.deus-ex {
+  --gb-bg:      #0a0f0d;
+  --gb-bg-hard: #060a08;
+  --gb-fg:      #c5a059;
+  --gb-fg2:     #8b7355;
+  --gb-fg3:     #3a3020;
+  --gb-border:  #5c4a2a;
+  --gb-border2: #141812;
+  --gb-green:   #aaddaa;
+  --gb-aqua:    #c5a059;
+  --gb-purple:  #ff9933;
+  --gb-yellow:  #ffd700;
+  --gb-orange:  #ff8c00;
+  --gb-red:     #cc3333;
+  --gb-blue:    #6699cc;
+}
+
+/* ── Mass Effect ── */
+.terminal.mass-effect {
+  --gb-bg:      #0a0e14;
+  --gb-bg-hard: #06080e;
+  --gb-fg:      #aaddff;
+  --gb-fg2:     #3366cc;
+  --gb-fg3:     #1a2a4a;
+  --gb-border:  #224477;
+  --gb-border2: #0a0f1a;
+  --gb-green:   #00ff88;
+  --gb-aqua:    #00aaff;
+  --gb-purple:  #cc66ff;
+  --gb-yellow:  #ffaa00;
+  --gb-orange:  #ff6600;
+  --gb-red:     #ff3333;
+  --gb-blue:    #0066ff;
+}
+
 /* ── Utility ── */
 .sr-only {
   position: absolute; width: 1px; height: 1px;

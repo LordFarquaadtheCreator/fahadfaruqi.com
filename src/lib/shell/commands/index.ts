@@ -48,6 +48,10 @@ export function dispatch(cwd: string, raw: string): DispatchResult {
         'solarized-dark', 'tokyo-night',
         'cyberpunk', 'synthwave', 'matrix',
         'hotdogstand', 'campfire', 'vaporwave',
+        'fallout', 'portal', 'ironman',
+        'bioshock', 'skyrim', 'metroid',
+        'zelda', 'minecraft', 'deus-ex',
+        'mass-effect',
       ];
       if (!args[0] || !valid.includes(args[0])) {
         return {

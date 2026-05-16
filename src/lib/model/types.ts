@@ -11,7 +11,17 @@ export type Theme =
   | 'matrix'
   | 'hotdogstand'
   | 'campfire'
-  | 'vaporwave';
+  | 'vaporwave'
+  | 'fallout'
+  | 'portal'
+  | 'ironman'
+  | 'bioshock'
+  | 'skyrim'
+  | 'metroid'
+  | 'zelda'
+  | 'minecraft'
+  | 'deus-ex'
+  | 'mass-effect';
 
 export type OutputType = 'text' | 'success' | 'error' | 'warning' | 'json' | 'list';
 
