@@ -6,14 +6,23 @@
 
   let inputRow: InputRow;
 
-  function handleTerminalClick() { inputRow?.focus(); }
+  function handleBodyClick(e: MouseEvent) {
+    if (e.target === e.currentTarget) {
+      inputRow?.focus();
+    }
+  }
+
+  function handleTerminalKey(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      inputRow?.focus();
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions a11y_no_noninteractive_tabindex -->
 <div
   class="terminal {$terminal.theme}"
-  onclick={handleTerminalClick}
-  onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleTerminalClick(); }}
+  onkeydown={handleTerminalKey}
   tabindex="0"
   role="application"
   aria-label="terminal"
@@ -29,7 +38,8 @@
     <span class="title-text">user@portfolio — {$terminal.path}</span>
   </div>
 
-  <div class="body">
+  <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+  <div class="body" role="region" aria-label="terminal body" onclick={handleBodyClick}>
     <History entries={$terminal.history} />
     <InputRow bind:this={inputRow} path={$terminal.path} />
     <HintBar hints={$terminal.hints} candidates={$terminal.completionCandidates} />
