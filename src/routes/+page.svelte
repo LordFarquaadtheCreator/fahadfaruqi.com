@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-  <title>Portfolio</title>
+  <title>Fahad Faruqi</title>
 </svelte:head>
 
 <main>
