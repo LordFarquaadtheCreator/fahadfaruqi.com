@@ -3,6 +3,7 @@ package world
 import (
 	"interpreter/desktop"
 	"interpreter/dock"
+	"interpreter/ephemeral"
 	"interpreter/finder"
 	"interpreter/fs"
 	"interpreter/menubar"
@@ -12,13 +13,14 @@ import (
 )
 
 type World struct {
-	FS       fs.FileSystem
-	Env      map[string]string
-	WM       *wm.Manager
-	Finder   *finder.FinderManager
-	Terminal *terminal.TerminalManager
-	Viewer   *viewer.ViewerManager
-	Dock     *dock.DockVM
-	MenuBar  *menubar.MenuBarVM
-	Desktop  *desktop.DesktopVM
+	FS        fs.FileSystem
+	Env       map[string]string
+	WM        *wm.Manager
+	Finder    *finder.FinderManager
+	Terminal  *terminal.TerminalManager
+	Viewer    *viewer.ViewerManager
+	Ephemeral *ephemeral.EphemeralManager
+	Dock      *dock.DockVM
+	MenuBar   *menubar.MenuBarVM
+	Desktop   *desktop.DesktopVM
 }

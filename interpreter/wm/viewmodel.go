@@ -15,6 +15,7 @@ type WindowVM struct {
 	Height    int             `json:"height"`
 	Minimized bool            `json:"minimized"`
 	Maximized bool            `json:"maximized"`
+	Ephemeral bool            `json:"ephemeral"`
 	Content   json.RawMessage `json:"content"`
 }
 
@@ -45,6 +46,7 @@ func BuildWindowsVM(m *Manager, contentBuilder ContentBuilder) []WindowVM {
 			Height:    w.Height,
 			Minimized: w.Minimized,
 			Maximized: w.Maximized,
+			Ephemeral: w.Ephemeral,
 			Content:   content,
 		})
 	}

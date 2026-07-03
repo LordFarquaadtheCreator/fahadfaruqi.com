@@ -3,11 +3,12 @@ package apps
 type AppType string
 
 const (
-	TypeFinder     AppType = "finder"
-	TypeTerminal   AppType = "terminal"
-	TypeViewer     AppType = "viewer"
+	TypeFinder      AppType = "finder"
+	TypeTerminal    AppType = "terminal"
+	TypeViewer      AppType = "viewer"
+	TypeEphemeral   AppType = "ephemeral"
 	TypePlaceholder AppType = "placeholder"
-	TypeEditor     AppType = "editor"
+	TypeEditor      AppType = "editor"
 )
 
 type App struct {
@@ -24,6 +25,7 @@ var Registry = map[string]App{
 	"terminal":     {ID: "terminal", Name: "iTerm", Icon: "/icons/iterm.png", Type: TypeTerminal, Width: 640, Height: 400},
 	"viewer-image": {ID: "viewer-image", Name: "Preview", Icon: "/icons/preview.png", Type: TypeViewer, Width: 600, Height: 450},
 	"viewer-text":  {ID: "viewer-text", Name: "Preview", Icon: "/icons/preview.png", Type: TypeViewer, Width: 600, Height: 450},
+	"preview-ephemeral": {ID: "preview-ephemeral", Name: "Quick Look", Icon: "/icons/preview.png", Type: TypeEphemeral, Width: 400, Height: 300},
 	"obsidian":     {ID: "obsidian", Name: "Obsidian", Icon: "/icons/obsidian.png", Type: TypePlaceholder, Width: 800, Height: 500},
 	"slack":        {ID: "slack", Name: "Slack", Icon: "/icons/slack.png", Type: TypePlaceholder, Width: 800, Height: 500},
 	"spotify":      {ID: "spotify", Name: "Spotify", Icon: "/icons/spotify.png", Type: TypePlaceholder, Width: 800, Height: 500},

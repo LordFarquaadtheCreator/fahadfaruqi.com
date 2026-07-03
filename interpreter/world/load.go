@@ -3,6 +3,7 @@ package world
 import (
 	_ "embed"
 	"encoding/json"
+	"interpreter/ephemeral"
 	"interpreter/finder"
 	"interpreter/fs"
 	"interpreter/viewer"
@@ -93,11 +94,12 @@ func Load() World {
 	manager := wm.NewManager()
 
 	w := World{
-		FS:     filesystem,
-		Env:    env,
-		WM:     manager,
-		Finder: finder.NewFinderManager(manager, filesystem),
-		Viewer: viewer.NewViewerManager(manager, filesystem),
+		FS:        filesystem,
+		Env:       env,
+		WM:        manager,
+		Finder:    finder.NewFinderManager(manager, filesystem),
+		Viewer:    viewer.NewViewerManager(manager, filesystem),
+		Ephemeral: ephemeral.NewEphemeralManager(manager, filesystem),
 	}
 	return w
 }

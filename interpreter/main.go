@@ -7,6 +7,7 @@ import (
 	"interpreter/apps"
 	"interpreter/desktop"
 	"interpreter/dock"
+	"interpreter/ephemeral"
 	"interpreter/finder"
 	"interpreter/menubar"
 	"interpreter/session"
@@ -172,16 +173,19 @@ func main() {
 		if err != nil {
 			return err.Error()
 		}
+		pushVM()
 		return nil
 	})
 
 	os["finderBack"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		w.Finder.Back(args[0].String())
+		pushVM()
 		return nil
 	})
 
 	os["finderForward"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		w.Finder.Forward(args[0].String())
+		pushVM()
 		return nil
 	})
 
@@ -214,6 +218,33 @@ func main() {
 		} else if appID != "" {
 			app, _ := apps.Get(appID)
 			w.WM.Spawn(string(app.Type), app.ID, path.Base(entryPath), app.Width, app.Height)
+		}
+		pushVM()
+		return nil
+	})
+
+	// Ephemeral preview (Quick Look)
+	os["ephemeralPreview"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		filePath := args[0].String()
+		if !w.FS.Exists(filePath) {
+			return nil
+		}
+		w.Ephemeral.SpawnForFile(filePath)
+		pushVM()
+		return nil
+	})
+
+	os["ephemeralClose"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		w.Ephemeral.Close()
+		pushVM()
+		return nil
+	})
+
+	os["ephemeralOpenPreview"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		filePath := w.Ephemeral.CurrentFilePath()
+		w.Ephemeral.Close()
+		if filePath != "" {
+			w.Viewer.SpawnForFile(filePath)
 		}
 		pushVM()
 		return nil
@@ -268,6 +299,7 @@ func cleanupWindow(id string) {
 	w.Finder.Cleanup(id)
 	w.Terminal.Cleanup(id)
 	w.Viewer.Cleanup(id)
+	w.Ephemeral.Cleanup(id)
 }
 
 // buildContent dispatches to the right app-specific content builder.
@@ -279,6 +311,8 @@ func buildContent(win *wm.Window) json.RawMessage {
 		return terminal.BuildContentVM(win, w.Terminal)
 	case string(apps.TypeViewer):
 		return viewer.BuildContentVM(win, w.Viewer)
+	case string(apps.TypeEphemeral):
+		return ephemeral.BuildContentVM(win, w.Ephemeral)
 	default:
 		// placeholder, editor
 		return buildSplashContent(win)

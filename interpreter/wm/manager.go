@@ -85,6 +85,36 @@ func (m *Manager) spawn(appType, appID, title string, width, height int, notify 
 	return win
 }
 
+// SpawnCentered creates a window centered in viewport, ignoring lastDrag position.
+// Used for ephemeral windows like Quick Look.
+func (m *Manager) SpawnCentered(appType, appID, title string, width, height int) *Window {
+	if len(m.windows) >= maxWindows && len(m.order) > 0 {
+		m.closeWindow(m.order[0])
+	}
+	id := fmt.Sprintf("win-%d", m.nextID)
+	m.nextID++
+	win := &Window{
+		ID:        id,
+		AppType:   appType,
+		AppID:     appID,
+		Title:     title,
+		Width:     width,
+		Height:    height,
+		Ephemeral: true,
+	}
+	if m.viewportW > 0 && m.viewportH > 0 {
+		win.X = (m.viewportW - width) / 2
+		win.Y = (m.viewportH - height) / 2
+	} else {
+		win.X = 50
+		win.Y = 50
+	}
+	m.clampWindow(win)
+	m.windows[id] = win
+	m.order = append(m.order, id)
+	return win
+}
+
 func (m *Manager) Close(id string) {
 	m.closeWindow(id)
 	m.doNotify()
