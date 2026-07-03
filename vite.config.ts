@@ -2,18 +2,8 @@ import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
 
-function injectTheme() {
-	return {
-		name: 'inject-theme',
-		transformIndexHtml(html: string) {
-			const theme = process.env.VITE_THEME || '';
-			return html.replace('__THEME__', theme);
-		}
-	};
-}
-
 export default defineConfig({
-	plugins: [sveltekit(), svelteTesting(), injectTheme()],
+	plugins: [sveltekit(), svelteTesting()],
 	test: {
 		expect: { requireAssertions: true },
 		projects: [

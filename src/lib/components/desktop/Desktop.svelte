@@ -20,6 +20,12 @@
   onMount(() => {
     initOS();
 
+    // VITE_THEME env var overrides data-theme for dev
+    const envTheme = import.meta.env.VITE_THEME as string | undefined;
+    if (envTheme) {
+      document.documentElement.setAttribute('data-theme', envTheme);
+    }
+
     const syncTheme = () => os()?.setTheme?.(isDark());
     syncTheme();
 

@@ -187,11 +187,13 @@ func main() {
 
 	os["finderSetView"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		w.Finder.SetViewMode(args[0].String(), finder.ViewMode(args[1].String()))
+		pushVM()
 		return nil
 	})
 
 	os["finderSelect"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		w.Finder.SelectEntry(args[0].String(), args[1].String())
+		pushVM()
 		return nil
 	})
 

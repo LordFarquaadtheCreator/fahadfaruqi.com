@@ -20,9 +20,7 @@
 		</script>
 		<script>
 			// Prevent theme FOUC
-			// __THEME__ replaced by Vite injectTheme plugin from VITE_THEME env var
-			const envTheme = '__THEME__';
-			const theme = envTheme || localStorage.getItem('theme') || 'system';
+			const theme = localStorage.getItem('theme') || 'system';
 			document.documentElement.setAttribute('data-theme', theme);
 		</script>
 	</head>
