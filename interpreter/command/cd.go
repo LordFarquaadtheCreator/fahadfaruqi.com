@@ -10,7 +10,7 @@ import (
 func CD(args []string, w world.World, s *session.Session) response.Response {
 	if len(args) == 0 {
 		s.SetCWD(w.Env["HOME"])
-		return response.Response{Type: response.PWD, Payload: nil, CWD: s.CWD}
+		return response.Response{Type: response.Noop, Payload: nil, CWD: s.CWD}
 	}
 	if len(args) > 1 {
 		return response.Error("cd", "too many arguments", s.CWD)
@@ -32,5 +32,5 @@ func CD(args []string, w world.World, s *session.Session) response.Response {
 	}
 
 	s.SetCWD(resolved)
-	return response.Response{Type: response.PWD, Payload: nil, CWD: s.CWD}
+	return response.Response{Type: response.Noop, Payload: nil, CWD: s.CWD}
 }

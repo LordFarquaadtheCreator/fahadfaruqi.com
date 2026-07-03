@@ -625,37 +625,118 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.92);
   color: #e0e0e0;
   font-family: var(--font-mono);
   font-size: 13px;
-  padding: 8px;
+  padding: 10px 12px;
   overflow-y: auto;
+  line-height: 1.35;
 }
 
 .terminal-output {
   flex: 1;
-  white-space: pre-wrap;
   word-break: break-word;
+}
+
+.terminal-welcome {
+  color: #888;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.terminal-cmd {
+  color: #5b9bd5;
+  font-weight: 600;
 }
 
 .terminal-line {
   display: flex;
-  gap: 8px;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: baseline;
 }
 
-.terminal-prompt { color: #28c840; }
-.terminal-input { color: #e0e0e0; }
-.terminal-result { color: #a0a0a0; white-space: pre-wrap; }
+.terminal-user {
+  color: #28c840;
+  font-weight: 600;
+}
+
+.terminal-colon {
+  color: #888;
+}
+
+.terminal-path {
+  color: #5b9bd5;
+}
+
+.terminal-prompt {
+  color: #28c840;
+  margin-right: 4px;
+}
+
+.terminal-input {
+  color: #e0e0e0;
+}
+
+.terminal-ls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  padding: 1px 0 2px;
+}
+
+.terminal-ls-dir {
+  color: #5b9bd5;
+  font-weight: 600;
+}
+
+.terminal-ls-file {
+  color: #ccc;
+}
+
+.terminal-cat {
+  color: #d4d4d4;
+  word-break: break-word;
+  margin: 0;
+  padding: 1px 0 2px;
+  font-size: 13px;
+}
+
+.terminal-text {
+  color: #ccc;
+  word-break: break-word;
+  margin: 0;
+  padding: 1px 0;
+  font-size: 13px;
+}
+
+.terminal-env {
+  color: #aaa;
+  padding: 1px 0;
+}
+
+.terminal-env-key {
+  color: #d19a66;
+}
+
+.terminal-env-val {
+  color: #98c379;
+}
+
+.terminal-error {
+  color: #f48771;
+  padding: 2px 0;
+}
 
 .terminal-input-row {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   align-items: center;
   margin-top: 4px;
 }
 
-.terminal-input-row input {
+.terminal-input-field {
   flex: 1;
   background: transparent;
   border: none;
@@ -663,6 +744,7 @@ body {
   font-family: var(--font-mono);
   font-size: 13px;
   outline: none;
+  caret-color: #28c840;
 }
 
 /* ── Viewer ── */

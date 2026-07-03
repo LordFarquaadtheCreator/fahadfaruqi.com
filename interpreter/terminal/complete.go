@@ -88,15 +88,19 @@ func completePath(partial, cwd string, filesystem fs.FileSystem) []string {
 		if !strings.HasPrefix(strings.ToLower(name), strings.ToLower(basePart)) {
 			continue
 		}
-		// Build the completion string
+		// Build completion preserving original path prefix from input
 		var completion string
-		if strings.HasPrefix(partial, "~/") {
-			completion = "~/"
-			if dirPath != "~" {
-				completion = dirPath + "/"
+		if strings.HasPrefix(partial, "~/") || partial == "~" {
+			completion = dirPart
+			if dirPart != "~" && dirPart != "" {
+				completion += "/"
+			} else if dirPart == "~" {
+				completion += "/"
 			}
-		} else if dirPath != cwd && dirPath != "." {
-			completion = dirPath + "/"
+		} else if dirPart == "." || dirPart == "" {
+			completion = ""
+		} else {
+			completion = dirPart + "/"
 		}
 		completion += name
 		if child.Type.IsDir() {
