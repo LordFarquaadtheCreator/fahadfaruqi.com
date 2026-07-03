@@ -10,6 +10,12 @@
 
   function onEntryClick(path: string, isDir: boolean) {
     os()?.finderSelect?.(win.id, path);
+    // Prefetch full image so preview/ephemeral opens instantly
+    const entry = content.content.entries?.find((e) => e.path === path);
+    if (entry?.imagePath) {
+      const img = new Image();
+      img.src = entry.imagePath;
+    }
   }
 
   function onEntryDoubleClick(path: string) {

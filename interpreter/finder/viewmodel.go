@@ -38,12 +38,13 @@ type ContentVM struct {
 }
 
 type EntryVM struct {
-	Name     string `json:"name"`
-	Path     string `json:"path"`
-	Kind     string `json:"kind"` // "dir" | "md" | "txt" | "png" | "jpeg"
-	Icon     string `json:"icon"`
-	Size     int64  `json:"size"`
-	Modified string `json:"modified"`
+	Name      string `json:"name"`
+	Path      string `json:"path"`
+	Kind      string `json:"kind"` // "dir" | "md" | "txt" | "png" | "jpeg"
+	Icon      string `json:"icon"`
+	ImagePath string `json:"imagePath,omitempty"`
+	Size      int64  `json:"size"`
+	Modified  string `json:"modified"`
 }
 
 type BreadcrumbItemVM struct {
@@ -87,12 +88,13 @@ func BuildContentVM(win *wm.Window, fm *FinderManager, filesystem fs.FileSystem)
 				icon = child.Meta.ImagePath
 			}
 			entries = append(entries, EntryVM{
-				Name:     path.Base(paths[i]),
-				Path:     paths[i],
-				Kind:     kind,
-				Icon:     icon,
-				Size:     child.Meta.Size,
-				Modified: child.Meta.Modified,
+				Name:      path.Base(paths[i]),
+				Path:      paths[i],
+				Kind:      kind,
+				Icon:      icon,
+				ImagePath: child.Meta.ImagePath,
+				Size:      child.Meta.Size,
+				Modified:  child.Meta.Modified,
 			})
 		}
 		vm.Content = ContentVM{Kind: "folder", Entries: entries}
