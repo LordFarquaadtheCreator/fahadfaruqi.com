@@ -17,6 +17,7 @@ type CommandRunner interface {
 type TerminalEntry struct {
 	Input  string `json:"input"`
 	Output string `json:"output"`
+	CWD    string `json:"cwd"`
 }
 
 // TerminalState holds per-window terminal state.
@@ -57,6 +58,7 @@ func (tm *TerminalManager) RunCommand(id, input string) string {
 	if !ok {
 		return `{"type":"error","payload":{"command":"","message":"terminal not found"}}`
 	}
+	cwd := s.Session.CWD
 	output := tm.runner.RunCommand(input, s.Session)
 
 	// Check if command was clear — wipe history instead of recording
@@ -68,7 +70,7 @@ func (tm *TerminalManager) RunCommand(id, input string) string {
 		return output
 	}
 
-	s.History = append(s.History, TerminalEntry{Input: input, Output: output})
+	s.History = append(s.History, TerminalEntry{Input: input, Output: output, CWD: cwd})
 	return output
 }
 

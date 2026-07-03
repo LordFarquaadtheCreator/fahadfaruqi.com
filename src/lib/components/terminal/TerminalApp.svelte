@@ -111,7 +111,7 @@
       <div class="terminal-line">
         <span class="terminal-user">fahad@mac</span>
         <span class="terminal-colon">:</span>
-        <span class="terminal-path">{content.cwd}</span>
+        <span class="terminal-path">{entry.cwd}</span>
         <span class="terminal-prompt">$</span>
         <span class="terminal-input">{entry.input}</span>
       </div>

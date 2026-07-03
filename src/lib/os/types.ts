@@ -78,6 +78,7 @@ export interface TerminalContentVM {
 export interface TerminalEntry {
   input: string;
   output: string;
+  cwd: string;
 }
 
 export interface ViewerContentVM {
