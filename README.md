@@ -87,7 +87,7 @@ GOOS=js GOARCH=wasm go build -o ../static/interp.wasm .
 
 ## Deployment
 
-GitHub Actions: `npm ci` → `npm run build` → deploy `build/` to GitHub Pages. Triggers on push to `main`.
+GitHub Actions: setup Go + Node → build WASM from `interpreter/` → `npm ci` → `npm run build` → deploy `build/` to GitHub Pages. Triggers on push to `main`. CI builds WASM from source — no need to commit `static/interp.wasm`.
 
 ## Conventions
 
