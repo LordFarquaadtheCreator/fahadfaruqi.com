@@ -1,10 +1,17 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { terminal } from '$lib/stores/terminalStore';
   import History   from './History.svelte';
   import InputRow  from './InputRow.svelte';
   import HintBar   from './HintBar.svelte';
 
   let inputRow: InputRow;
+
+  // Initialize WASM interpreter on mount
+  onMount(() => {
+    console.log('Terminal onMount fired');
+    terminal.init();
+  });
 
   function handleBodyClick(e: MouseEvent) {
     if (e.target === e.currentTarget) {
@@ -16,6 +23,14 @@
     if (e.key === 'Enter' || e.key === ' ') {
       inputRow?.focus();
     }
+  }
+
+  function handleCommand(input: string) {
+    terminal.execute(input);
+  }
+
+  function handleTabComplete(input: string): string {
+    return terminal.tabComplete(input);
   }
 </script>
 
@@ -35,13 +50,13 @@
       <span class="dot" style="background:#d79921"></span>
       <span class="dot" style="background:#98971a"></span>
     </div>
-    <span class="title-text">user@portfolio — {$terminal.path}</span>
+    <span class="title-text">user@fahadfaruqi.com — {$terminal.path}</span>
   </div>
 
   <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
   <div class="body" role="region" aria-label="terminal body" onclick={handleBodyClick}>
     <History entries={$terminal.history} />
-    <InputRow bind:this={inputRow} path={$terminal.path} />
+    <InputRow bind:this={inputRow} path={$terminal.path} onCommand={handleCommand} onTabComplete={handleTabComplete} />
     <HintBar hints={$terminal.hints} candidates={$terminal.completionCandidates} />
   </div>
 </div>

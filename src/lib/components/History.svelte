@@ -8,7 +8,6 @@
   let scrollEl: HTMLDivElement;
 
   $effect(() => {
-    entries;
     tick().then(() => {
       if (scrollEl) scrollEl.scrollTop = scrollEl.scrollHeight;
     });

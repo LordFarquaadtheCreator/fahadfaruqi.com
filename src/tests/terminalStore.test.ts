@@ -34,16 +34,16 @@ describe('execute — ls', () => {
   it('ls at root lists sections', () => {
     terminal.execute('ls');
     const last = get(terminal).history.at(-1)!;
-    expect(last.output.type).toBe('list');
-    expect(Array.isArray(last.output.payload)).toBe(true);
+    expect(last.output.type).toBe('text');
+    expect(typeof last.output.payload).toBe('string');
   });
   it('ls with glob filters', () => {
     terminal.execute('cd resume');
     terminal.execute('cd experience');
     terminal.execute('ls *');
     const last = get(terminal).history.at(-1)!;
-    expect(last.output.type).toBe('list');
-    expect((last.output.payload as any[]).length).toBeGreaterThan(0);
+    expect(last.output.type).toBe('text');
+    expect((last.output.payload as string).length).toBeGreaterThan(0);
   });
   it('ls nonexistent is error', () => {
     terminal.execute('ls zzz*');

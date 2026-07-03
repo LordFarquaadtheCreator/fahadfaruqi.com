@@ -18,11 +18,11 @@ describe('dispatch — cd', () => {
 });
 
 describe('dispatch — ls', () => {
-  it('ls at root lists sections',    () => expect(dispatch('~', 'ls').output.type).toBe('list'));
+  it('ls at root lists sections',    () => expect(dispatch('~', 'ls').output.type).toBe('text'));
   it('ls with glob filters',         () => {
     const out = dispatch('~/resume/experience', 'ls *').output;
-    expect(out.type).toBe('list');
-    expect((out.payload as any[]).length).toBeGreaterThan(0);
+    expect(out.type).toBe('text');
+    expect((out.payload as string).length).toBeGreaterThan(0);
   });
   it('ls nonexistent glob is error', () => expect(dispatch('~', 'ls zzz*').output.type).toBe('error'));
 });

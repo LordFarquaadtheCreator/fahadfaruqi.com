@@ -23,11 +23,16 @@ export type Theme =
   | 'deus-ex'
   | 'mass-effect';
 
-export type OutputType = 'text' | 'success' | 'error' | 'warning' | 'json' | 'list';
+export type OutputType = 'text' | 'success' | 'error' | 'warning' | 'json' | 'list' | 'cat' | 'clear';
+
+export interface CatPayload {
+  name: string;
+  content: string;
+}
 
 export interface OutputEntry {
   type: OutputType;
-  payload: string | JsonNode | ListItem[] | ListItem;
+  payload: string | JsonNode | ListItem[] | ListItem | CatPayload;
 }
 
 export interface HistoryEntry {

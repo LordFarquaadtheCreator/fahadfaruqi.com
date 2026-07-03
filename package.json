@@ -4,7 +4,9 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"predev": "./build-wasm.sh",
 		"dev": "vite dev",
+		"prebuild": "./build-wasm.sh",
 		"build": "vite build",
 		"build:watch": "vite build --watch",
 		"preview": "vite preview",

@@ -29,8 +29,6 @@
   .p-dollar { color: var(--gb-yellow); font-weight: 500; margin-right: 6px; }
   .cmd-text { color: var(--gb-fg); }
   .output-block {
-    border-left: 2px solid var(--gb-border2);
-    padding: 4px 0 4px 12px;
-    margin-left: 2px;
+    padding: 2px 0;
   }
 </style>

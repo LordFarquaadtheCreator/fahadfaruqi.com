@@ -1,0 +1,169 @@
+{
+  "~": {
+    "type": "dir",
+    "children": [
+      "~/.about.md",
+      "~/.contact.md",
+      "~/.blog.md",
+      "~/resume",
+      "~/readme.md"
+    ],
+    "hidden": false
+  },
+  "~/.about.md": {
+    "type": "file",
+    "content": "# About\n\n**Name:** Fahad Faruqi\n\n**Title:** Software engineer shipping iOS, web, backend, and applied AI products.\n\n**Location:** Queens, NYC",
+    "hidden": true
+  },
+  "~/.contact.md": {
+    "type": "file",
+    "content": "# Contact\n\n**Email:** fahadfaruqi1@gmail.com",
+    "hidden": true
+  },
+  "~/.blog.md": {
+    "type": "file",
+    "content": "# Blog\n\n> There is no quality control here.",
+    "hidden": true
+  },
+  "~/readme.md": {
+    "type": "file",
+    "content": "# Fahad Faruqi\n\nType `help` or press `Tab` to explore.\n\n## Available Commands\n\n- `ls [path]` — list directory contents\n- `cd <path>` — change directory\n- `cat <file>` — display file contents\n- `open <path>` — open Finder window\n- `pwd` — print working directory\n- `echo <text>` — display text\n- `env` — display environment variables\n- `history` — display command history\n- `clear` — clear terminal\n- `help` — display this help message\n\n## Navigation\n\n- `~` — home directory\n- `resume/` — CV sections (experience, education, projects, toolkit)",
+    "hidden": false
+  },
+  "~/resume": {
+    "type": "dir",
+    "children": [
+      "~/resume/experience",
+      "~/resume/education",
+      "~/resume/projects",
+      "~/resume/toolkit"
+    ],
+    "hidden": false
+  },
+  "~/resume/experience": {
+    "type": "dir",
+    "children": [
+      "~/resume/experience/socialode.md",
+      "~/resume/experience/tobi-wealth.md",
+      "~/resume/experience/crowdpass.md",
+      "~/resume/experience/google.md",
+      "~/resume/experience/easymeets.md",
+      "~/resume/experience/nyc-dot.md",
+      "~/resume/experience/fiindme.md",
+      "~/resume/experience/nybg.md",
+      "~/resume/experience/asapp.md",
+      "~/resume/experience/cuny-tech-prep.md"
+    ],
+    "hidden": false
+  },
+  "~/resume/education": {
+    "type": "dir",
+    "children": [
+      "~/resume/education/city-college.md",
+      "~/resume/education/cornell-tech.md"
+    ],
+    "hidden": false
+  },
+  "~/resume/projects": {
+    "type": "dir",
+    "children": [
+      "~/resume/projects/asapp-nlp.md",
+      "~/resume/projects/wordpress-nlp.md"
+    ],
+    "hidden": false
+  },
+  "~/resume/toolkit": {
+    "type": "dir",
+    "children": [
+      "~/resume/toolkit/core-stack.md",
+      "~/resume/toolkit/creative-product.md",
+      "~/resume/toolkit/systems-data.md"
+    ],
+    "hidden": false
+  },
+  "~/resume/experience/socialode.md": {
+    "type": "file",
+    "content": "# Socialode — Software Engineer\n\n**URL:** [socialode.com](https://socialode.com/)\n\n**Role:** Software Engineer | **Location:** Remote | **Duration:** Jan 2026 – Present\n\nBuilding type-safe backend infrastructure and tooling for a social platform.\n\n## Highlights\n\n- Built a type-safe mail package in TypeScript, including validation, templating, and delivery\n- Built a CLI tool to spin up realistic test users on demand, eliminating manual data setup for QA and local dev\n- Shipped the matching feature end-to-end data model, migration, and REST API\n- Closed a critical auth gap by implementing full password reset — betterauth extension, mail integration, and frontend flow\n- Shipped dynamic bio generation into the user API, turning raw interest data into personalized profiles across response formats\n- Standardized account eligibility checks across protected routes with onboarding-enforcement middleware\n\n**Tools:** TypeScript, Node.js, BetterAuth, CLI tools, REST APIs\n\n**Skills:** Backend engineering, auth systems, developer tooling, API design",
+    "hidden": false
+  },
+  "~/resume/experience/tobi-wealth.md": {
+    "type": "file",
+    "content": "# Tobi Wealth — Principal Software Engineer\n\n**URL:** [tobiwealth.com](https://tobiwealth.com/)\n\n**Role:** Principal Software Engineer | **Location:** New York, NY | **Duration:** Dec 2025 – Present\n\nOwning product-facing performance and UX quality across a modern fintech stack.\n\n## Highlights\n\n- Cut critical load times from roughly four seconds to near-instant by introducing targeted caching\n- Fixed high-priority UX issues across SwiftUI iOS surfaces and an Express TypeScript backend\n- Improved the feel of core user journeys by tightening end-to-end performance and polish\n\n**Tools:** SwiftUI, Express, TypeScript, Caching\n\n**Skills:** iOS development, performance optimization, UX refinement, full-stack debugging",
+    "hidden": false
+  },
+  "~/resume/experience/crowdpass.md": {
+    "type": "file",
+    "content": "# Crowdpass — Software Engineer\n\n**URL:** [crowdpass.co](https://www.crowdpass.co/)\n\n**Role:** Software Engineer | **Location:** New York, NY | **Duration:** Jul 2025 – Dec 2025\n\nBuilt revenue-driving features and cost-saving infrastructure for an enterprise event platform.\n\n## Highlights\n\n- Reduced per-client Twilio costs by 82% through dependency and messaging optimization work\n- Rewrote client cost-tracking webhooks to unlock clearer financial reporting for 2,000+ clients\n- Launched a CRUD guest-ticketing module used by enterprise customers for registration management\n- Delivered mobile and web improvements across React Native, .NET, and Next.js products\n\n**Tools:** .NET, Entity Framework, Next.js, React Native, Twilio, Auth0\n\n**Skills:** Cost optimization, feature delivery, mobile development, enterprise support",
+    "hidden": false
+  },
+  "~/resume/experience/google.md": {
+    "type": "file",
+    "content": "# Google — Software Engineering Program Mentee\n\n**URL:** [buildyourfuture.withgoogle.com](https://buildyourfuture.withgoogle.com/)\n\n**Role:** Software Engineering Program Mentee (GSWEP) | **Location:** New York, NY | **Duration:** Aug 2024 – Dec 2025\n\nCompleted intensive mentorship focused on interview performance and software engineering growth.\n\n## Highlights\n\n- Improved coding interview outcomes through one-on-one mentorship with Google software engineers\n- Strengthened problem-solving speed, communication, and interview readiness in a structured program\n\n**Tools:** Mock interviews, Mentorship sessions, Problem sets\n\n**Skills:** Algorithms, technical communication, interview readiness, problem solving",
+    "hidden": false
+  },
+  "~/resume/experience/easymeets.md": {
+    "type": "file",
+    "content": "# EasyMeets — Software Engineer\n\n**URL:** [easymeets-app.com](https://easymeets-app.com/)\n\n**Role:** Software Engineer | **Location:** New York, NY | **Duration:** Nov 2024 – Aug 2025\n\nLed backend delivery while helping steer product, mobile, and deployment work for a startup MVP.\n\n## Highlights\n\n- Managed weekly sprints while supporting a React Native app aimed at 1,000+ potential users\n- Built and tested a Go Fiber backend covering authentication and data-management workflows\n- Shipped 15+ features across Next.js and React Native while improving release velocity\n- Shortened deployment time by 75% with GitHub Actions, Docker, Linux services, and AWS EC2\n\n**Tools:** Go Fiber, React Native, Next.js, PostgreSQL, Docker, AWS EC2\n\n**Skills:** Technical leadership, backend engineering, CI/CD, MVP delivery",
+    "hidden": false
+  },
+  "~/resume/experience/nyc-dot.md": {
+    "type": "file",
+    "content": "# NYC Department of Transportation — Software Engineering Intern\n\n**URL:** [nyc.gov/dot](https://www.nyc.gov/site/dot/index.page)\n\n**Role:** Software Engineering Intern | **Location:** New York, NY | **Duration:** Jun 2023 – Aug 2025\n\nSupported internal public-sector software with reliability, security, and automation improvements.\n\n## Highlights\n\n- Mitigated security risks across critical C# and Visual Basic .NET applications\n- Built an automated C# email service that reduced missed project deadlines by 75%\n- Refactored a .NET web application to improve stability and cut crash rates for daily users\n- Normalized MySQL schemas to improve key query performance by more than 30%\n\n**Tools:** C#, Visual Basic .NET, .NET, MySQL\n\n**Skills:** Application hardening, automation, maintenance engineering, database tuning",
+    "hidden": false
+  },
+  "~/resume/experience/fiindme.md": {
+    "type": "file",
+    "content": "# Fiindme — Software Engineer\n\n**Role:** Software Engineer | **Location:** New York, NY | **Duration:** Mar 2024 – Jun 2024\n\nWorked on recommendation logic and product communication in an early-stage startup setting.\n\n## Highlights\n\n- Engineered a friend-recommendation approach using preference weighting, embeddings, and neural models\n- Bridged technical work with business context to help the team and CEO align on product decisions\n\n**Tools:** LLM embeddings, Neural networks, Recommendation modeling\n\n**Skills:** Matching systems, product translation, applied AI, startup execution",
+    "hidden": false
+  },
+  "~/resume/experience/nybg.md": {
+    "type": "file",
+    "content": "# NYC Botanical Garden — Breakthrough Tech AI Fellow\n\n**URL:** [nybg.org](https://www.nybg.org/)\n\n**Role:** Breakthrough Tech AI Fellow | **Location:** New York, NY | **Duration:** Jan 2024 – Jun 2024\n\nBuilt a computer-vision pipeline for irregular botanical specimen classification.\n\n## Highlights\n\n- Fine-tuned an image-classification workflow that reached 97% accuracy in a Kaggle competition\n- Explored a wide range of Python computer-vision libraries and techniques for the project\n\n**Tools:** Python, OpenCV, YOLOv8, Kaggle\n\n**Skills:** Computer vision, model tuning, classification, experimentation",
+    "hidden": false
+  },
+  "~/resume/experience/asapp.md": {
+    "type": "file",
+    "content": "# ASAPP — Breakthrough Tech AI Fellow\n\n**URL:** [asapp.com](https://www.asapp.com/)\n\n**Role:** Breakthrough Tech AI Fellow | **Location:** New York, NY | **Duration:** Jun 2023 – Dec 2023\n\nApplied natural-language processing to customer-support classification and completed an AI fellowship cohort.\n\n## Highlights\n\n- Classified salient customer-service interactions with pandas, scikit-learn, and Bayesian optimization to reach an 84% F1 score\n- Trained classification and regression NLP models in weekly sprint-based fellowship work\n- Built stronger experimentation habits around data prep, model evaluation, and collaboration\n\n**Tools:** Python, pandas, scikit-learn, Bayesian optimization, Jupyter\n\n**Skills:** NLP, data science, model evaluation, fellowship collaboration",
+    "hidden": false
+  },
+  "~/resume/experience/cuny-tech-prep.md": {
+    "type": "file",
+    "content": "# CUNY Tech Prep — Full Stack Fellow\n\n**URL:** [cunytechprep.nyc](https://cunytechprep.nyc/)\n\n**Role:** Full Stack Fellow | **Location:** New York, NY | **Duration:** Aug 2023 – May 2024\n\nExpanded full-stack and AI application work through fellowship projects and shipped prototypes.\n\n## Highlights\n\n- Served outfit recommendations through a MongoDB-backed REST API built with Express\n- Reduced hallucinations in an academic-text assistant through reranking, rewriting, and sentence-windowing techniques\n- Deployed a Python Streamlit prototype to Hugging Face Spaces\n\n**Tools:** JavaScript, Express, MongoDB, Python, Streamlit, Hugging Face Spaces\n\n**Skills:** Full-stack development, API design, RAG iteration, rapid prototyping",
+    "hidden": false
+  },
+  "~/resume/education/city-college.md": {
+    "type": "file",
+    "content": "# The City College of New York\n\n**Degree:** Bachelor of Science in Computer Science\n\n**Location:** New York, NY | **Duration:** Jul 2021 – Aug 2025\n\n## Highlights\n\n- Graduated Cum Laude\n- Co-founded BYTE Club — dedicated to building software projects and supporting SWE growth at CCNY",
+    "hidden": false
+  },
+  "~/resume/education/cornell-tech.md": {
+    "type": "file",
+    "content": "# Cornell Tech\n\n**Degree:** Certificate in Machine Learning Foundations\n\n**Location:** New York, NY | **Duration:** Jun 2023 – Aug 2023\n\n## Highlights\n\n- Immersive hands-on learning through Break Through Tech\n- Applied theoretical knowledge to real-world ML scenarios",
+    "hidden": false
+  },
+  "~/resume/projects/asapp-nlp.md": {
+    "type": "file",
+    "content": "# ASAPP NLP — Identifying Relevant Parts of Customer Service Conversations\n\n**Role:** ML Engineer Team Lead | **Duration:** Aug 2023 – Present\n\nDeveloped ML application to analyze customer service conversations using NLP, Pipeline, and Transformers to accurately provide managers answers to salient questions regarding customer service interactions.\n\n## Highlights\n\n- Led team of 5 ML engineers leveraging Python's spaCy, pandas, numPy and scikit-learn libraries to vectorize textual data\n- Enabled efficient feature processing for customer service analysis\n\n**Tools:** Python, spaCy, pandas, numpy, scikit-learn, NLP, Transformers",
+    "hidden": false
+  },
+  "~/resume/projects/wordpress-nlp.md": {
+    "type": "file",
+    "content": "# WordPress NLP Article Poster w/Google API\n\n**Role:** Developer | **Duration:** Mar 2023 – Mar 2023\n\nDeveloped Python script to scrape data from Google emails to format into a WordPress blog. Used Google API to pull email articles and summarize text with NLP pipeline using Huggingface transformers.\n\n## Highlights\n\n- Automated content creation workflow\n- Leveraged Google API and Huggingface transformers for text summarization\n\n**Tools:** Python, Google API, NLP, Huggingface transformers, WordPress API",
+    "hidden": false
+  },
+  "~/resume/toolkit/core-stack.md": {
+    "type": "file",
+    "content": "# Core Stack\n\n- SwiftUI\n- TypeScript\n- React Native\n- Next.js\n- Go Fiber\n- .NET\n- Node.js",
+    "hidden": false
+  },
+  "~/resume/toolkit/creative-product.md": {
+    "type": "file",
+    "content": "# Creative & Product\n\n- UX refinement\n- Performance optimization\n- Design systems\n- Mobile development\n- Feature delivery",
+    "hidden": false
+  },
+  "~/resume/toolkit/systems-data.md": {
+    "type": "file",
+    "content": "# Systems & Data\n\n- PostgreSQL\n- MySQL\n- Docker\n- AWS EC2\n- Python\n- NLP\n- Computer vision\n- Entity Framework",
+    "hidden": false
+  }
+}

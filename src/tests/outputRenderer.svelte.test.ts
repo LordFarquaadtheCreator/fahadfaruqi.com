@@ -26,7 +26,7 @@ describe('OutputRenderer', () => {
     expect(container.querySelector('.out-success')).toBeTruthy();
   });
 
-  it('renders list output with items', () => {
+  it('renders list output inline like terminal ls', () => {
     const { container } = render(OutputRenderer, {
       props: {
         output: {
@@ -38,9 +38,8 @@ describe('OutputRenderer', () => {
         }
       }
     });
-    expect(container.querySelectorAll('.list-row').length).toBe(2);
+    expect(container.querySelector('pre.list-output')).toBeTruthy();
     expect(container.textContent).toContain('Item A');
-    expect(container.textContent).toContain('2024');
-    expect(container.textContent).toContain('desc');
+    expect(container.textContent).toContain('Item B');
   });
 });

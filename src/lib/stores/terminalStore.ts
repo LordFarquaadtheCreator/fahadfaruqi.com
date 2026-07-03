@@ -1,9 +1,9 @@
 import { writable, get } from 'svelte/store';
 import type { TerminalState, HistoryEntry, Hint } from '$lib/model/types';
-import { dispatch }    from '$lib/shell/commands/index';
-import { complete, deriveHints } from '$lib/shell/completer';
+import { loadInterpreter } from '$lib/wasmLoader.js';
 
 import { profile } from '$lib/model/data';
+import { complete } from '$lib/shell/completer';
 
 const BOOT: HistoryEntry = {
   id:      'boot',
@@ -16,30 +16,49 @@ function hintsFromStrings(cmds: string[]): Hint[] {
   return cmds.map(cmd => ({ label: cmd, cmd }));
 }
 
+let run: ((input: string) => string) | null = null;
+let initPromise: Promise<void> | null = null;
+const cmdQueue: string[] = [];
+
 function createTerminalStore() {
   const initial: TerminalState = {
     path:                '~',
     history:             [BOOT],
-    hints:               hintsFromStrings(deriveHints('~')),
+    hints:               hintsFromStrings(['ls', 'cd resume', 'cat readme.txt', 'help', 'clear', 'theme']),
     theme:               'gruvbox-dark',
     cmdHistoryLog:       [],
     cmdHistoryCursor:    -1,
     completionCandidates: [],
   };
 
-  const { subscribe, update } = writable<TerminalState>(initial);
+  const { subscribe, update, set } = writable<TerminalState>(initial);
 
-  // ── execute ───────────────────────────────────────────────────
+  // Initialize WASM interpreter
+  async function init() {
+    console.log('terminalStore init called');
+    if (initPromise) return initPromise;
+    initPromise = (async () => {
+      console.log('terminalStore loading WASM...');
+      run = await loadInterpreter();
+      console.log('terminalStore WASM loaded, run set:', run !== null);
+      // Process queued commands
+      while (cmdQueue.length > 0) {
+        const cmd = cmdQueue.shift()!;
+        processCommand(cmd);
+      }
+    })();
+    return initPromise;
+  }
 
-  function execute(raw: string) {
-    const trimmed = raw.trim();
-    if (!trimmed) return;
+  function processCommand(trimmed: string) {
+    if (!run) return;
 
     update(state => {
-      const result = dispatch(state.path, trimmed);
+      const resultStr = run!(trimmed);
+      const result = JSON.parse(resultStr);
 
       // clear is a special signal
-      if (result.output.payload === '__clear__') {
+      if (result.type === 'clear') {
         return {
           ...state,
           history:             [],
@@ -49,23 +68,23 @@ function createTerminalStore() {
         };
       }
 
-      // theme change: extract new theme from the command
+      // theme change
       const { verb, args } = (() => {
         const p = trimmed.split(/\s+/);
         return { verb: p[0], args: p.slice(1) };
       })();
 
-      const nextTheme = verb === 'theme' && result.output.type === 'success'
+      const nextTheme = verb === 'theme' && result.type === 'success'
         ? (args[0] as TerminalState['theme'])
         : state.theme;
 
-      const nextPath = result.newPath ?? state.path;
+      const nextPath = result.cwd ?? state.path;
 
       const entry: HistoryEntry = {
         id:      crypto.randomUUID(),
         command: trimmed,
         path:    state.path,
-        output:  result.output,
+        output:  { type: result.type as any, payload: result.payload },
       };
 
       return {
@@ -73,7 +92,7 @@ function createTerminalStore() {
         path:                nextPath,
         theme:               nextTheme,
         history:             [...state.history, entry],
-        hints:               hintsFromStrings(deriveHints(nextPath)),
+        hints:               hintsFromStrings(['ls', 'cd resume', 'cat readme.txt', 'help', 'clear', 'theme']),
         cmdHistoryLog:       [trimmed, ...state.cmdHistoryLog].slice(0, 50),
         cmdHistoryCursor:    -1,
         completionCandidates: [],
@@ -81,14 +100,31 @@ function createTerminalStore() {
     });
   }
 
+  // ── execute ───────────────────────────────────────────────────
+
+  function execute(raw: string) {
+    const trimmed = raw.trim();
+    console.log('execute called:', trimmed, 'run:', run !== null);
+    if (!trimmed) return;
+
+    if (!run) {
+      // Queue command and trigger init
+      console.log('queuing command');
+      cmdQueue.push(trimmed);
+      init();
+      return;
+    }
+
+    console.log('processing command');
+    processCommand(trimmed);
+  }
+
   // ── tabComplete ───────────────────────────────────────────────
 
   function tabComplete(input: string): string {
-    const state  = get({ subscribe });
+    const state = get({ subscribe });
     const result = complete(state.path, input);
-
     update(s => ({ ...s, completionCandidates: result.candidates }));
-
     return result.completed;
   }
 
@@ -119,10 +155,10 @@ function createTerminalStore() {
   }
 
   function reset() {
-    update(() => initial);
+    set(initial);
   }
 
-  return { subscribe, execute, tabComplete, historyUp, historyDown, setTheme, reset };
+  return { subscribe, execute, tabComplete, historyUp, historyDown, setTheme, reset, init };
 }
 
 export const terminal = createTerminalStore();

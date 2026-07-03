@@ -74,6 +74,35 @@ static/
 
 GitHub Actions workflow: `npm ci` → `npm run build` → upload `build/` → deploy to GitHub Pages. No env vars needed. `BASE_PATH` env var supported in `svelte.config.js` if needed for sub-path hosting.
 
+## Architecture Rule (MVVM, strict)
+
+This app is strict MVVM. The Go WASM backend (`/interpreter`) owns ALL logic:
+filesystem, parsing, zsh interpretation, window/Finder state, drag math,
+view-mode layout, markdown rendering, focus, z-order, navigation history.
+
+Svelte is a dumb view layer. It:
+- Renders ViewModel JSON received from Go.
+- Forwards raw input events (clicks, key, pointer deltas) to Go via `window.os.*`.
+- Holds zero domain state. No `$derived` business logic, no parsing, no math.
+
+The only Svelte state allowed: ephemeral UI affordances (hover/focus rings)
+and a single `$state` holding the latest VM snapshot.
+
+Every meaningful operation routes through Go.
+
+## File Map (Extended)
+
+```
+interpreter/
+├── finder/         # Window manager + VM + markdown render (see interpreter/finder/AGENTS.md)
+├── command/open.go # zsh `open` entry point
+└── ...
+
+src/lib/
+├── finder/         # Read-only VM mirror (see src/lib/finder/AGENTS.md)
+└── components/finder/  # Finder UI (see src/lib/components/finder/AGENTS.md)
+```
+
 ## Testing
 
 Two Vitest projects in `vite.config.ts`:

@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { terminal } from '$lib/stores/terminalStore';
-
-  let { path }: { path: string } = $props();
+  let { path, onCommand, onTabComplete }: { path: string; onCommand: (input: string) => void; onTabComplete: (input: string) => string } = $props();
 
   let value = $state('');
   let inputEl: HTMLInputElement;
@@ -10,26 +8,25 @@
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'Enter') {
-      terminal.execute(value);
+      onCommand(value);
       value = '';
       return;
     }
 
     if (e.key === 'Tab') {
       e.preventDefault();
-      value = terminal.tabComplete(value);
+      value = onTabComplete(value);
       return;
     }
 
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      value = terminal.historyUp();
       return;
     }
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      value = terminal.historyDown();
+      return;
     }
   }
 </script>
@@ -46,6 +43,7 @@
     autocomplete="off"
     spellcheck="false"
     aria-label="terminal input"
+    onsubmit={(e) => e.preventDefault()}
   />
 </div>
 
