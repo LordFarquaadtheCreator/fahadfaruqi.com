@@ -46,28 +46,30 @@ func (em *EphemeralManager) SpawnForFile(filePath string) *wm.Window {
 	app, _ := apps.Get("preview-ephemeral")
 	winW, winH := app.Width, app.Height
 
-	if !state.IsDir && node.Meta.ImgWidth > 0 && node.Meta.ImgHeight > 0 {
-		vw, vh := em.wm.Viewport()
-		if vw > 0 && vh > 0 {
-			imgW := float64(node.Meta.ImgWidth)
-			imgH := float64(node.Meta.ImgHeight)
-
-			scaleMin := math.Max(0.3*float64(vw)/imgW, 0.3*float64(vh)/imgH)
-			scaleMax := math.Min(0.45*float64(vw)/imgW, 0.45*float64(vh)/imgH)
-			naturalFit := math.Min(0.375*float64(vw)/imgW, 0.375*float64(vh)/imgH)
-
-			scale := naturalFit
-			if scale > scaleMax {
-				scale = scaleMax
-			}
-			if scale < scaleMin {
-				scale = scaleMin
-			}
-
-			winW = int(imgW*scale + 0.5)
-			winH = int(imgH*scale + 0.5)
-		}
+	if !state.IsDir {
 		state.ImagePath = node.Meta.ImagePath
+		if node.Meta.ImgWidth > 0 && node.Meta.ImgHeight > 0 {
+			vw, vh := em.wm.Viewport()
+			if vw > 0 && vh > 0 {
+				imgW := float64(node.Meta.ImgWidth)
+				imgH := float64(node.Meta.ImgHeight)
+
+				scaleMin := math.Max(0.3*float64(vw)/imgW, 0.3*float64(vh)/imgH)
+				scaleMax := math.Min(0.45*float64(vw)/imgW, 0.45*float64(vh)/imgH)
+				naturalFit := math.Min(0.375*float64(vw)/imgW, 0.375*float64(vh)/imgH)
+
+				scale := naturalFit
+				if scale > scaleMax {
+					scale = scaleMax
+				}
+				if scale < scaleMin {
+					scale = scaleMin
+				}
+
+				winW = int(imgW*scale + 0.5)
+				winH = int(imgH*scale + 0.5)
+			}
+		}
 	}
 
 	win := em.wm.SpawnCentered(string(app.Type), app.ID, state.FileName, winW, winH)

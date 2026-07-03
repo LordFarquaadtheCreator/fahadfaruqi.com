@@ -955,6 +955,85 @@ body {
 }
 
 /* ── Splash ── */
+
+/* ── Ephemeral Preview ── */
+.window.ephemeral {
+  border: 1px solid var(--mac-separator);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  z-index: 100 !important;
+}
+
+.ephemeral-preview {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--mac-bg);
+  position: relative;
+}
+
+.ephemeral-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  flex: 1;
+}
+
+.ephemeral-open-preview {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--mac-text);
+  background: var(--mac-bg-secondary);
+  border: 0.5px solid var(--mac-separator);
+  cursor: default;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.ephemeral-preview:hover .ephemeral-open-preview {
+  opacity: 1;
+}
+
+.ephemeral-folder {
+  flex-direction: row;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.ephemeral-folder-icon {
+  width: 64px;
+  height: 64px;
+  flex: none;
+}
+
+.ephemeral-folder-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--mac-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.ephemeral-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: transparent;
+  cursor: default;
+}
+
+/* ── Splash ── */
 .splash-app {
   flex: 1;
   display: flex;

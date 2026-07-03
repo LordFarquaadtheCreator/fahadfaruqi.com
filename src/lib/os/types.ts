@@ -22,7 +22,8 @@ export interface WindowVM {
   height: number;
   minimized: boolean;
   maximized: boolean;
-  content: FinderContentVM | TerminalContentVM | ViewerContentVM | SplashContentVM;
+  ephemeral: boolean;
+  content: FinderContentVM | TerminalContentVM | ViewerContentVM | EphemeralContentVM | SplashContentVM;
 }
 
 export interface FinderContentVM {
@@ -87,6 +88,14 @@ export interface ViewerContentVM {
   name: string;
   content?: string;
   isMarkdown?: boolean;
+}
+
+export interface EphemeralContentVM {
+  kind: 'ephemeral-image' | 'ephemeral-folder';
+  src?: string;
+  name: string;
+  filePath: string;
+  icon?: string;
 }
 
 export interface SplashContentVM {

@@ -104,21 +104,26 @@
 <div
   class="window"
   class:focused
+  class:ephemeral={win.ephemeral}
   style="left: {win.x}px; top: {win.y}px; width: {win.width}px; height: {win.height}px; z-index: {win.z};"
   onpointerdown={onPointerDown}
   role="group"
   aria-label={win.title}
 >
-  <div class="titlebar">
-    <div class="traffic-lights">
-      <button class="traffic-light close" onclick={onclose} aria-label="Close"></button>
-      <button class="traffic-light minimize" onclick={onminimize} aria-label="Minimize"></button>
-      <button class="traffic-light maximize" onclick={onmaximize} aria-label="Maximize"></button>
+  {#if !win.ephemeral}
+    <div class="titlebar">
+      <div class="traffic-lights">
+        <button class="traffic-light close" onclick={onclose} aria-label="Close"></button>
+        <button class="traffic-light minimize" onclick={onminimize} aria-label="Minimize"></button>
+        <button class="traffic-light maximize" onclick={onmaximize} aria-label="Maximize"></button>
+      </div>
+      <span class="title">{win.title}</span>
     </div>
-    <span class="title">{win.title}</span>
-  </div>
+  {/if}
   <div class="window-content">
     {@render children()}
   </div>
-  <div class="resize-handle" role="separator" onpointerdown={onResizeStart}></div>
+  {#if !win.ephemeral}
+    <div class="resize-handle" role="separator" onpointerdown={onResizeStart}></div>
+  {/if}
 </div>

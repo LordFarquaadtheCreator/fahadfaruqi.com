@@ -6,6 +6,7 @@
   import TerminalApp from '$lib/components/terminal/TerminalApp.svelte';
   import ImageViewer from '$lib/components/viewer/ImageViewer.svelte';
   import TextViewer from '$lib/components/viewer/TextViewer.svelte';
+  import EphemeralPreview from '$lib/components/viewer/EphemeralPreview.svelte';
   import SplashApp from '$lib/components/placeholder/SplashApp.svelte';
 
   let { windows, focusedId }: { windows: WindowVM[]; focusedId: string } = $props();
@@ -31,6 +32,8 @@
         <ImageViewer content={win.content} />
       {:else if win.content.kind === 'viewer-text'}
         <TextViewer content={win.content} />
+      {:else if win.content.kind === 'ephemeral-image'}
+        <EphemeralPreview content={win.content} />
       {:else if win.content.kind === 'splash'}
         <SplashApp content={win.content} />
       {/if}

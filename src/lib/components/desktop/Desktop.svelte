@@ -40,7 +40,30 @@
     const onResize = () => setViewport(window.innerWidth, window.innerHeight);
     window.addEventListener('resize', onResize);
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') os()?.closeFocused?.();
+      if (e.key === 'Escape') {
+        os()?.closeFocused?.();
+        return;
+      }
+      if (e.key === ' ') {
+        // Spacebar: toggle ephemeral preview on selected finder file
+        e.preventDefault();
+        const focused = vm?.windows?.find((w) => w.id === vm?.focusedId);
+        if (focused?.content?.kind === 'finder') {
+          const sel = focused.content.selectedEntry;
+          if (sel) {
+            // Check if ephemeral already open — toggle close
+            const ephemeralWin = vm?.windows?.find((w) => w.ephemeral);
+            if (ephemeralWin) {
+              os()?.ephemeralClose?.();
+            } else {
+              os()?.ephemeralPreview?.(sel);
+            }
+          }
+        } else if (focused?.ephemeral) {
+          // Spacebar on ephemeral window itself — close it
+          os()?.ephemeralClose?.();
+        }
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => {
@@ -58,5 +81,15 @@
   <MenuBar menuBar={vm.menuBar} />
   <DesktopIcons icons={vm.desktop.icons} />
   <WindowLayer windows={vm.windows} focusedId={vm.focusedId} />
+  {#if vm?.windows?.some((w) => w.ephemeral)}
+    <div
+      class="ephemeral-backdrop"
+      onclick={() => os()?.ephemeralClose?.()}
+      onkeydown={(e) => { if (e.key === ' ') { e.preventDefault(); os()?.ephemeralClose?.(); } }}
+      role="button"
+      tabindex={-1}
+      aria-label="Close preview"
+    ></div>
+  {/if}
   <Dock dock={vm.dock} />
 {/if}
