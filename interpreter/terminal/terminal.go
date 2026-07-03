@@ -58,6 +58,16 @@ func (tm *TerminalManager) RunCommand(id, input string) string {
 		return `{"type":"error","payload":{"command":"","message":"terminal not found"}}`
 	}
 	output := tm.runner.RunCommand(input, s.Session)
+
+	// Check if command was clear — wipe history instead of recording
+	var resp struct {
+		Type string `json:"type"`
+	}
+	if json.Unmarshal([]byte(output), &resp) == nil && resp.Type == "clear" {
+		s.History = make([]TerminalEntry, 0)
+		return output
+	}
+
 	s.History = append(s.History, TerminalEntry{Input: input, Output: output})
 	return output
 }

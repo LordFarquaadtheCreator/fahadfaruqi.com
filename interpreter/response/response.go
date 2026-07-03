@@ -17,6 +17,7 @@ const (
 	Apps       Type = "apps"
 	Completion Type = "completion"
 	Err        Type = "error"
+	Noop       Type = "noop"
 )
 
 type Response struct {

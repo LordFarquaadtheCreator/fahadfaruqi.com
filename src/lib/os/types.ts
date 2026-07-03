@@ -149,3 +149,45 @@ export interface ShellResponse {
   payload: unknown;
   cwd: string;
 }
+
+export interface LsPayload {
+  entries: FSEntry[];
+  longFormat?: boolean;
+  'human-readable'?: boolean;
+  'show-hidden'?: boolean;
+  recursive?: boolean;
+  color?: string;
+}
+
+export interface FSEntry {
+  name: string;
+  type: string;
+  size: number;
+  modified: string;
+  hidden: boolean;
+  permission?: string;
+  owner?: string;
+  group?: string;
+}
+
+export interface CatPayload {
+  name: string;
+  content: string;
+}
+
+export interface TextPayload {
+  text: string;
+}
+
+export interface EnvPayload {
+  vars: Record<string, string>;
+}
+
+export interface HistoryPayload {
+  entries: string[];
+}
+
+export interface ErrorPayload {
+  command: string;
+  message: string;
+}

@@ -212,7 +212,9 @@ func main() {
 
 	// Terminal operations
 	os["terminalRun"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		return w.Terminal.RunCommand(args[0].String(), args[1].String())
+		output := w.Terminal.RunCommand(args[0].String(), args[1].String())
+		pushVM()
+		return output
 	})
 
 	os["terminalComplete"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {

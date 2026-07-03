@@ -29,6 +29,10 @@
 
   function onPointerDown(e: PointerEvent) {
     if (e.target instanceof HTMLElement && e.target.closest('.traffic-light')) return;
+    if (e.target instanceof HTMLElement && e.target.closest('.window-content')) {
+      onfocus();
+      return;
+    }
     onfocus();
     dragging = true;
     lastX = e.clientX;
