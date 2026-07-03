@@ -548,7 +548,7 @@ body {
 .entry:hover { background: var(--mac-bg-secondary); }
 .entry.selected { background: var(--mac-accent); color: white; }
 
-.entry-icon { width: 18px; height: 18px; flex-shrink: 0; }
+.entry-icon { width: 18px; height: 18px; flex-shrink: 0; object-fit: cover; }
 .entry-name { font-size: var(--font-size-body); }
 
 .finder-breadcrumb {

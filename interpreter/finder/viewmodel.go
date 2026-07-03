@@ -81,6 +81,10 @@ func BuildContentVM(win *wm.Window, fm *FinderManager, filesystem fs.FileSystem)
 			if child.Type.IsDir() {
 				kind = "dir"
 				icon = "/icons/folder.png"
+			} else if child.Meta.ThumbPath != "" {
+				icon = child.Meta.ThumbPath
+			} else if child.Meta.ImagePath != "" {
+				icon = child.Meta.ImagePath
 			}
 			entries = append(entries, EntryVM{
 				Name:     path.Base(paths[i]),

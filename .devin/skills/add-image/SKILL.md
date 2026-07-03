@@ -29,8 +29,10 @@ bash build-wasm.sh
 ## What it does
 
 - Scans `static/images/pictures/` for `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp` files
+- Generates 100×100 thumbnails via `sips` into `static/images/pictures/thumbs/`
+- Extracts natural image dimensions via `sips`
 - Removes stale `~/Pictures/*` entries from `data.json`
-- Adds new file nodes with `imagePath` pointing to `/images/pictures/<name>`
+- Adds new file nodes with `imagePath`, `thumbPath`, `imgWidth`, `imgHeight`
 - Updates `~/Pictures` children array
 - `data.json` remains single source of truth — no Go code changes
 
