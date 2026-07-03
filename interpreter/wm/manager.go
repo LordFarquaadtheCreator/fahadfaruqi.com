@@ -12,6 +12,10 @@ type Manager struct {
 	nextID    int
 	viewportW int
 	viewportH int
+	// lastDragX/lastDragY track position of most recently dragged window
+	// so new windows spawn offset from it instead of screen center
+	lastDragX int
+	lastDragY int
 	notify    func()
 }
 
@@ -62,7 +66,10 @@ func (m *Manager) spawn(appType, appID, title string, width, height int, notify 
 		Height:  height,
 	}
 	offset := (len(m.windows) % 5) * 30
-	if m.viewportW > 0 && m.viewportH > 0 {
+	if m.lastDragX != 0 || m.lastDragY != 0 {
+		win.X = m.lastDragX + offset
+		win.Y = m.lastDragY + offset
+	} else if m.viewportW > 0 && m.viewportH > 0 {
 		win.X = (m.viewportW-width)/2 + offset
 		win.Y = (m.viewportH-height)/2 + offset
 	} else {
@@ -125,6 +132,8 @@ func (m *Manager) Drag(id string, dx, dy int) {
 	w.X += dx
 	w.Y += dy
 	m.clampWindow(w)
+	m.lastDragX = w.X
+	m.lastDragY = w.Y
 	m.doNotify()
 }
 
