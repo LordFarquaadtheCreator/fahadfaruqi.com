@@ -72,7 +72,7 @@ src/                      # SvelteKit frontend (see src/agents.md)
 │   │   ├── viewer/       # Preview app (image + text/markdown)
 │   │   ├── window/       # Generic window chrome
 │   │   └── placeholder/  # Splash for unimplemented apps
-│   ├── data/             # Static data (portfolio.json)
+│   ├── data/             # Static data assets (images)
 │   └── wasmLoader.js     # Loads Go WASM module
 
 static/                   # Static assets (see static/AGENTS.md)

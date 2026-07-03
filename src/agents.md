@@ -23,7 +23,7 @@ Go WASM (interpreter/) → RootVM JSON → osStore → Svelte components → use
     - `viewer/` — Preview app (image + text/markdown)
     - `window/` — Generic window chrome
     - `placeholder/` — Splash for unimplemented apps
-  - `data/` — Static data (portfolio.json)
+  - `data/` — Static data assets (images)
   - `wasmLoader.js` — Loads Go WASM module
 - `routes/` — SvelteKit pages
   - `+page.svelte` — Main desktop page, calls `initOS()` on mount

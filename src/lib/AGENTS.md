@@ -10,7 +10,7 @@ lib/
 │   ├── types.ts           # TypeScript interfaces matching Go VM structs
 │   └── osStore.svelte.ts  # VM subscription store, initOS(), os() accessor
 ├── components/            # Svelte UI components (see components/AGENTS.md)
-├── data/                  # Static data (portfolio.json)
+├── data/                  # Static data assets (images)
 ├── wasmLoader.js          # Loads Go WASM module
 └── terminalStore.ts       # Legacy terminal store (may be unused)
 ```
