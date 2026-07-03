@@ -189,7 +189,11 @@ func main() {
 		winID := args[0].String()
 		entryPath := args[1].String()
 		if w.FS.IsDir(entryPath) {
-			return w.Finder.Navigate(winID, entryPath).Error()
+			if err := w.Finder.Navigate(winID, entryPath); err != nil {
+				return err.Error()
+			}
+			pushVM()
+			return nil
 		}
 		// File — open in viewer
 		appID := apps.AppForFile(path.Base(entryPath))
