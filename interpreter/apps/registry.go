@@ -36,12 +36,13 @@ var Registry = map[string]App{
 	"affinity":     {ID: "affinity", Name: "Affinity Designer", Icon: "/icons/affinity.png", Type: TypePlaceholder, Width: 900, Height: 600},
 	"whatsapp":     {ID: "whatsapp", Name: "WhatsApp", Icon: "/icons/whatsapp.png", Type: TypePlaceholder, Width: 800, Height: 500},
 	"imsg":         {ID: "imsg", Name: "Messages", Icon: "/icons/imsg.png", Type: TypePlaceholder, Width: 800, Height: 500},
+	"browseros":    {ID: "browseros", Name: "BrowserOS", Icon: "/icons/browseros.png", Type: TypePlaceholder, Width: 1000, Height: 650},
 }
 
 // DockOrder defines which apps appear in the dock and in what order.
 var DockOrder = []string{
 	"finder", "terminal", "obsidian", "slack", "spotify", "steam",
-	"devin", "zed", "xcode", "figma", "hermes", "affinity", "whatsapp", "imsg",
+	"devin", "zed", "xcode", "figma", "hermes", "affinity", "whatsapp", "imsg", "browseros",
 }
 
 func Get(id string) (App, bool) {
