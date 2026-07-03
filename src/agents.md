@@ -1,51 +1,51 @@
 # src/
 
-Source root. SvelteKit 2 + Svelte 5 (Runes) + TypeScript terminal application.
+SvelteKit 2 + Svelte 5 (Runes) + TypeScript. macOS desktop simulation. Strict MVVM — Go WASM backend owns all logic, Svelte is dumb view layer.
 
-- **app.css** — Global design system. CSS custom properties for 32 terminal themes. `0px border-radius` enforced. Breakpoints for mobile. `.sr-only` utility.
+## Architecture
 
-## Adding New Themes
+This is a macOS desktop environment simulated in the browser. Go WASM backend (`interpreter/`) owns all state and logic. Svelte renders VM JSON and forwards events back.
 
-### Pattern
-Each theme is a CSS class on `.terminal` that defines 12 custom properties:
-- `--gb-bg`, `--gb-bg-hard` — Background colors (normal and darker variant)
-- `--gb-fg`, `--gb-fg2`, `--gb-fg3` — Foreground text colors (primary, accent, dimmed)
-- `--gb-border`, `--gb-border2` — Border colors (primary and secondary)
-- `--gb-green` through `--gb-blue` — Semantic color roles
-
-### Example
-```css
-/* ──── New Theme Name ──── */
-.terminal.theme-name {
-  --gb-bg:      #hex_value;
-  --gb-bg-hard: #darker_hex;
-  --gb-fg:      #primary_light;
-  --gb-fg2:     #accent_color;
-  --gb-fg3:     #dim_text;
-  --gb-border:  #border_color;
-  --gb-border2: #dark_border;
-  /* ... etc for all semantic colors */
-}
+```
+Go WASM (interpreter/) → RootVM JSON → osStore → Svelte components → user events → window.os.* → Go
 ```
 
-### Color Selection Guidelines
-1. **Contrast first** — Ensure `--gb-fg` has sufficient brightness against `--gb-bg`
-2. **Maintain hierarchy** — `--gb-fg > --gb-fg2 > --gb-fg3` in lightness
-3. **Semantic mapping**:
-   - `--gb-green` → success, terminals, nature
-   - `--gb-aqua` → links, highlights, water/cyberpunk accents
-   - `--gb-purple` → commands, magical, mysterious elements
-   - `--gb-yellow` → warnings, sand, classic terminal yellow
-   - `--gb-orange` → UI elements, notifications, warmth
-   - `--gb-red` → errors, danger, critical states
-   - `--gb-blue` → primary actions, sky, information
+## Directory Map
 
-## Directory map
+- `app.css` — Global design system. macOS CSS variables, window/dock/menubar/finder/viewer styles. `0px border-radius` enforced.
+- `app.html` — HTML shell, loads wasm_exec.js
+- `lib/` — Frontend library (see `lib/AGENTS.md`)
+  - `os/` — VM types + OS bridge to Go WASM
+  - `components/` — Svelte UI components (see `components/AGENTS.md`)
+    - `desktop/` — Menubar, dock, wallpaper, icons, window layer
+    - `finder/` — Finder app
+    - `terminal/` — Terminal app
+    - `viewer/` — Preview app (image + text/markdown)
+    - `window/` — Generic window chrome
+    - `placeholder/` — Splash for unimplemented apps
+  - `data/` — Static data (portfolio.json)
+  - `wasmLoader.js` — Loads Go WASM module
+- `routes/` — SvelteKit pages
+  - `+page.svelte` — Main desktop page, calls `initOS()` on mount
+  - `+layout.svelte` — Font imports, favicon, theme-color meta
 
-- `lib/components/` — Svelte UI (Terminal, InputRow, History, OutputRenderer, HintBar)
-- `lib/data/` — Static JSON data (`portfolio.json`)
-- `lib/model/` — Types (`types.ts`), data helpers (`data.ts`), virtual filesystem (`filesystem.ts`)
-- `lib/shell/` — Shell logic: completer, resolver, glob, command handlers
-- `lib/stores/` — Svelte writable store for terminal state
-- `routes/` — SvelteKit pages (single-page terminal)
-- `tests/` — Vitest unit and component tests
+## CSS Sections in app.css
+
+1. **Reset & Base** — box-sizing, font vars, scrollbar styling
+2. **Desktop** — wallpaper, desktop icons
+3. **MenuBar** — top bar, menu items, tray icons, mix-blend-mode
+4. **Dock** — bottom dock, tooltips, running indicators
+5. **Window** — window chrome, titlebar, traffic lights, resize
+6. **Finder** — sidebar, toolbar, breadcrumb, entries
+7. **Terminal** — terminal output, input prompt
+8. **Viewer** — image viewer, text viewer toolbar
+9. **Markdown Body** — rendered markdown styles (headings, code, tables, etc.)
+10. **Splash** — placeholder app splash screen
+
+## Critical Rules
+
+- Svelte 5 Runes only (`$props`, `$state`, `$effect`). Never `export let` or `$:`.
+- No business logic in Svelte. All state from Go VM, all events to Go via `window.os.*`.
+- `$state` only for ephemeral UI (hover, focus, open menus, clock interval).
+- VM types in `lib/os/types.ts` must match Go struct JSON tags exactly.
+- Rebuild WASM after Go changes: `cd interpreter && GOOS=js GOARCH=wasm go build -o ../static/interp.wasm .`

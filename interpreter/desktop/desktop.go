@@ -41,8 +41,8 @@ func BuildVM(filesystem fs.FileSystem) DesktopVM {
 			Name: path.Base(paths[i]),
 			Path: paths[i],
 			Icon: iconPath,
-			X:    20 + col*108, // right-aligned via CSS right offset
-			Y:    40 + row*108,
+			X:    20 + col*100, // right-aligned via CSS right offset
+			Y:    40 + row*100,
 		})
 
 		row++
