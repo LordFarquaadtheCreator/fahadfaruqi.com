@@ -9,23 +9,29 @@ let vm: RootVM | null = null;
 const subscribers = new Set<Subscriber>();
 
 export function initOS(): void {
-  const os = (window as any).os;
-  if (!os) return;
-
-  os.subscribe((json: string) => {
-    try {
-      vm = JSON.parse(json) as RootVM;
-      for (const sub of subscribers) {
-        sub(vm);
-      }
-    } catch (e) {
-      console.error('Failed to parse VM JSON:', e);
+  const tryInit = () => {
+    const os = (window as any).os;
+    if (!os) {
+      setTimeout(tryInit, 50);
+      return;
     }
-  });
 
-  if (os.setViewport) {
-    os.setViewport(window.innerWidth, window.innerHeight);
-  }
+    os.subscribe((json: string) => {
+      try {
+        vm = JSON.parse(json) as RootVM;
+        for (const sub of subscribers) {
+          sub(vm);
+        }
+      } catch (e) {
+        console.error('Failed to parse VM JSON:', e);
+      }
+    });
+
+    if (os.setViewport) {
+      os.setViewport(window.innerWidth, window.innerHeight);
+    }
+  };
+  tryInit();
 }
 
 export function getVM(): RootVM | null {
