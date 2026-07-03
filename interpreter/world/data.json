@@ -2,204 +2,195 @@
   "~": {
     "type": "dir",
     "children": [
-      "~/.about.md",
-      "~/.contact.md",
-      "~/.blog.md",
-      "~/resume",
-      "~/readme.md",
-      "~/Pictures",
-      "~/notes.txt"
+      "~/About",
+      "~/Contact",
+      "~/Blog",
+      "~/Resume",
+      "~/Pictures"
     ],
     "hidden": false
   },
-  "~/.about.md": {
+  "~/About": {
+    "type": "dir",
+    "children": [
+      "~/About/about.md"
+    ],
+    "hidden": false
+  },
+  "~/About/about.md": {
     "type": "file",
     "content": "# About\n\n**Name:** Fahad Faruqi\n\n**Title:** Software engineer shipping iOS, web, backend, and applied AI products.\n\n**Location:** Queens, NYC",
-    "hidden": true
+    "hidden": false
   },
-  "~/.contact.md": {
+  "~/Contact": {
+    "type": "dir",
+    "children": [
+      "~/Contact/contact.md"
+    ],
+    "hidden": false
+  },
+  "~/Contact/contact.md": {
     "type": "file",
     "content": "# Contact\n\n**Email:** fahadfaruqi1@gmail.com",
-    "hidden": true
+    "hidden": false
   },
-  "~/.blog.md": {
+  "~/Blog": {
+    "type": "dir",
+    "children": [
+      "~/Blog/welcome.md"
+    ],
+    "hidden": false
+  },
+  "~/Blog/welcome.md": {
     "type": "file",
-    "content": "# Blog\n\n> There is no quality control here.",
-    "hidden": true
-  },
-  "~/readme.md": {
-    "type": "file",
-    "content": "# Fahad Faruqi\n\nType `help` or press `Tab` to explore.\n\n## Available Commands\n\n- `ls [path]` — list directory contents\n- `cd <path>` — change directory\n- `cat <file>` — display file contents\n- `open <path>` — open Finder window\n- `pwd` — print working directory\n- `echo <text>` — display text\n- `env` — display environment variables\n- `history` — display command history\n- `clear` — clear terminal\n- `help` — display this help message\n\n## Navigation\n\n- `~` — home directory\n- `resume/` — CV sections (experience, education, projects, toolkit)",
+    "content": "# Welcome\n\nIf we're being honest - I have no idea what I'm doing here. But hopefully I'll figure it out and there'll be really cool and philosophical stuff in here that's not just filler.",
     "hidden": false
   },
-  "~/resume": {
+  "~/Resume": {
     "type": "dir",
     "children": [
-      "~/resume/experience",
-      "~/resume/education",
-      "~/resume/projects",
-      "~/resume/toolkit"
+      "~/Resume/experience",
+      "~/Resume/education",
+      "~/Resume/projects",
+      "~/Resume/toolkit"
     ],
     "hidden": false
   },
-  "~/resume/experience": {
+  "~/Resume/experience": {
     "type": "dir",
     "children": [
-      "~/resume/experience/tobi-wealth.md",
-      "~/resume/experience/socialode.md",
-      "~/resume/experience/crowdpass.md",
-      "~/resume/experience/google.md",
-      "~/resume/experience/easymeets.md",
-      "~/resume/experience/nyc-dot.md"
+      "~/Resume/experience/tobi-wealth.md",
+      "~/Resume/experience/socialode.md",
+      "~/Resume/experience/crowdpass.md",
+      "~/Resume/experience/google.md",
+      "~/Resume/experience/easymeets.md",
+      "~/Resume/experience/nyc-dot.md"
     ],
     "hidden": false
   },
-  "~/resume/education": {
+  "~/Resume/education": {
     "type": "dir",
     "children": [
-      "~/resume/education/city-college.md",
-      "~/resume/education/cornell-tech.md"
+      "~/Resume/education/city-college.md",
+      "~/Resume/education/cornell-tech.md"
     ],
     "hidden": false
   },
-  "~/resume/projects": {
+  "~/Resume/projects": {
     "type": "dir",
     "children": [
-      "~/resume/projects/google-ai-overviews.md",
-      "~/resume/projects/fahadfaruqi-com.md",
-      "~/resume/projects/deviantart-mcp.md",
-      "~/resume/projects/agents-skills.md",
-      "~/resume/projects/interview-highlighter.md",
-      "~/resume/projects/cover-letter-writter.md",
-      "~/resume/projects/create-yt-summary.md"
+      "~/Resume/projects/google-ai-overviews.md",
+      "~/Resume/projects/fahadfaruqi-com.md",
+      "~/Resume/projects/deviantart-mcp.md",
+      "~/Resume/projects/agents-skills.md",
+      "~/Resume/projects/interview-highlighter.md",
+      "~/Resume/projects/cover-letter-writter.md",
+      "~/Resume/projects/create-yt-summary.md"
     ],
     "hidden": false
   },
-  "~/resume/toolkit": {
+  "~/Resume/toolkit": {
     "type": "dir",
     "children": [
-      "~/resume/toolkit/languages.md",
-      "~/resume/toolkit/frameworks.md",
-      "~/resume/toolkit/developer-tools.md"
+      "~/Resume/toolkit/languages.md",
+      "~/Resume/toolkit/frameworks.md",
+      "~/Resume/toolkit/developer-tools.md"
     ],
     "hidden": false
   },
-  "~/resume/experience/tobi-wealth.md": {
+  "~/Resume/experience/tobi-wealth.md": {
     "type": "file",
     "content": "# Tobi Wealth — Principal Software Engineer\n\n**URL:** [tobiwealth.com](https://tobiwealth.com/)\n\n**Role:** Principal Software Engineer | **Location:** Remote | **Duration:** Dec 2025 – Present\n\nOwning product-facing performance and UX quality across a modern fintech stack.\n\n## Highlights\n\n- Built a multi-tier caching layer for dashboards and media that eliminated redundant network request patterns and removed loading skeleton flashes during background data refreshes\n- Shipped a financial wellness engagement system with progress visualization and animations for recurring user retention\n- Hardened a TypeScript-to-Swift type generation pipeline driven by YAML schemas, eliminating runtime decoding mismatches caused by snake_case leaks and string literal drift between backend contracts and mobile clients\n- Orchestrated the migration of complex monoliths into a declarative component system, accelerating feature development cycles by enabling rapid UI prototyping through reusable Swift components\n- Rebuilt onboarding flow to close email enumeration vulnerabilities, iOS password autofill legibility failures, hardening the security posture of the authentication surface before public release\n- Owned end-to-end revenue surface: simplified the paywall experience, fixed hero overflow and truncation bugs on smaller devices, and enforced uniform trial messaging across all plan cards so the subscription flow is experiment-ready\n\n**Tools:** SwiftUI, TypeScript, YAML, Caching\n\n**Skills:** iOS development, performance optimization, type safety, security hardening",
     "hidden": false
   },
-  "~/resume/experience/socialode.md": {
+  "~/Resume/experience/socialode.md": {
     "type": "file",
     "content": "# Socialode — Software Engineer\n\n**URL:** [socialode.com](https://www.socialode.com/)\n\n**Role:** Software Engineer | **Location:** Remote | **Duration:** Jan 2026 – Jun 2026\n\nBuilding type-safe backend infrastructure and tooling for a social platform.\n\n## Highlights\n\n- Developed CLI seed tooling to eliminate manual QA setup, cutting test environment spin-up time\n- Closed a critical auth gap by delivering full password reset across auth, mail, and frontend, improving account security and reducing friction for returning users\n- Built account-eligibility middleware to enforce onboarding requirements across protected routes\n\n**Tools:** TypeScript, Node.js, BetterAuth, CLI tools, REST APIs\n\n**Skills:** Backend engineering, auth systems, developer tooling, API design",
     "hidden": false
   },
-  "~/resume/experience/crowdpass.md": {
+  "~/Resume/experience/crowdpass.md": {
     "type": "file",
     "content": "# Crowdpass — Software Engineer\n\n**URL:** [crowdpass.co](https://www.crowdpass.co/)\n\n**Role:** Software Engineer | **Location:** New York, NY | **Duration:** Jul 2025 – Dec 2025\n\nBuilt revenue-driving features and cost-saving infrastructure for an enterprise event platform.\n\n## Highlights\n\n- Reduced per-client costs by 82% by engineering a cost optimization strategy for Twilio dependencies\n- Enabled new revenue streams and granular financial oversight for 2,000+ clients by rewriting client cost-tracking webhook\n- Developed and launched a CRUD Guest Ticketing Module used by 2,000+ enterprise clients to manage end-user registrations, driving adoption and feature completeness\n- Delivered 12+ high-impact features across .NET backend and Next.js frontend, enhancing UX for 10,000+ monthly users\n\n**Tools:** .NET, Entity Framework, Next.js, React Native, Twilio, Auth0\n\n**Skills:** Cost optimization, feature delivery, mobile development, enterprise support",
     "hidden": false
   },
-  "~/resume/experience/google.md": {
+  "~/Resume/experience/google.md": {
     "type": "file",
     "content": "# Google — Software Engineering Program Mentee\n\n**URL:** [buildyourfuture.withgoogle.com](https://buildyourfuture.withgoogle.com/)\n\n**Role:** Software Engineering Program Mentee (GSWEP) | **Location:** New York, NY | **Duration:** Aug 2024 – Nov 2025\n\nCompleted intensive mentorship focused on interview performance and software engineering growth.\n\n## Highlights\n\n- Improved coding interview success rate by 30% by completing intensive 1:1 mentorship with Google Software Engineers\n\n**Tools:** Mock interviews, Mentorship sessions, Problem sets\n\n**Skills:** Algorithms, technical communication, interview readiness, problem solving",
     "hidden": false
   },
-  "~/resume/experience/easymeets.md": {
+  "~/Resume/experience/easymeets.md": {
     "type": "file",
     "content": "# EasyMeets — Backend Tech Lead\n\n**URL:** [easymeets-app.com](https://easymeets-app.com/)\n\n**Role:** Backend Tech Lead | **Location:** New York, NY | **Duration:** Oct 2024 – Aug 2025\n\nLed backend delivery while helping steer product, mobile, and deployment work for a startup MVP.\n\n## Highlights\n\n- Delivered 15+ critical features across Next.js and React Native, increasing feature velocity by 20% over 10 months\n- Developed robust Go Fiber backend service featuring 85% unit test coverage across 30+ core API endpoints for user authentication and data management\n- Streamlined time to deployment by 75% through GitHub Actions, CI/CD, Linux Services, Docker on AWS EC2 servers\n\n**Tools:** Go Fiber, React Native, Next.js, PostgreSQL, Docker, AWS EC2\n\n**Skills:** Technical leadership, backend engineering, CI/CD, MVP delivery",
     "hidden": false
   },
-  "~/resume/experience/nyc-dot.md": {
+  "~/Resume/experience/nyc-dot.md": {
     "type": "file",
     "content": "# NYC Department of Transportation — Software Engineering Intern\n\n**URL:** [nyc.gov/dot](https://www.nyc.gov/site/dot/index.page)\n\n**Role:** Software Engineering Intern | **Location:** New York, NY | **Duration:** Jun 2023 – Aug 2025\n\nSupported internal public-sector software with reliability, security, and automation improvements.\n\n## Highlights\n\n- Mitigated security risks across 3 critical C# and Visual Basic .NET applications serving 200+ internal users\n- Developed and deployed an automated C# emailing service, decreasing missed project deadlines by 75%\n- Refactored a C# .NET web application, improving stability and decreasing the crash rate by 45% for 200+ daily users\n\n**Tools:** C#, Visual Basic .NET, .NET, MySQL\n\n**Skills:** Application hardening, automation, maintenance engineering, stability",
     "hidden": false
   },
-  "~/resume/education/city-college.md": {
+  "~/Resume/education/city-college.md": {
     "type": "file",
     "content": "# CUNY City College of New York\n\n**Degree:** B.S. Computer Science - Cum Laude\n\n**Location:** New York, NY | **Class of 2025**\n\n## Highlights\n\n- Graduated Cum Laude\n- Co-founded BYTE Club — dedicated to building software projects and supporting SWE growth at CCNY",
     "hidden": false
   },
-  "~/resume/education/cornell-tech.md": {
+  "~/Resume/education/cornell-tech.md": {
     "type": "file",
     "content": "# Cornell Tech\n\n**Degree:** Certificate in Fundamentals of Machine Learning\n\n**Location:** New York, NY | **Duration:** Aug 2023 – Sept 2023\n\n## Highlights\n\n- Immersive hands-on learning through Break Through Tech\n- Applied theoretical knowledge to real-world ML scenarios",
     "hidden": false
   },
-  "~/resume/projects/google-ai-overviews.md": {
+  "~/Resume/projects/google-ai-overviews.md": {
     "type": "file",
     "content": "# Google AI Overviews Blocker\n\n**Role:** Contributor | **Duration:** Feb 2026\n\nEnhanced Google Search AI Overview detection to cover previously undetected edge cases for 400,000 users.\n\n## Highlights\n\n- Enhanced Google Search AI Overview detection to cover previously undetected edge cases for 400,000 users\n\n**Tools:** JavaScript",
     "hidden": false
   },
-  "~/resume/projects/fahadfaruqi-com.md": {
+  "~/Resume/projects/fahadfaruqi-com.md": {
     "type": "file",
     "content": "# fahadfaruqi.com\n\n**Role:** Creator | **Duration:** Mar 2026 – Present\n\nA macOS desktop environment simulated entirely in the browser. Go WASM backend owns all logic — filesystem, zsh shell, window manager, Finder, Terminal. Svelte renders the view model and forwards events back.\n\n## Highlights\n\n- Built a full in-memory filesystem, zsh tokenizer, and window manager in Go compiled to WASM\n- Strict MVVM architecture — Svelte holds zero domain state, every operation routes through Go bindings\n- Implemented drag, resize, minimize, maximize, z-order focus, dock, menu bar with mix-blend-mode auto-contrast\n\n**Tools:** Go, WebAssembly, SvelteKit, Svelte 5, TypeScript, CSS Custom Properties",
     "hidden": false
   },
-  "~/resume/projects/deviantart-mcp.md": {
+  "~/Resume/projects/deviantart-mcp.md": {
     "type": "file",
     "content": "# deviantart-mcp\n\n**Role:** Creator | **Duration:** Jun 2026 – Present\n\nMCP (Model Context Protocol) server for the DeviantArt API. Lets LLMs browse, search, and interact with DeviantArt content. Go core with an npm wrapper for distribution.\n\n## Highlights\n\n- Built self-contained Go MCP server with OAuth2 flows for both public browsing and user actions\n- Designed clean separation — DeviantArt API client has zero MCP knowledge, adapter layer shapes operations into tools\n- Distributed via npm with platform-specific binary downloads from GitHub Releases, version-synced through git tags\n\n**Tools:** Go, MCP, OAuth2, npm, GitHub Releases, LLM tooling",
     "hidden": false
   },
-  "~/resume/projects/agents-skills.md": {
+  "~/Resume/projects/agents-skills.md": {
     "type": "file",
     "content": "# agents-skills\n\n**Role:** Creator | **Duration:** May 2026 – Present\n\nCollection of agent skills and MCP server infrastructure. Includes an image generation workflow powered by Modal + ComfyUI, and a skill for discovering and installing MCP servers across platforms.\n\n## Highlights\n\n- Migrated image generation pipeline to MCP-only server using Google MCP SDK with typed structs and Docker\n- Built find-mcps skill with platform-agnostic MCP config detection and conditional Docker builds\n- Managed deviantart-mcp as a submodule within a broader agent tooling monorepo\n\n**Tools:** JavaScript, MCP, Modal, ComfyUI, Docker, Google MCP SDK",
     "hidden": false
   },
-  "~/resume/projects/interview-highlighter.md": {
+  "~/Resume/projects/interview-highlighter.md": {
     "type": "file",
     "content": "# interview-highlighter\n\n**Role:** Creator | **Duration:** May 2026 – Present\n\nCLI tool that downloads a YouTube video, transcribes it via LM Studio, extracts a highlight segment, and renders both branded and unbranded clips with optional overlay assets.\n\n## Highlights\n\n- Automated YouTube download, transcription, highlight extraction, and ffmpeg rendering in a single Go binary\n- Config-driven branding with overlay positioning, intro/outro video support, and aspect-ratio-preserving cropping\n- Integrated LM Studio's OpenAI-compatible API for multimodal audio transcription\n\n**Tools:** Go, yt-dlp, ffmpeg, LM Studio, CLI",
     "hidden": false
   },
-  "~/resume/projects/cover-letter-writter.md": {
+  "~/Resume/projects/cover-letter-writter.md": {
     "type": "file",
     "content": "# cover-letter-writter\n\n**Role:** Creator | **Duration:** May 2026 – Present\n\nGo CLI that reads cover letter text from the clipboard and outputs a styled PDF with contact info — no templates, no Word, no typing.\n\n## Highlights\n\n- Built a zero-friction workflow — copy text, run binary, get PDF in Downloads\n- Configurable output directory, filename, and contact info via JSON config\n\n**Tools:** Go, CLI, PDF generation",
     "hidden": false
   },
-  "~/resume/projects/create-yt-summary.md": {
+  "~/Resume/projects/create-yt-summary.md": {
     "type": "file",
     "content": "# create-yt-summary\n\n**Role:** Creator | **Duration:** May 2026 – Present\n\nPython tool that downloads YouTube video transcripts via yt-dlp and generates structured summaries using LM Studio local models.\n\n## Highlights\n\n- Combined yt-dlp transcript extraction with local LLM summarization for offline-friendly video analysis\n- Packaged with conda environment for reproducible dependencies\n\n**Tools:** Python, yt-dlp, LM Studio, Conda",
     "hidden": false
   },
-  "~/resume/toolkit/languages.md": {
+  "~/Resume/toolkit/languages.md": {
     "type": "file",
     "content": "# Languages\n\n- Swift\n- TypeScript\n- Go\n- C#\n- Python\n- PostgreSQL\n- MySQL\n- Visual Basic\n- JavaScript\n- Bash\n- YAML",
     "hidden": false
   },
-  "~/resume/toolkit/frameworks.md": {
+  "~/Resume/toolkit/frameworks.md": {
     "type": "file",
     "content": "# Frameworks\n\n- SwiftUI\n- Supabase\n- .NET\n- Entity Framework\n- React\n- React Native\n- Next.js\n- Twilio\n- SendGrid\n- Auth0",
     "hidden": false
   },
-  "~/resume/toolkit/developer-tools.md": {
+  "~/Resume/toolkit/developer-tools.md": {
     "type": "file",
     "content": "# Developer Tools\n\n- Git\n- Windsurf\n- Zed\n- Codex\n- Claude Code\n- AWS\n- Docker\n- Linux\n- macOS",
     "hidden": false
   },
   "~/Pictures": {
     "type": "dir",
-    "children": [
-      "~/Pictures/profile.png",
-      "~/Pictures/screenshot.jpeg"
-    ],
-    "hidden": false
-  },
-  "~/Pictures/profile.png": {
-    "type": "file",
-    "mimeType": "image/png",
-    "imagePath": "/images/profile/profile.png",
-    "content": "",
-    "hidden": false
-  },
-  "~/Pictures/screenshot.jpeg": {
-    "type": "file",
-    "mimeType": "image/jpeg",
-    "imagePath": "/images/profile/screenshot.jpeg",
-    "content": "",
-    "hidden": false
-  },
-  "~/notes.txt": {
-    "type": "file",
-    "mimeType": "text/plain",
-    "content": "Quick notes:\n- Rewrite portfolio as macOS desktop\n- Ship it\n- Profit",
+    "children": [],
     "hidden": false
   }
 }
