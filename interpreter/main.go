@@ -23,6 +23,7 @@ var (
 	w      world.World
 	s      *session.Session
 	vmSubs []js.Value
+	dark   bool
 )
 
 // RootVM is the full desktop view model pushed to JS on every state change.
@@ -68,6 +69,12 @@ func main() {
 
 	os["setViewport"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		w.WM.SetViewport(args[0].Int(), args[1].Int())
+		return nil
+	})
+
+	os["setTheme"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		dark = args[0].Bool()
+		pushVM()
 		return nil
 	})
 
@@ -307,7 +314,7 @@ func pushVM() {
 		ViewportH: vpH,
 		Dock:      dock.BuildVM(w.WM),
 		MenuBar:   menubar.BuildVM(w.WM),
-		Desktop:   desktop.BuildVM(w.FS),
+		Desktop:   desktop.BuildVM(w.FS, dark),
 	}
 	b, err := json.Marshal(root)
 	if err != nil {

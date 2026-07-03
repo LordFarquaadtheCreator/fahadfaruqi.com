@@ -134,6 +134,7 @@ export interface TrayItemVM {
 
 export interface DesktopVM {
   icons: DesktopIconVM[];
+  wallpaper: string;
 }
 
 export interface DesktopIconVM {

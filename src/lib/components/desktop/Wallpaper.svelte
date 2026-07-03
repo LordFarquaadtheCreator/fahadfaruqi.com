@@ -1,6 +1,5 @@
 <script lang="ts">
-  // Wallpaper path served from static/wallpapers/
-  let { src = '/wallpapers/wallpaper.jpg' }: { src?: string } = $props();
+  let { src }: { src: string } = $props();
 </script>
 
 <div class="wallpaper" style="background-image: url({src})"></div>

@@ -10,8 +10,26 @@
 
   let vm = $state<RootVM | null>(null);
 
+  function isDark(): boolean {
+    const theme = document.documentElement.getAttribute('data-theme') || 'system';
+    if (theme === 'dark') return true;
+    if (theme === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
   onMount(() => {
     initOS();
+
+    const syncTheme = () => os()?.setTheme?.(isDark());
+    syncTheme();
+
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onMqChange = () => syncTheme();
+    mq.addEventListener('change', onMqChange);
+
+    const observer = new MutationObserver(() => syncTheme());
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
     const unsub = subscribe((v) => { vm = v; });
     const onResize = () => setViewport(window.innerWidth, window.innerHeight);
     window.addEventListener('resize', onResize);
@@ -21,14 +39,16 @@
     window.addEventListener('keydown', onKey);
     return () => {
       unsub();
+      mq.removeEventListener('change', onMqChange);
+      observer.disconnect();
       window.removeEventListener('resize', onResize);
       window.removeEventListener('keydown', onKey);
     };
   });
 </script>
 
-<Wallpaper />
 {#if vm}
+  <Wallpaper src={vm.desktop.wallpaper} />
   <MenuBar menuBar={vm.menuBar} />
   <DesktopIcons icons={vm.desktop.icons} />
   <WindowLayer windows={vm.windows} focusedId={vm.focusedId} />

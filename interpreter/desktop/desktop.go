@@ -8,7 +8,8 @@ import (
 
 // DesktopVM is the desktop icons view model.
 type DesktopVM struct {
-	Icons []DesktopIconVM `json:"icons"`
+	Icons     []DesktopIconVM `json:"icons"`
+	Wallpaper string          `json:"wallpaper"`
 }
 
 type DesktopIconVM struct {
@@ -21,7 +22,8 @@ type DesktopIconVM struct {
 
 // BuildVM builds the desktop view model from the filesystem.
 // Shows top-level non-hidden items in home directory as desktop icons.
-func BuildVM(filesystem fs.FileSystem) DesktopVM {
+// dark selects the wallpaper variant.
+func BuildVM(filesystem fs.FileSystem, dark bool) DesktopVM {
 	children, paths, _ := filesystem.Children("~", false)
 	var icons []DesktopIconVM
 
@@ -52,7 +54,12 @@ func BuildVM(filesystem fs.FileSystem) DesktopVM {
 		}
 	}
 
-	return DesktopVM{Icons: icons}
+	wp := "/wallpapers/wallpaper.jpg"
+	if dark {
+		wp = "/wallpapers/wallpaper-dark.jpg"
+	}
+
+	return DesktopVM{Icons: icons, Wallpaper: wp}
 }
 
 func isImageType(mime string) bool {
