@@ -6,6 +6,7 @@ import (
 	"interpreter/finder"
 	"interpreter/fs"
 	"interpreter/wm"
+	"math"
 	"path"
 	"strings"
 )
@@ -62,7 +63,32 @@ func (vm *ViewerManager) SpawnForFile(filePath string) *wm.Window {
 		state.Content = node.Content
 	}
 
-	win := vm.wm.SpawnSilent(string(app.Type), app.ID, state.FileName, app.Width, app.Height)
+	winW, winH := app.Width, app.Height
+	if state.MimeType == "image/*" && node.Meta.ImgWidth > 0 && node.Meta.ImgHeight > 0 {
+		vw, vh := vm.wm.Viewport()
+		if vw > 0 && vh > 0 {
+			const titlebar = 28
+			imgW := float64(node.Meta.ImgWidth)
+			imgH := float64(node.Meta.ImgHeight)
+
+			scaleMin := math.Max(0.3*float64(vw)/imgW, 0.3*float64(vh)/imgH)
+			scaleMax := math.Min(0.45*float64(vw)/imgW, 0.45*float64(vh)/imgH)
+			naturalFit := math.Min(0.375*float64(vw)/imgW, 0.375*float64(vh)/imgH)
+
+			scale := naturalFit
+			if scale > scaleMax {
+				scale = scaleMax
+			}
+			if scale < scaleMin {
+				scale = scaleMin
+			}
+
+			winW = int(imgW*scale + 0.5)
+			winH = int(imgH*scale + 0.5) + titlebar
+		}
+	}
+
+	win := vm.wm.SpawnSilent(string(app.Type), app.ID, state.FileName, winW, winH)
 	vm.states[win.ID] = state
 	return win
 }

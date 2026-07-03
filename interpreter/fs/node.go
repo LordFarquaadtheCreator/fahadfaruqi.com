@@ -21,5 +21,7 @@ type Meta struct {
 	Size      int64
 	Modified  string
 	ImagePath string // URL path for image files (e.g. /images/profile/profile.png)
+	ImgWidth  int    // natural pixel width of image
+	ImgHeight int    // natural pixel height of image
 	MimeType  string // MIME type for file type detection
 }

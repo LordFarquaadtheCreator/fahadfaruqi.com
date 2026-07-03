@@ -224,174 +224,224 @@
     "content": "",
     "imagePath": "/images/pictures/lucky_1.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_2.jpg": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_2.jpg",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 1980,
+    "imgHeight": 3520
   },
   "~/Pictures/lucky_3.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_3.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_4.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_4.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_5.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_5.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_6.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_6.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_7.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_7.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 5712,
+    "imgHeight": 4284
   },
   "~/Pictures/lucky_8.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_8.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_and_sufi_1.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_and_sufi_1.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_and_sufi_2.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_and_sufi_2.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 5712,
+    "imgHeight": 4284
   },
   "~/Pictures/lucky_and_sufi_3.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_and_sufi_3.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_and_sufi_4.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_and_sufi_4.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/lucky_and_sufi_5.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/lucky_and_sufi_5.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/sufi_1.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_1.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/sufi_10.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_10.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/sufi_11.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_11.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 6000,
+    "imgHeight": 4000
   },
   "~/Pictures/sufi_12.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_12.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 717,
+    "imgHeight": 978
   },
   "~/Pictures/sufi_2.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_2.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/sufi_3.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_3.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/sufi_4.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_4.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 5712,
+    "imgHeight": 4284
   },
   "~/Pictures/sufi_5.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_5.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 5712,
+    "imgHeight": 4284
   },
   "~/Pictures/sufi_6.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_6.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/sufi_7.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_7.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/sufi_8.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_8.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 4032,
+    "imgHeight": 3024
   },
   "~/Pictures/sufi_9.JPG": {
     "type": "file",
     "content": "",
     "imagePath": "/images/pictures/sufi_9.JPG",
     "mimeType": "image/jpeg",
-    "hidden": false
+    "hidden": false,
+    "imgWidth": 5712,
+    "imgHeight": 4284
   }
 }

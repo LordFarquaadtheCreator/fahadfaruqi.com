@@ -36,6 +36,8 @@ func Load() World {
 				Size:      int64(len(jn.Content)),
 				Modified:  "2024-01-01",
 				ImagePath: jn.ImagePath,
+				ImgWidth:  jn.ImgWidth,
+				ImgHeight: jn.ImgHeight,
 				MimeType:  jn.MimeType,
 			},
 			Hidden: jn.Hidden,
@@ -105,5 +107,7 @@ type jsonNode struct {
 	Content   string   `json:"content"`
 	Hidden    bool     `json:"hidden"`
 	ImagePath string   `json:"imagePath"`
+	ImgWidth  int      `json:"imgWidth"`
+	ImgHeight int      `json:"imgHeight"`
 	MimeType  string   `json:"mimeType"`
 }
