@@ -17,8 +17,13 @@
 
   let input = $state('');
   let scrollRef = $state<HTMLDivElement | null>(null);
+  let inputRef = $state<HTMLInputElement | null>(null);
   let historyIdx = $state(-1);
   let savedInput = '';
+
+  function focusInput() {
+    inputRef?.focus();
+  }
 
   function runCommand() {
     if (!input.trim()) return;
@@ -92,7 +97,7 @@
   }
 </script>
 
-<div class="terminal-app" bind:this={scrollRef}>
+<div class="terminal-app" bind:this={scrollRef} onclick={focusInput} onkeydown={focusInput} role="application" tabindex="-1">
   <div class="terminal-output">
     {#if content.history.length === 0}
       <div class="terminal-welcome">
@@ -174,6 +179,7 @@
     <input
       type="text"
       bind:value={input}
+      bind:this={inputRef}
       onkeydown={onKeydown}
       autocomplete="off"
       spellcheck="false"
