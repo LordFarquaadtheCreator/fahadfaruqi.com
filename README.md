@@ -1,14 +1,13 @@
-# This is my Website
-<img width="2317" height="1269" alt="Screenshot 2026-07-03 at 3 26 45 PM" src="https://github.com/user-attachments/assets/e9ab6853-4bf8-4e36-b294-4b582adcd087" />
-
 # fahadfaruqi.com
 
 A macOS desktop environment simulated entirely in the browser. Go WASM backend owns all logic — filesystem, shell, window management, state. Svelte renders the view model and forwards events back.
 
+<img width="2317" height="1269" alt="Screenshot 2026-07-03 at 3 26 45 PM" src="https://github.com/user-attachments/assets/e9ab6853-4bf8-4e36-b294-4b582adcd087" />
+
 ## Stack
 
 - **SvelteKit 2** + **Svelte 5** (Runes) — dumb view layer, renders VM JSON, forwards events
-- **Go WASM** — all domain logic: filesystem, zsh shell, window manager, Finder, Terminal, Viewer
+- **Go WASM** — all domain logic: filesystem, zsh shell, window manager, Finder, Terminal, Viewer, Quick Look
 - **TypeScript** — strict, VM types mirror Go structs
 - **CSS Custom Properties** — macOS design system, no framework
 - **Vitest** — unit + component tests
@@ -32,6 +31,7 @@ interpreter/              Go WASM backend
 ├── command/              zsh command handlers (ls, cd, cat, open, etc.)
 ├── desktop/              Desktop icons VM
 ├── dock/                 Dock VM with running/active state
+├── ephemeral/            Quick Look preview manager (spacebar toggle)
 ├── finder/               Finder window manager + VM + markdown render
 ├── fs/                   In-memory filesystem
 ├── menubar/              Menu bar VM (menus, tray, clock)
@@ -65,13 +65,15 @@ static/                   Static assets
 ## Commands
 
 ```bash
-npm run dev        # dev server
-npm run build      # static output → build/
-npm run preview    # serve build/
-npm test           # vitest (unit + component)
-npm run check      # svelte-check + tsc
+npm run dev          # dev server (rebuilds WASM via predev hook)
+npm run dev:light    # dev server, force light theme
+npm run dev:dark     # dev server, force dark theme
+npm run build        # static output → build/ (rebuilds WASM via prebuild)
+npm run preview      # serve build/
+npm test             # vitest (unit + component)
+npm run check        # svelte-check + tsc
 
-# Rebuild WASM after Go changes (from interpreter/)
+# Manual WASM rebuild (from interpreter/)
 GOOS=js GOARCH=wasm go build -o ../static/interp.wasm .
 ```
 
@@ -80,10 +82,17 @@ GOOS=js GOARCH=wasm go build -o ../static/interp.wasm .
 - **Finder** — browse in-memory filesystem, sidebar, breadcrumbs, icon/list view, markdown rendering
 - **Terminal** — zsh-like shell with command history, tab completion, pipe support
 - **Viewer** — image preview + text/markdown viewer
+- **Quick Look** — ephemeral preview via spacebar, click-away close, folder support
 - **Window Manager** — drag, resize, minimize, maximize, focus z-order
 - **Dock** — app launcher with running indicators, tooltips
 - **Menu Bar** — Apple menu, app menus, tray icons, live clock, mix-blend-mode auto-contrast
 - **Desktop Icons** — right-aligned, double-click to open
+- **Theming** — light/dark wallpaper driven from WASM via `os.setTheme`
+
+## Virtual Filesystem
+
+Boots from `interpreter/world/data.json`. Home (`~`) contains:
+`About/`, `Contact/`, `Blog/`, `Resume/`, `Pictures/` — each with markdown or image content. Markdown files render to HTML in Viewer.
 
 ## Deployment
 
@@ -101,4 +110,3 @@ GitHub Actions: setup Go + Node → build WASM from `interpreter/` → `npm ci` 
 ## License
 
 MIT
-
