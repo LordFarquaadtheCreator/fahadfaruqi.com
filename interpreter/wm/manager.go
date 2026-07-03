@@ -38,6 +38,16 @@ func (m *Manager) SetViewport(w, h int) {
 }
 
 func (m *Manager) Spawn(appType, appID, title string, width, height int) *Window {
+	return m.spawn(appType, appID, title, width, height, true)
+}
+
+// SpawnSilent creates a window without triggering notify. Caller must call
+// the app-specific state registration, then pushVM() manually.
+func (m *Manager) SpawnSilent(appType, appID, title string, width, height int) *Window {
+	return m.spawn(appType, appID, title, width, height, false)
+}
+
+func (m *Manager) spawn(appType, appID, title string, width, height int, notify bool) *Window {
 	if len(m.windows) >= maxWindows && len(m.order) > 0 {
 		m.closeWindow(m.order[0])
 	}
@@ -57,7 +67,9 @@ func (m *Manager) Spawn(appType, appID, title string, width, height int) *Window
 	m.clampWindow(win)
 	m.windows[id] = win
 	m.order = append(m.order, id)
-	m.doNotify()
+	if notify {
+		m.doNotify()
+	}
 	return win
 }
 

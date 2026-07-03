@@ -88,6 +88,7 @@ func main() {
 		default:
 			w.WM.Spawn(string(app.Type), app.ID, app.Name, app.Width, app.Height)
 		}
+		pushVM()
 		return nil
 	})
 
@@ -98,6 +99,7 @@ func main() {
 		}
 		if w.FS.IsDir(filePath) {
 			w.Finder.Spawn(filePath)
+			pushVM()
 			return nil
 		}
 		appID := apps.AppForFile(path.Base(filePath))
@@ -107,6 +109,7 @@ func main() {
 			app, _ := apps.Get(appID)
 			w.WM.Spawn(string(app.Type), app.ID, path.Base(filePath), app.Width, app.Height)
 		}
+		pushVM()
 		return nil
 	})
 
@@ -203,6 +206,7 @@ func main() {
 			app, _ := apps.Get(appID)
 			w.WM.Spawn(string(app.Type), app.ID, path.Base(entryPath), app.Width, app.Height)
 		}
+		pushVM()
 		return nil
 	})
 
@@ -239,6 +243,7 @@ func main() {
 		default:
 			w.WM.Spawn(string(app.Type), app.ID, app.Name, app.Width, app.Height)
 		}
+		pushVM()
 		return nil
 	})
 

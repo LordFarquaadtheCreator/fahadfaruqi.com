@@ -44,7 +44,7 @@ func NewTerminalManager(w *wm.Manager, runner CommandRunner, env map[string]stri
 
 func (tm *TerminalManager) Spawn() *wm.Window {
 	app, _ := apps.Get("terminal")
-	win := tm.wm.Spawn(string(apps.TypeTerminal), app.ID, app.Name, app.Width, app.Height)
+	win := tm.wm.SpawnSilent(string(apps.TypeTerminal), app.ID, app.Name, app.Width, app.Height)
 	tm.states[win.ID] = &TerminalState{
 		Session: session.New(tm.env),
 		History: make([]TerminalEntry, 0),

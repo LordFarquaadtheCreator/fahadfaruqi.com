@@ -72,7 +72,7 @@ func (fm *FinderManager) Spawn(initialPath string) (*wm.Window, error) {
 		return nil, fmt.Errorf("path does not exist: %s", initialPath)
 	}
 	app, _ := apps.Get("finder")
-	win := fm.wm.Spawn(string(apps.TypeFinder), app.ID, path.Base(initialPath), app.Width, app.Height)
+	win := fm.wm.SpawnSilent(string(apps.TypeFinder), app.ID, path.Base(initialPath), app.Width, app.Height)
 	fm.states[win.ID] = &FinderState{
 		Path:     initialPath,
 		ViewMode: IconView,

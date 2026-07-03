@@ -62,7 +62,7 @@ func (vm *ViewerManager) SpawnForFile(filePath string) *wm.Window {
 		state.Content = node.Content
 	}
 
-	win := vm.wm.Spawn(string(app.Type), app.ID, state.FileName, app.Width, app.Height)
+	win := vm.wm.SpawnSilent(string(app.Type), app.ID, state.FileName, app.Width, app.Height)
 	vm.states[win.ID] = state
 	return win
 }
