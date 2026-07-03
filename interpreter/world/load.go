@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"interpreter/finder"
 	"interpreter/fs"
+	"interpreter/viewer"
+	"interpreter/wm"
 	"strings"
 )
 
@@ -31,8 +33,10 @@ func Load() World {
 			Children: jn.Children,
 			Content:  jn.Content,
 			Meta: fs.Meta{
-				Size:     int64(len(jn.Content)),
-				Modified: "2024-01-01",
+				Size:      int64(len(jn.Content)),
+				Modified:  "2024-01-01",
+				ImagePath: jn.ImagePath,
+				MimeType:  jn.MimeType,
 			},
 			Hidden: jn.Hidden,
 		}
@@ -82,17 +86,24 @@ func Load() World {
 		}
 	}
 
+	filesystem := fs.NewFileSystem(nodes)
+	manager := wm.NewManager()
+
 	w := World{
-		FS:     fs.NewFileSystem(nodes),
+		FS:     filesystem,
 		Env:    env,
-		Finder: finder.NewManager(),
+		WM:     manager,
+		Finder: finder.NewFinderManager(manager, filesystem),
+		Viewer: viewer.NewViewerManager(manager, filesystem),
 	}
 	return w
 }
 
 type jsonNode struct {
-	Type     string   `json:"type"`
-	Children []string `json:"children"`
-	Content  string   `json:"content"`
-	Hidden   bool     `json:"hidden"`
+	Type      string   `json:"type"`
+	Children  []string `json:"children"`
+	Content   string   `json:"content"`
+	Hidden    bool     `json:"hidden"`
+	ImagePath string   `json:"imagePath"`
+	MimeType  string   `json:"mimeType"`
 }

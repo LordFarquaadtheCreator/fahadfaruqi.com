@@ -4,8 +4,25 @@
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#1e1e1e" />
 		%sveltekit.head%
 		<script src="/wasm_exec.js"></script>
+		<script>
+			// Load WASM module before Svelte hydrates
+			(async () => {
+				const go = new Go();
+				const result = await WebAssembly.instantiateStreaming(
+					fetch('/interp.wasm'),
+					go.importObject
+				);
+				go.run(result.instance);
+			})();
+		</script>
+		<script>
+			// Prevent theme FOUC
+			const theme = localStorage.getItem('theme') || 'system';
+			document.documentElement.setAttribute('data-theme', theme);
+		</script>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>

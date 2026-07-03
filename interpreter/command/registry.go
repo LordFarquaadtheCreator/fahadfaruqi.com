@@ -18,4 +18,6 @@ var Registry = map[string]CommandFunc{
 	"history": History,
 	"clear":   Clear,
 	"open":    Open,
+	"apps":    Apps,
+	"help":    Help,
 }

@@ -60,7 +60,7 @@ func LS(args []string, w world.World, s *session.Session) response.Response {
 		case "-u", "--time=access":
 			options.SortByTime = true
 
-		case "-c", "--time=access":
+		case "-c":
 			options.SortByTime = true
 
 		case "-S", "--size=size", "--sort=size":

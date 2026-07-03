@@ -18,6 +18,8 @@ type Node struct {
 }
 
 type Meta struct {
-	Size     int64
-	Modified string
+	Size      int64
+	Modified  string
+	ImagePath string // URL path for image files (e.g. /images/profile/profile.png)
+	MimeType  string // MIME type for file type detection
 }

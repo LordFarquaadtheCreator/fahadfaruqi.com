@@ -5,16 +5,18 @@ import "encoding/json"
 type Type string
 
 const (
-	LS      Type = "ls"
-	Cat     Type = "cat"
-	PWD     Type = "pwd"
-	Echo    Type = "echo"
-	Env     Type = "env"
-	History Type = "history"
-	Clear   Type = "clear"
-	VarSet  Type = "varset"
-	Open    Type = "open"
-	Err     Type = "error"
+	LS         Type = "ls"
+	Cat        Type = "cat"
+	PWD        Type = "pwd"
+	Echo       Type = "echo"
+	Env        Type = "env"
+	History    Type = "history"
+	Clear      Type = "clear"
+	VarSet     Type = "varset"
+	Open       Type = "open"
+	Apps       Type = "apps"
+	Completion Type = "completion"
+	Err        Type = "error"
 )
 
 type Response struct {
@@ -73,6 +75,10 @@ type LsOptions struct {
 
 type HistoryPayload struct {
 	Entries []string `json:"entries"`
+}
+
+type CompletionPayload struct {
+	Candidates []string `json:"candidates"`
 }
 
 type ErrorPayload struct {

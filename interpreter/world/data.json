@@ -6,7 +6,9 @@
       "~/.contact.md",
       "~/.blog.md",
       "~/resume",
-      "~/readme.md"
+      "~/readme.md",
+      "~/Pictures",
+      "~/notes.txt"
     ],
     "hidden": false
   },
@@ -164,6 +166,34 @@
   "~/resume/toolkit/systems-data.md": {
     "type": "file",
     "content": "# Systems & Data\n\n- PostgreSQL\n- MySQL\n- Docker\n- AWS EC2\n- Python\n- NLP\n- Computer vision\n- Entity Framework",
+    "hidden": false
+  },
+  "~/Pictures": {
+    "type": "dir",
+    "children": [
+      "~/Pictures/profile.png",
+      "~/Pictures/screenshot.jpeg"
+    ],
+    "hidden": false
+  },
+  "~/Pictures/profile.png": {
+    "type": "file",
+    "mimeType": "image/png",
+    "imagePath": "/images/profile/profile.png",
+    "content": "",
+    "hidden": false
+  },
+  "~/Pictures/screenshot.jpeg": {
+    "type": "file",
+    "mimeType": "image/jpeg",
+    "imagePath": "/images/profile/screenshot.jpeg",
+    "content": "",
+    "hidden": false
+  },
+  "~/notes.txt": {
+    "type": "file",
+    "mimeType": "text/plain",
+    "content": "Quick notes:\n- Rewrite portfolio as macOS desktop\n- Ship it\n- Profit",
     "hidden": false
   }
 }
