@@ -61,12 +61,13 @@ func (m *Manager) spawn(appType, appID, title string, width, height int, notify 
 		Width:   width,
 		Height:  height,
 	}
+	offset := (len(m.windows) % 5) * 30
 	if m.viewportW > 0 && m.viewportH > 0 {
-		win.X = (m.viewportW - width) / 2
-		win.Y = (m.viewportH - height) / 2
+		win.X = (m.viewportW-width)/2 + offset
+		win.Y = (m.viewportH-height)/2 + offset
 	} else {
-		win.X = 50
-		win.Y = 50
+		win.X = 50 + offset
+		win.Y = 50 + offset
 	}
 	m.clampWindow(win)
 	m.windows[id] = win
