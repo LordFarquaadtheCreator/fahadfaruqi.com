@@ -10,7 +10,7 @@ Top-level desktop container. Renders Wallpaper, MenuBar, DesktopIcons, WindowLay
 
 ### Wallpaper.svelte
 
-Full-screen fixed background image. Default: `/wallpapers/wallpaper.jpg`. Accepts `src` prop override.
+Full-screen fixed background image. Default: the desktop wallpaper on the CDN, `https://assets.fahadfaruqi.com/www/wallpapers/wallpaper.jpg` (the Go VM picks light/dark and sends the absolute URL). Accepts `src` prop override.
 
 ### MenuBar.svelte
 

@@ -22,12 +22,22 @@ User action → window.os.<action>() → Go mutates state → pushVM() → JSON 
 
 Every state change triggers full VM re-serialization. No incremental updates. No Svelte stores for app state — only ephemeral UI (hover, focus, clock).
 
+## Assets
+
+No image, icon, wallpaper or wasm binary lives in this repo or in the build. They are served from Cloudflare — the R2 bucket `assets`, custom domain `assets.fahadfaruqi.com`, under the `www/` prefix — which keeps the Pages artifact around 100 KB instead of ~95 MB.
+
+- **Origin**: `https://assets.fahadfaruqi.com/www`. Three places know it, all defaulting to the same value: `src/lib/assets.js` (Svelte; `VITE_ASSETS_BASE` overrides it), `src/app.html` (the pre-hydration wasm load), and the Go wasm (baked in by `build-wasm.sh` via `-ldflags "-X interpreter/assets.Base=..."`, `ASSETS_BASE` overrides it).
+- **Go side**: `interpreter/world/data.json` and the VM builders keep relative paths (`/images/pictures/…`, `/icons/…`, `/wallpapers/…`) and `interpreter/assets.URL()` turns them into absolute URLs as they enter a view model.
+- **R2 layout**: `www/images/pictures/…` (originals + `thumbs/`), `www/images/companies/…`, `www/icons/…`, `www/wallpapers/…`, `www/interp.wasm`, `www/wasm_exec.js`. The bucket is shared with art.fahadfaruqi.com, whose Worker ignores anything under `www/` the same way it ignores its own `d/` derivatives.
+- **Cache**: images `max-age=604800` (7 days); `interp.wasm` `max-age=300` — Cloudflare does not edge-cache `application/wasm`, so every visit fetches it once; `wasm_exec.js` `max-age=14400`, because Cloudflare raises browser TTLs below the zone's 4-hour Browser Cache TTL. Replacing an image *in place* therefore keeps serving the old bytes for up to 7 days — rename the file, or purge it in the Cloudflare dashboard.
+
 ## Project Structure
 
 ```
 interpreter/              Go WASM backend
 ├── main.go               Entry point, window.os.* bindings, pushVM()
 ├── apps/                 App registry + file associations
+├── assets/               CDN base injected at build time; assets.URL()
 ├── command/              zsh command handlers (ls, cd, cat, open, etc.)
 ├── desktop/              Desktop icons VM
 ├── dock/                 Dock VM with running/active state
@@ -45,21 +55,19 @@ interpreter/              Go WASM backend
 
 src/                      SvelteKit frontend
 ├── app.css               Global macOS design system
-├── app.html              HTML shell, loads wasm_exec.js + WASM
+├── app.html              HTML shell, loads wasm_exec.js + WASM from the CDN
 ├── routes/
 │   ├── +layout.svelte    Renders <Desktop />, font imports
 │   └── +page.svelte      Head only (title)
 └── lib/
+    ├── assets.js         CDN base + assetUrl()
     ├── os/               VM types + OS bridge (osStore)
     ├── components/       Svelte UI (desktop, finder, terminal, viewer, window)
     ├── data/             Static data
     └── wasmLoader.js     Loads Go WASM module
 
-static/                   Static assets
-├── interp.wasm           Compiled Go WASM binary
-├── wasm_exec.js          Go WASM runtime
-├── icons/                App + file type icons
-└── wallpapers/           Desktop wallpapers
+static/                   Site plumbing only: favicon.png, robots.txt, AGENTS.md
+scripts/                  publish-wasm.py, sync-pictures.py (both need R2 credentials)
 ```
 
 ## Commands
@@ -73,8 +81,14 @@ npm run preview      # serve build/
 npm test             # vitest (unit + component)
 npm run check        # svelte-check + tsc
 
-# Manual WASM rebuild (from interpreter/)
-GOOS=js GOARCH=wasm go build -o ../static/interp.wasm .
+# Rebuild the wasm locally (also done by the predev/prebuild hooks)
+./build-wasm.sh
+
+# Publish the interpreter + its wasm_exec.js to the CDN (CI does this on every push)
+R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/publish-wasm.py
+
+# Upload pictures from a local directory and sync them into data.json
+R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/sync-pictures.py [source-dir]
 ```
 
 ## Features
@@ -96,14 +110,15 @@ Boots from `interpreter/world/data.json`. Home (`~`) contains:
 
 ## Deployment
 
-GitHub Actions: setup Go + Node → build WASM from `interpreter/` → `npm ci` → `npm run build` → deploy `build/` to GitHub Pages. Triggers on push to `main`. CI builds WASM from source — no need to commit `static/interp.wasm`.
+GitHub Actions, on push to `main`: setup Node + Go (`go-version-file: interpreter/go.mod`, because the published `wasm_exec.js` must come from the toolchain that built the wasm) → `npm ci` → `npm run build` (its `prebuild` hook compiles the wasm with `ASSETS_BASE`, the job-level env) → `scripts/publish-wasm.py` uploads `interp.wasm` + `wasm_exec.js` to the CDN using the `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` repo secrets → deploy `build/` to GitHub Pages.
 
 ## Conventions
 
 - **0px border-radius site-wide** — enforced via `* { border-radius: 0 !important }`
 - Svelte 5 Runes only — never legacy `export let` / `$:`
 - VM types in `src/lib/os/types.ts` must match Go struct JSON tags exactly
-- Rebuild WASM after any Go change
+- Rebuild WASM after any Go change, and publish it — the deployed site loads the wasm from the CDN, not from `build/`
+- Never add images, icons or wallpapers under `static/` — they go to the CDN (see Assets)
 - Desktop icons right-aligned (CSS `right` offset, not `left`)
 - `mix-blend-mode: difference` on menubar for auto-contrast against wallpaper
 

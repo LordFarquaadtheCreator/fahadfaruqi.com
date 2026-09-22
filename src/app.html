@@ -6,13 +6,26 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#1e1e1e" />
 		%sveltekit.head%
-		<script src="/wasm_exec.js"></script>
 		<script>
+			// Every image, icon, wallpaper and the interpreter itself are served from the
+			// Cloudflare CDN (R2 bucket `assets`), not from this build. The same default
+			// lives in src/lib/assets.js, where VITE_ASSETS_BASE can override it.
+			window.__ASSETS_BASE__ = 'https://assets.fahadfaruqi.com/www';
+
 			// Load WASM module before Svelte hydrates
 			(async () => {
+				const script = document.createElement('script');
+				script.src = `${window.__ASSETS_BASE__}/wasm_exec.js`;
+				const loaded = new Promise((resolve, reject) => {
+					script.onload = resolve;
+					script.onerror = reject;
+				});
+				document.head.appendChild(script);
+				await loaded;
+
 				const go = new Go();
 				const result = await WebAssembly.instantiateStreaming(
-					fetch('/interp.wasm'),
+					fetch(`${window.__ASSETS_BASE__}/interp.wasm`),
 					go.importObject
 				);
 				go.run(result.instance);

@@ -1,9 +1,11 @@
 // @ts-ignore - Go is loaded from wasm_exec.js
+import { assetUrl } from './assets.js';
+
 export async function loadInterpreter() {
 	// Load wasm_exec.js first
 	await new Promise((resolve, reject) => {
 		const script = document.createElement('script');
-		script.src = '/wasm_exec.js';
+		script.src = assetUrl('/wasm_exec.js');
 		script.onload = resolve;
 		script.onerror = reject;
 		document.head.appendChild(script);
@@ -13,7 +15,7 @@ export async function loadInterpreter() {
 	const go = new Go();
 
 	const result = await WebAssembly.instantiateStreaming(
-		fetch("/interp.wasm"),
+		fetch(assetUrl('/interp.wasm')),
 		go.importObject
 	);
 

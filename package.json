@@ -4,7 +4,6 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"predev": "./build-wasm.sh",
 		"dev": "vite dev",
 		"dev:light": "VITE_THEME=light vite dev",
 		"dev:dark": "VITE_THEME=dark vite dev",

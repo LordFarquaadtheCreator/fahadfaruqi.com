@@ -2,6 +2,7 @@ package ephemeral
 
 import (
 	"encoding/json"
+	"interpreter/assets"
 	"interpreter/apps"
 	"interpreter/fs"
 	"interpreter/wm"
@@ -135,7 +136,7 @@ func BuildContentVM(win *wm.Window, em *EphemeralManager) json.RawMessage {
 
 	if s.IsDir {
 		vm.Kind = "ephemeral-folder"
-		vm.Icon = "/icons/folder.png"
+		vm.Icon = assets.URL("/icons/folder.png")
 	} else {
 		vm.Kind = "ephemeral-image"
 		vm.Src = s.ImagePath

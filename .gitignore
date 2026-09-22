@@ -18,9 +18,8 @@ Thumbs.db
 !.env.example
 !.env.test
 
-# WASM — built in CI from interpreter/
-static/interp.wasm
-static/interp.v2.wasm
+# WASM — built from interpreter/ by build-wasm.sh; published to the CDN, never shipped
+/interp.wasm
 
 # Vite
 vite.config.js.timestamp-*

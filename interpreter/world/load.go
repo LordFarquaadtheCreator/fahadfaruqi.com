@@ -3,6 +3,7 @@ package world
 import (
 	_ "embed"
 	"encoding/json"
+	"interpreter/assets"
 	"interpreter/ephemeral"
 	"interpreter/finder"
 	"interpreter/fs"
@@ -36,8 +37,8 @@ func Load() World {
 			Meta: fs.Meta{
 				Size:      int64(len(jn.Content)),
 				Modified:  "2024-01-01",
-				ImagePath: jn.ImagePath,
-				ThumbPath: jn.ThumbPath,
+				ImagePath: assets.URL(jn.ImagePath),
+				ThumbPath: assets.URL(jn.ThumbPath),
 				ImgWidth:  jn.ImgWidth,
 				ImgHeight: jn.ImgHeight,
 				MimeType:  jn.MimeType,

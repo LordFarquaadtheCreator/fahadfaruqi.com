@@ -19,4 +19,4 @@ Props: `window: WindowVM`, `content: FinderContentVM`.
 - Rendered by `WindowLayer.svelte` when `win.content.kind === 'finder'`
 - All navigation routed through `window.os.*` — no local path state
 - CSS in `src/app.css` under `/* ── Finder ── */` section
-- Sidebar items, breadcrumbs, and entry icons all come from Go VM (icon paths like `/icons/folder.png`)
+- Sidebar items, breadcrumbs, and entry icons all come from Go VM (absolute CDN URLs like `https://assets.fahadfaruqi.com/www/icons/folder.png`, prefixed in Go by `assets.URL()`)

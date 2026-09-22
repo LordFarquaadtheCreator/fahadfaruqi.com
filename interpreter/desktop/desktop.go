@@ -2,6 +2,7 @@ package desktop
 
 import (
 	"encoding/json"
+	"interpreter/assets"
 	"interpreter/fs"
 	"path"
 )
@@ -30,12 +31,12 @@ func BuildVM(filesystem fs.FileSystem, dark bool) DesktopVM {
 	col := 0
 	row := 0
 	for i, child := range children {
-		iconPath := "/icons/file.png"
+		iconPath := assets.URL("/icons/file.png")
 		if child.Type.IsDir() {
-			iconPath = "/icons/folder.png"
+			iconPath = assets.URL("/icons/folder.png")
 		} else if child.Meta.MimeType != "" {
 			if isImageType(child.Meta.MimeType) {
-				iconPath = "/icons/file.png"
+				iconPath = assets.URL("/icons/file.png")
 			}
 		}
 
@@ -54,9 +55,9 @@ func BuildVM(filesystem fs.FileSystem, dark bool) DesktopVM {
 		}
 	}
 
-	wp := "/wallpapers/wallpaper.jpg"
+	wp := assets.URL("/wallpapers/wallpaper.jpg")
 	if dark {
-		wp = "/wallpapers/wallpaper-dark.jpg"
+		wp = assets.URL("/wallpapers/wallpaper-dark.jpg")
 	}
 
 	return DesktopVM{Icons: icons, Wallpaper: wp}

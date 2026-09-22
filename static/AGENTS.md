@@ -1,44 +1,45 @@
 # static/
 
-Static assets served directly by SvelteKit. No build step — files served as-is.
+Only site plumbing is served from here: `favicon.png`, `robots.txt`. Everything that
+used to live here — `icons/`, `wallpapers/`, `images/`, `interp.wasm`, `wasm_exec.js` —
+now comes from Cloudflare.
 
-## Structure
+## Where assets actually are
+
+The R2 bucket `assets`, custom domain `assets.fahadfaruqi.com`, prefix `www/`:
 
 ```
-static/
-├── interp.wasm        # Go WASM binary (built from interpreter/)
-├── interp.v2.wasm     # Older WASM binary (legacy, can be cleaned up)
-├── wasm_exec.js       # Go WASM runtime support (from Go SDK)
-├── favicon.png        # Site favicon
-├── robots.txt         # Robots
-├── icons/             # App and file type icons (PNG)
-│   ├── finder.png, iterm.png, preview.png, textedit.png
-│   ├── obsidian.png, slack.png, spotify.png, steam.png
-│   ├── devin.png, zed.png, xcode.png, figma.png, hermes.png
-│   ├── affinity.png, whatsapp.png, imsg.png
-│   ├── folder.png, file.png, trash.png
-│   └── ... (see apps/registry.go for full list)
-├── wallpapers/        # Desktop wallpaper images
-│   ├── wallpaper.jpg  # Active wallpaper (referenced by Wallpaper.svelte)
-│   └── ... (other wallpapers, not currently used)
-└── images/            # General images (currently empty)
+https://assets.fahadfaruqi.com/www/icons/finder.png
+https://assets.fahadfaruqi.com/www/wallpapers/wallpaper.jpg
+https://assets.fahadfaruqi.com/www/images/pictures/lucky_1.JPG
+https://assets.fahadfaruqi.com/www/images/pictures/thumbs/lucky_1.JPG
+https://assets.fahadfaruqi.com/www/interp.wasm
+https://assets.fahadfaruqi.com/www/wasm_exec.js
 ```
 
-## WASM Build
+The bucket is shared with art.fahadfaruqi.com. Its metadata Worker lists every object
+that is not under `d/` (its own derivatives) or `www/` (this site), so keep new objects
+under `www/` or they turn up as photographs in that gallery.
+
+## Who builds the URLs
+
+- Go VM: paths stay relative (`/icons/folder.png`, `/wallpapers/wallpaper.jpg`) and
+  `interpreter/assets.URL()` prefixes them on the way into a view model. The base is
+  baked in by `build-wasm.sh` (`-ldflags "-X interpreter/assets.Base=…"`), overridable
+  with `ASSETS_BASE`.
+- Svelte: `src/lib/assets.js` (overridable with `VITE_ASSETS_BASE`) and `src/app.html`,
+  which needs the base for the pre-hydration wasm load.
+
+## Publishing
 
 ```bash
-cd interpreter/
-GOOS=js GOARCH=wasm go build -o ../static/interp.wasm .
+# interpreter + the wasm_exec.js of the toolchain that built it (CI does this on push)
+R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/publish-wasm.py
+
+# pictures, from a local source directory, uploaded and synced into data.json
+R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/sync-pictures.py [source-dir]
 ```
 
-`wasm_exec.js` comes from Go SDK: `$(go env GOROOT)/misc/wasm/wasm_exec.js`. Copy here if Go version changes.
-
-## Icon Naming
-
-Icons referenced by path in Go `apps/registry.go` (e.g. `/icons/finder.png`). Must match exactly. Adding a new app = add icon PNG here + reference in registry.
-
-## Relationship
-
-- `wasmLoader.js` (in `src/lib/`) fetches `interp.wasm` and `wasm_exec.js`
-- `Wallpaper.svelte` references `/wallpapers/wallpaper.jpg`
-- Go VM sends icon paths as strings (e.g. `/icons/folder.png`) — Svelte renders `<img src={path}>`
+Adding an app icon means: put the PNG in the bucket at `www/icons/<name>.png`, then
+reference `assets.URL("/icons/<name>.png")` in `apps/registry.go`. The filename must
+match exactly — nothing validates it.

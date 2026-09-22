@@ -2,6 +2,7 @@ package finder
 
 import (
 	"encoding/json"
+	"interpreter/assets"
 	"interpreter/fs"
 	"interpreter/wm"
 	"path"
@@ -78,10 +79,10 @@ func BuildContentVM(win *wm.Window, fm *FinderManager, filesystem fs.FileSystem)
 		var entries []EntryVM
 		for i, child := range children {
 			kind := "md"
-			icon := "/icons/file.png"
+			icon := assets.URL("/icons/file.png")
 			if child.Type.IsDir() {
 				kind = "dir"
-				icon = "/icons/folder.png"
+				icon = assets.URL("/icons/folder.png")
 			} else if child.Meta.ThumbPath != "" {
 				icon = child.Meta.ThumbPath
 			} else if child.Meta.ImagePath != "" {
@@ -111,25 +112,25 @@ func buildSidebar(currentPath string) []SidebarSectionVM {
 		{
 			Title: "",
 			Items: []SidebarItemVM{
-				{Name: "Recents", Path: "~/Recents", Icon: "/icons/folder.png", Active: currentPath == "~/Recents"},
-				{Name: "Shared", Path: "~/Shared", Icon: "/icons/folder.png", Active: currentPath == "~/Shared"},
+				{Name: "Recents", Path: "~/Recents", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Recents"},
+				{Name: "Shared", Path: "~/Shared", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Shared"},
 			},
 		},
 		{
 			Title: "Favorites",
 			Items: []SidebarItemVM{
-				{Name: "Applications", Path: "~/Applications", Icon: "/icons/folder.png", Active: currentPath == "~/Applications"},
-				{Name: "Desktop", Path: "~/Desktop", Icon: "/icons/folder.png", Active: currentPath == "~/Desktop"},
-				{Name: "Documents", Path: "~/Documents", Icon: "/icons/folder.png", Active: currentPath == "~/Documents"},
-				{Name: "Downloads", Path: "~/Downloads", Icon: "/icons/folder.png", Active: currentPath == "~/Downloads"},
+				{Name: "Applications", Path: "~/Applications", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Applications"},
+				{Name: "Desktop", Path: "~/Desktop", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Desktop"},
+				{Name: "Documents", Path: "~/Documents", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Documents"},
+				{Name: "Downloads", Path: "~/Downloads", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Downloads"},
 			},
 		},
 		{
 			Title: "Locations",
 			Items: []SidebarItemVM{
-				{Name: "iCloud Drive", Path: "~/iCloud", Icon: "/icons/folder.png", Active: currentPath == "~/iCloud"},
-				{Name: "farquaad", Path: "~", Icon: "/icons/folder.png", Active: currentPath == "~"},
-				{Name: "Network", Path: "~/Network", Icon: "/icons/folder.png", Active: currentPath == "~/Network"},
+				{Name: "iCloud Drive", Path: "~/iCloud", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/iCloud"},
+				{Name: "farquaad", Path: "~", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~"},
+				{Name: "Network", Path: "~/Network", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Network"},
 			},
 		},
 	}
@@ -142,7 +143,7 @@ func buildBreadcrumb(currentPath string) []BreadcrumbItemVM {
 		items = append(items, BreadcrumbItemVM{
 			Name: p.Name,
 			Path: p.Path,
-			Icon: "/icons/folder.png",
+			Icon: assets.URL("/icons/folder.png"),
 		})
 	}
 	return items
