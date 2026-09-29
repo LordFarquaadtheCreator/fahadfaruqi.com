@@ -5,14 +5,14 @@ macOS desktop simulation in the browser. SvelteKit 2 + Svelte 5 (Runes) + TypeSc
 ## Commands
 
 ```bash
-npm run dev        # dev server
-npm run build      # static output → build/
-npm run preview    # serve build/
-npm test           # vitest (unit + component)
-npm run check      # svelte-check + tsc
+bun run dev        # dev server
+bun run build      # static output → build/
+bun run preview    # serve build/
+bun run test       # vitest (unit + component)
+bun run check      # svelte-check + tsc
 
 # WASM build (run from interpreter/ directory)
-GOOS=js GOARCH=wasm go build -o ../static/interp.wasm .
+GOOS=js GOARCH=wasm go build -o ../interp.wasm .
 ```
 
 ## Stack
@@ -84,6 +84,7 @@ static/                   # Site plumbing (see static/AGENTS.md)
 
 ## Critical Conventions
 
+- **Bun, not npm** — `bun install`, `bun run <script>`, `bunx <package>`. No npm, npx, yarn or pnpm.
 - **0px border-radius site-wide** — enforced via `* { border-radius: 0 !important }` in `app.css`
 - Svelte 5 Runes only. Never legacy `export let` / `$:` syntax
 - VM types in `src/lib/os/types.ts` must match Go struct JSON tags exactly

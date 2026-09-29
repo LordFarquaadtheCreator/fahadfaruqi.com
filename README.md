@@ -74,13 +74,13 @@ scripts/                  publish-wasm.py, sync-pictures.py, sync-wallpapers.py 
 ## Commands
 
 ```bash
-npm run dev          # dev server (rebuilds WASM via predev hook)
-npm run dev:light    # dev server, force light theme
-npm run dev:dark     # dev server, force dark theme
-npm run build        # static output → build/ (rebuilds WASM via prebuild)
-npm run preview      # serve build/
-npm test             # vitest (unit + component)
-npm run check        # svelte-check + tsc
+bun run dev          # dev server (rebuilds WASM via predev hook)
+bun run dev:light    # dev server, force light theme
+bun run dev:dark     # dev server, force dark theme
+bun run build        # static output → build/ (rebuilds WASM via prebuild)
+bun run preview      # serve build/
+bun run test         # vitest (unit + component)
+bun run check        # svelte-check + tsc
 
 # Rebuild the wasm locally (also done by the predev/prebuild hooks)
 ./build-wasm.sh
@@ -118,10 +118,11 @@ Boots from `interpreter/world/data.json`. Home (`~`) contains:
 
 ## Deployment
 
-GitHub Actions, on push to `main`: setup Node + Go (`go-version-file: interpreter/go.mod`, because the published `wasm_exec.js` must come from the toolchain that built the wasm) → `npm ci` → `npm run build` (its `prebuild` hook compiles the wasm with `ASSETS_BASE`, the job-level env) → `scripts/publish-wasm.py` uploads `interp.wasm` + `wasm_exec.js` to the CDN using the `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` repo secrets → deploy `build/` to GitHub Pages.
+GitHub Actions, on push to `main`: setup Bun + Go (`go-version-file: interpreter/go.mod`, because the published `wasm_exec.js` must come from the toolchain that built the wasm) → `bun install` → `bun run build` (its `prebuild` hook compiles the wasm with `ASSETS_BASE`, the job-level env) → `scripts/publish-wasm.py` uploads `interp.wasm` + `wasm_exec.js` to the CDN using the `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` repo secrets → deploy `build/` to GitHub Pages.
 
 ## Conventions
 
+- **Bun, not npm** — `bun install`, `bun run <script>`, `bunx <package>`. No npm, npx, yarn or pnpm.
 - **0px border-radius site-wide** — enforced via `* { border-radius: 0 !important }`
 - Svelte 5 Runes only — never legacy `export let` / `$:`
 - VM types in `src/lib/os/types.ts` must match Go struct JSON tags exactly

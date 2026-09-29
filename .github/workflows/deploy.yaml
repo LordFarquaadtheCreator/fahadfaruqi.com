@@ -27,16 +27,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 20
-          cache: npm
+          bun-version: latest
       - uses: actions/setup-go@v5
         with:
           # Must match interpreter/go.mod: wasm_exec.js is published from this toolchain.
           go-version-file: interpreter/go.mod
-      - run: npm ci
-      - run: npm run build
+      - run: bun install
+      - run: bun run build
       - name: Publish the interpreter to the CDN
         env:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
