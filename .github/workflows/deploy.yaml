@@ -35,7 +35,8 @@ jobs:
           # Must match interpreter/go.mod: wasm_exec.js is published from this toolchain.
           go-version-file: interpreter/go.mod
       - run: bun install
-      - run: bun run build
+      # --bun: vite's bin has a node shebang, which bun run would otherwise honour
+      - run: bun run --bun build
       - name: Publish the interpreter to the CDN
         env:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}

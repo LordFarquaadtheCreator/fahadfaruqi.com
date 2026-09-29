@@ -122,7 +122,7 @@ GitHub Actions, on push to `main`: setup Bun + Go (`go-version-file: interpreter
 
 ## Conventions
 
-- **Bun, not npm** — `bun install`, `bun run <script>`, `bunx <package>`. No npm, npx, yarn or pnpm.
+- **Bun, not npm** — `bun install`, `bun run <script>`, `bunx <package>`. No npm, npx, yarn or pnpm. A script that must run on Bun's runtime rather than a bin's node shebang takes `--bun`, which is how CI runs the build (`bun run --bun build`).
 - **0px border-radius site-wide** — enforced via `* { border-radius: 0 !important }`
 - Svelte 5 Runes only — never legacy `export let` / `$:`
 - VM types in `src/lib/os/types.ts` must match Go struct JSON tags exactly

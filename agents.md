@@ -84,7 +84,7 @@ static/                   # Site plumbing (see static/AGENTS.md)
 
 ## Critical Conventions
 
-- **Bun, not npm** — `bun install`, `bun run <script>`, `bunx <package>`. No npm, npx, yarn or pnpm.
+- **Bun, not npm** — `bun install`, `bun run <script>`, `bunx <package>`. No npm, npx, yarn or pnpm. A script that must run on Bun's runtime rather than a bin's node shebang takes `--bun`, which is how CI runs the build (`bun run --bun build`).
 - **0px border-radius site-wide** — enforced via `* { border-radius: 0 !important }` in `app.css`
 - Svelte 5 Runes only. Never legacy `export let` / `$:` syntax
 - VM types in `src/lib/os/types.ts` must match Go struct JSON tags exactly
