@@ -18,11 +18,12 @@ type Node struct {
 }
 
 type Meta struct {
-	Size      int64
-	Modified  string
-	ImagePath string // URL path for full-size image
-	ThumbPath string // URL path for thumbnail
-	ImgWidth  int    // natural pixel width of image
-	ImgHeight int    // natural pixel height of image
-	MimeType  string // MIME type for file type detection
+	Size           int64
+	Modified       string
+	ImagePath      string // URL path for full-size image
+	ThumbPath      string // URL path for thumbnail
+	CompressedPath string // URL path for the compressed copy, empty if the file has none
+	ImgWidth       int    // natural pixel width of image
+	ImgHeight      int    // natural pixel height of image
+	MimeType       string // MIME type for file type detection
 }

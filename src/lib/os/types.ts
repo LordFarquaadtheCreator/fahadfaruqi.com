@@ -61,6 +61,7 @@ export interface EntryVM {
   kind: string;
   icon: string;
   imagePath?: string;
+  compressedPath?: string;
   size: number;
   modified: string;
 }

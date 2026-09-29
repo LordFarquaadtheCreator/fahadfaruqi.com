@@ -25,9 +25,11 @@ Every state change calls `pushVM()` → full VM re-serialization → Svelte re-r
 | Module | Purpose | Key Files |
 |---|---|---|
 | `apps/` | App registry, file associations | `registry.go`, `associations.go` |
+| `assets/` | CDN base + `assets.URL()` | `assets.go` |
 | `command/` | zsh command handlers | `registry.go`, `ls.go`, `cd.go`, `cat.go`, `open.go`, etc. |
 | `desktop/` | Desktop icons VM | `desktop.go` |
 | `dock/` | Dock VM with running/active state | `dock.go` |
+| `ephemeral/` | Quick Look preview (spacebar) | `ephemeral.go` |
 | `finder/` | Finder window manager + VM + markdown render | `finder.go`, `viewmodel.go`, `render.go` |
 | `fs/` | In-memory filesystem | `fs.go`, `node.go`, `resolve.go` |
 | `menubar/` | Menu bar VM (menus, tray, clock) | `menubar.go` |

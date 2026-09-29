@@ -55,9 +55,9 @@ func BuildVM(filesystem fs.FileSystem, dark bool) DesktopVM {
 		}
 	}
 
-	wp := assets.URL("/wallpapers/wallpaper.jpg")
+	wp := assets.URL("/wallpapers/compressed/wallpaper.avif")
 	if dark {
-		wp = assets.URL("/wallpapers/wallpaper-dark.jpg")
+		wp = assets.URL("/wallpapers/compressed/wallpaper-dark.avif")
 	}
 
 	return DesktopVM{Icons: icons, Wallpaper: wp}

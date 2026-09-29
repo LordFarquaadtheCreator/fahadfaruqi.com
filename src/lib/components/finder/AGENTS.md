@@ -10,7 +10,7 @@ Renders Finder window content from `FinderContentVM`:
 - **Sidebar**: 3 sections (Recents, Favorites, Locations) with icons. Click forwards to `os()?.finderNavigate(id, path)`.
 - **Toolbar**: Back/forward arrows (disabled state from `canBack`/`canForward`), view mode buttons, search icon. Click forwards to `os()?.finderBack(id)` / `os()?.finderForward(id)`.
 - **Breadcrumb**: Path segments with icons. Click forwards to `os()?.finderNavigate(id, path)`.
-- **Content area**: File entries with icons, names, sizes, modified dates. Double-click forwards to `os()?.finderOpenEntry(id, path)`.
+- **Content area**: File entries with icons, names, sizes, modified dates. Double-click forwards to `os()?.finderOpenEntry(id, path)`. Selecting an entry prefetches its compressed copy, so Quick Look opens instantly; resting the pointer on an entry for 300ms warms the master, which is what the Viewer opens.
 
 Props: `window: WindowVM`, `content: FinderContentVM`.
 

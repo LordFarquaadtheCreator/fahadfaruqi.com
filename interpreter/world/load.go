@@ -35,13 +35,14 @@ func Load() World {
 			Children: jn.Children,
 			Content:  jn.Content,
 			Meta: fs.Meta{
-				Size:      int64(len(jn.Content)),
-				Modified:  "2024-01-01",
-				ImagePath: assets.URL(jn.ImagePath),
-				ThumbPath: assets.URL(jn.ThumbPath),
-				ImgWidth:  jn.ImgWidth,
-				ImgHeight: jn.ImgHeight,
-				MimeType:  jn.MimeType,
+				Size:           int64(len(jn.Content)),
+				Modified:       "2024-01-01",
+				ImagePath:      assets.URL(jn.ImagePath),
+				ThumbPath:      assets.URL(jn.ThumbPath),
+				CompressedPath: assets.URL(jn.CompressedPath),
+				ImgWidth:       jn.ImgWidth,
+				ImgHeight:      jn.ImgHeight,
+				MimeType:       jn.MimeType,
 			},
 			Hidden: jn.Hidden,
 		}
@@ -106,13 +107,14 @@ func Load() World {
 }
 
 type jsonNode struct {
-	Type      string   `json:"type"`
-	Children  []string `json:"children"`
-	Content   string   `json:"content"`
-	Hidden    bool     `json:"hidden"`
-	ImagePath string   `json:"imagePath"`
-	ThumbPath string   `json:"thumbPath"`
-	ImgWidth  int      `json:"imgWidth"`
-	ImgHeight int      `json:"imgHeight"`
-	MimeType  string   `json:"mimeType"`
+	Type           string   `json:"type"`
+	Children       []string `json:"children"`
+	Content        string   `json:"content"`
+	Hidden         bool     `json:"hidden"`
+	ImagePath      string   `json:"imagePath"`
+	ThumbPath      string   `json:"thumbPath"`
+	CompressedPath string   `json:"compressedPath"`
+	ImgWidth       int      `json:"imgWidth"`
+	ImgHeight      int      `json:"imgHeight"`
+	MimeType       string   `json:"mimeType"`
 }

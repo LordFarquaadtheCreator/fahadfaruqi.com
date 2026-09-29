@@ -28,8 +28,9 @@ No image, icon, wallpaper or wasm binary lives in this repo or in the build. The
 
 - **Origin**: `https://assets.fahadfaruqi.com/www`. Three places know it, all defaulting to the same value: `src/lib/assets.js` (Svelte; `VITE_ASSETS_BASE` overrides it), `src/app.html` (the pre-hydration wasm load), and the Go wasm (baked in by `build-wasm.sh` via `-ldflags "-X interpreter/assets.Base=..."`, `ASSETS_BASE` overrides it).
 - **Go side**: `interpreter/world/data.json` and the VM builders keep relative paths (`/images/pictures/…`, `/icons/…`, `/wallpapers/…`) and `interpreter/assets.URL()` turns them into absolute URLs as they enter a view model.
-- **R2 layout**: `www/images/pictures/…` (originals + `thumbs/`), `www/images/companies/…`, `www/icons/…`, `www/wallpapers/…`, `www/interp.wasm`, `www/wasm_exec.js`. The bucket is shared with art.fahadfaruqi.com, whose Worker ignores anything under `www/` the same way it ignores its own `d/` derivatives.
-- **Cache**: images `max-age=604800` (7 days); `interp.wasm` `max-age=300` — Cloudflare does not edge-cache `application/wasm`, so every visit fetches it once; `wasm_exec.js` `max-age=14400`, because Cloudflare raises browser TTLs below the zone's 4-hour Browser Cache TTL. Replacing an image *in place* therefore keeps serving the old bytes for up to 7 days — rename the file, or purge it in the Cloudflare dashboard.
+- **R2 layout**: `www/images/pictures/…` (masters, with `thumbs/` and `compressed/` beside them), `www/images/companies/…`, `www/icons/…`, `www/wallpapers/…` (masters + `compressed/`), `www/interp.wasm`, `www/wasm_exec.js`. The bucket is shared with art.fahadfaruqi.com, whose Worker ignores anything under `www/` the same way it ignores its own `d/` derivatives.
+- **Compressed copies**: every picture and wallpaper also exists as an AVIF copy — `compressed/<stem>.avif`, longest side 1600 px for pictures and 3200 px for wallpapers, encoded with `libsvtav1 -crf 22 -preset 6`. The Finder renders the 100 px thumbnail, Quick Look and the Finder's click prefetch render the compressed copy, and the Viewer opens the master.
+- **Cache**: images `max-age=604800` (7 days) — masters, thumbnails and compressed copies alike; `interp.wasm` `max-age=300` — Cloudflare does not edge-cache `application/wasm`, so every visit fetches it once; `wasm_exec.js` `max-age=14400`, because Cloudflare raises browser TTLs below the zone's 4-hour Browser Cache TTL. Replacing an image *in place* therefore keeps serving the old bytes for up to 7 days — rename the file, or purge it in the Cloudflare dashboard.
 
 ## Project Structure
 
@@ -67,7 +68,7 @@ src/                      SvelteKit frontend
     └── wasmLoader.js     Loads Go WASM module
 
 static/                   Site plumbing only: favicon.png, robots.txt, AGENTS.md
-scripts/                  publish-wasm.py, sync-pictures.py (both need R2 credentials)
+scripts/                  publish-wasm.py, sync-pictures.py, sync-wallpapers.py (all need R2 credentials)
 ```
 
 ## Commands
@@ -89,7 +90,14 @@ R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/publish-wasm.py
 
 # Upload pictures from a local directory and sync them into data.json
 R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/sync-pictures.py [source-dir]
+
+# Re-encode the desktop wallpapers from the masters already on the CDN
+R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/sync-wallpapers.py
 ```
+
+`sync-pictures.py` writes three objects per picture (master, thumbnail, compressed copy) and
+needs ffmpeg on PATH for the AVIF encode; `sync-wallpapers.py` reads the masters back from
+the bucket and writes only the compressed copy.
 
 ## Features
 

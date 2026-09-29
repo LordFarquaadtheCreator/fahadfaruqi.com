@@ -48,7 +48,11 @@ func (em *EphemeralManager) SpawnForFile(filePath string) *wm.Window {
 	winW, winH := app.Width, app.Height
 
 	if !state.IsDir {
+		// Quick Look renders the compressed copy; the master is what the viewer opens.
 		state.ImagePath = node.Meta.ImagePath
+		if node.Meta.CompressedPath != "" {
+			state.ImagePath = node.Meta.CompressedPath
+		}
 		if node.Meta.ImgWidth > 0 && node.Meta.ImgHeight > 0 {
 			vw, vh := em.wm.Viewport()
 			if vw > 0 && vh > 0 {

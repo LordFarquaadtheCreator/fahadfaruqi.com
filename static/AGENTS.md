@@ -13,6 +13,8 @@ https://assets.fahadfaruqi.com/www/icons/finder.png
 https://assets.fahadfaruqi.com/www/wallpapers/wallpaper.jpg
 https://assets.fahadfaruqi.com/www/images/pictures/lucky_1.JPG
 https://assets.fahadfaruqi.com/www/images/pictures/thumbs/lucky_1.JPG
+https://assets.fahadfaruqi.com/www/images/pictures/compressed/lucky_1.avif
+https://assets.fahadfaruqi.com/www/wallpapers/compressed/wallpaper.avif
 https://assets.fahadfaruqi.com/www/interp.wasm
 https://assets.fahadfaruqi.com/www/wasm_exec.js
 ```
@@ -23,7 +25,7 @@ under `www/` or they turn up as photographs in that gallery.
 
 ## Who builds the URLs
 
-- Go VM: paths stay relative (`/icons/folder.png`, `/wallpapers/wallpaper.jpg`) and
+- Go VM: paths stay relative (`/icons/folder.png`, `/wallpapers/compressed/wallpaper.avif`) and
   `interpreter/assets.URL()` prefixes them on the way into a view model. The base is
   baked in by `build-wasm.sh` (`-ldflags "-X interpreter/assets.Base=…"`), overridable
   with `ASSETS_BASE`.
@@ -36,8 +38,12 @@ under `www/` or they turn up as photographs in that gallery.
 # interpreter + the wasm_exec.js of the toolchain that built it (CI does this on push)
 R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/publish-wasm.py
 
-# pictures, from a local source directory, uploaded and synced into data.json
+# pictures, from a local source directory, uploaded and synced into data.json:
+# master, 100px thumbnail, and the compressed copy the simulation renders
 R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/sync-pictures.py [source-dir]
+
+# the desktop wallpapers, re-encoded from the masters already in the bucket
+R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... ./scripts/sync-wallpapers.py
 ```
 
 Adding an app icon means: put the PNG in the bucket at `www/icons/<name>.png`, then

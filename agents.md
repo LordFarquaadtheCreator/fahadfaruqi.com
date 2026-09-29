@@ -42,9 +42,11 @@ Every meaningful operation routes through Go.
 interpreter/              # Go WASM backend (see interpreter/AGENTS.md)
 ├── main.go               # WASM entry, window.os.* bindings, pushVM()
 ├── apps/                 # App registry + file associations (see apps/AGENTS.md)
+├── assets/               # CDN base baked in at build time; assets.URL()
 ├── command/              # zsh command handlers (see command/AGENTS.md)
 ├── desktop/              # Desktop icons VM (see desktop/AGENTS.md)
 ├── dock/                 # Dock VM (see dock/AGENTS.md)
+├── ephemeral/            # Quick Look preview manager (see ephemeral/AGENTS.md)
 ├── finder/               # Finder manager + VM + markdown render (see finder/AGENTS.md)
 ├── fs/                   # In-memory filesystem (see fs/AGENTS.md)
 ├── menubar/              # Menu bar VM (see menubar/AGENTS.md)
@@ -72,14 +74,12 @@ src/                      # SvelteKit frontend (see src/agents.md)
 │   │   ├── viewer/       # Preview app (image + text/markdown)
 │   │   ├── window/       # Generic window chrome
 │   │   └── placeholder/  # Splash for unimplemented apps
-│   ├── data/             # Static data assets (images)
+│   ├── data/             # Empty — portfolio content lives in interpreter/world/data.json
 │   └── wasmLoader.js     # Loads Go WASM module
 
-static/                   # Static assets (see static/AGENTS.md)
-├── interp.wasm           # Go WASM binary
-├── wasm_exec.js          # Go WASM runtime
-├── icons/                # App and file type icons (PNG)
-└── wallpapers/           # Desktop wallpapers
+static/                   # Site plumbing (see static/AGENTS.md)
+├── favicon.png
+└── robots.txt            # icons, wallpapers, images and the wasm come from the CDN
 ```
 
 ## Critical Conventions

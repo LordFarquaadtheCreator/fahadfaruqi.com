@@ -8,14 +8,36 @@
     os()?.finderNavigate?.(win.id, path);
   }
 
+  let warmTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function entryFor(path: string) {
+    return content.content.entries?.find((e) => e.path === path);
+  }
+
   function onEntryClick(path: string, isDir: boolean) {
     os()?.finderSelect?.(win.id, path);
-    // Prefetch full image so preview/ephemeral opens instantly
-    const entry = content.content.entries?.find((e) => e.path === path);
-    if (entry?.imagePath) {
+    // Prefetch the compressed copy so Quick Look opens instantly
+    const entry = entryFor(path);
+    const src = entry?.compressedPath ?? entry?.imagePath;
+    if (src) {
       const img = new Image();
-      img.src = entry.imagePath;
+      img.src = src;
     }
+  }
+
+  // Resting on an entry warms the master, which is what the viewer opens
+  function onEntryHover(path: string) {
+    clearTimeout(warmTimer);
+    const src = entryFor(path)?.imagePath;
+    if (!src) return;
+    warmTimer = setTimeout(() => {
+      const img = new Image();
+      img.src = src;
+    }, 300);
+  }
+
+  function onEntryHoverEnd() {
+    clearTimeout(warmTimer);
   }
 
   function onEntryDoubleClick(path: string) {
@@ -86,6 +108,8 @@
             class:selected={entry.path === content.selectedEntry}
             onclick={() => onEntryClick(entry.path, entry.kind === 'dir')}
             ondblclick={() => onEntryDoubleClick(entry.path)}
+            onmouseenter={() => onEntryHover(entry.path)}
+            onmouseleave={onEntryHoverEnd}
           >
             <img class="entry-icon" src={entry.icon} alt="" />
             <span class="entry-name">{entry.name}</span>
