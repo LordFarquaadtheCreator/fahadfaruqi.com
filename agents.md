@@ -94,7 +94,7 @@ static/                   # Site plumbing (see static/AGENTS.md)
 
 ## Deployment
 
-GitHub Actions workflow: `npm ci` → `npm run build` → upload `build/` → deploy to GitHub Pages. No env vars needed.
+GitHub Actions workflow: `bun install` → `bun run --bun build` → upload `build/` → deploy to GitHub Pages. No env vars needed.
 
 ## Testing
 

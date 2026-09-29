@@ -118,7 +118,7 @@ Boots from `interpreter/world/data.json`. Home (`~`) contains:
 
 ## Deployment
 
-GitHub Actions, on push to `main`: setup Bun + Go (`go-version-file: interpreter/go.mod`, because the published `wasm_exec.js` must come from the toolchain that built the wasm) → `bun install` → `bun run build` (its `prebuild` hook compiles the wasm with `ASSETS_BASE`, the job-level env) → `scripts/publish-wasm.py` uploads `interp.wasm` + `wasm_exec.js` to the CDN using the `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` repo secrets → deploy `build/` to GitHub Pages.
+GitHub Actions, on push to `main`: setup Bun + Go (`go-version-file: interpreter/go.mod`, because the published `wasm_exec.js` must come from the toolchain that built the wasm) → `bun install` → `bun run --bun build` (its `prebuild` hook compiles the wasm with `ASSETS_BASE`, the job-level env) → `scripts/publish-wasm.py` uploads `interp.wasm` + `wasm_exec.js` to the CDN using the `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` repo secrets → deploy `build/` to GitHub Pages.
 
 ## Conventions
 
