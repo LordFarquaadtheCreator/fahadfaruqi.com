@@ -18,6 +18,7 @@ import (
 	"interpreter/wm"
 	"interpreter/world"
 	"path"
+	"strings"
 	"syscall/js"
 )
 
@@ -83,28 +84,21 @@ func main() {
 	// Window operations
 	os["spawn"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		appID := args[0].String()
-		app, ok := apps.Get(appID)
-		if !ok {
+		if !spawnApp(appID) {
 			return "unknown app: " + appID
 		}
-		switch app.Type {
-		case apps.TypeFinder:
-			w.Finder.Spawn("~")
-		case apps.TypeTerminal:
-			w.Terminal.Spawn()
-		case apps.TypeRose:
-			w.Rose.Spawn()
-		case apps.TypePlaceholder, apps.TypeEditor:
-			w.WM.Spawn(string(app.Type), app.ID, app.Name, app.Width, app.Height)
-		default:
-			w.WM.Spawn(string(app.Type), app.ID, app.Name, app.Width, app.Height)
-		}
-		pushVM()
 		return nil
 	})
 
 	os["openFile"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		filePath := args[0].String()
+		// a desktop icon can name an app instead of a file
+		if strings.HasPrefix(filePath, apps.AppPathPrefix) {
+			if !spawnApp(strings.TrimPrefix(filePath, apps.AppPathPrefix)) {
+				return "unknown app: " + filePath
+			}
+			return nil
+		}
 		if !w.FS.Exists(filePath) {
 			return "path does not exist: " + filePath
 		}
@@ -269,8 +263,7 @@ func main() {
 	// Dock
 	os["dockClick"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		appID := args[0].String()
-		app, ok := apps.Get(appID)
-		if !ok {
+		if _, ok := apps.Get(appID); !ok {
 			return nil
 		}
 		// Check if app already has a window — focus it, else spawn
@@ -280,17 +273,7 @@ func main() {
 				return nil
 			}
 		}
-		switch app.Type {
-		case apps.TypeFinder:
-			w.Finder.Spawn("~")
-		case apps.TypeTerminal:
-			w.Terminal.Spawn()
-		case apps.TypeRose:
-			w.Rose.Spawn()
-		default:
-			w.WM.Spawn(string(app.Type), app.ID, app.Name, app.Width, app.Height)
-		}
-		pushVM()
+		spawnApp(appID)
 		return nil
 	})
 
@@ -305,6 +288,27 @@ func main() {
 	js.Global().Set("os", js.ValueOf(os))
 
 	select {}
+}
+
+// spawnApp opens an app by id: the one place that knows how each app type is created. It reports
+// whether the id named a registered app, and pushes the new state itself.
+func spawnApp(appID string) bool {
+	app, ok := apps.Get(appID)
+	if !ok {
+		return false
+	}
+	switch app.Type {
+	case apps.TypeFinder:
+		w.Finder.Spawn("~")
+	case apps.TypeTerminal:
+		w.Terminal.Spawn()
+	case apps.TypeRose:
+		w.Rose.Spawn()
+	default:
+		w.WM.Spawn(string(app.Type), app.ID, app.Name, app.Width, app.Height)
+	}
+	pushVM()
+	return true
 }
 
 // cleanupWindow removes app-specific state when a window closes.

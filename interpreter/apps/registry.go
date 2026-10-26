@@ -48,8 +48,12 @@ var Registry = map[string]App{
 // DockOrder defines which apps appear in the dock and in what order.
 var DockOrder = []string{
 	"finder", "terminal", "obsidian", "slack", "spotify", "steam",
-	"devin", "zed", "xcode", "figma", "hermes", "affinity", "whatsapp", "imsg", "browseros", "rose",
+	"devin", "zed", "xcode", "figma", "hermes", "affinity", "whatsapp", "imsg", "browseros",
 }
+
+// AppPathPrefix marks a desktop icon that opens an app rather than a file. The desktop VM carries
+// it as the icon's path, so the frontend keeps calling openFile for everything on the desktop.
+const AppPathPrefix = "app:"
 
 func Get(id string) (App, bool) {
 	a, ok := Registry[id]

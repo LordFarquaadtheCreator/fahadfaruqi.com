@@ -2,6 +2,7 @@ package desktop
 
 import (
 	"encoding/json"
+	"interpreter/apps"
 	"interpreter/assets"
 	"interpreter/fs"
 	"path"
@@ -53,6 +54,18 @@ func BuildVM(filesystem fs.FileSystem, dark bool) DesktopVM {
 			row = 0
 			col++
 		}
+	}
+
+	// Apps that open from the desktop rather than the dock are appended after the filesystem's own
+	// entries, which puts them below the last folder.
+	if app, ok := apps.Get("rose"); ok {
+		icons = append(icons, DesktopIconVM{
+			Name: app.Name,
+			Path: apps.AppPathPrefix + app.ID,
+			Icon: app.Icon,
+			X:    20 + col*100,
+			Y:    40 + row*100,
+		})
 	}
 
 	wp := assets.URL("/wallpapers/compressed/wallpaper.avif")

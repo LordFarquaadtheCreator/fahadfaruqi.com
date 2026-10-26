@@ -8,10 +8,11 @@
   let canvas: HTMLCanvasElement | undefined = $state();
   let drawn = $state(false);
 
-  // The seed is the app's state and Go owns it, so a shuffle arrives as new props: the drawing is
-  // torn down and rebuilt from the new seed rather than patched.
+  // The seed is the app's state and Go owns it. `$derived` keeps this a number, so a VM push that
+  // carries the same seed — a window drag, a focus change — does not tear the drawing down.
+  const seed = $derived(content.seed);
+
   $effect(() => {
-    const seed = content.seed;
     const node = canvas;
     if (!node) return;
     drawn = false;
@@ -24,8 +25,8 @@
 <button
   class="rose-app"
   type="button"
-  aria-label="Rose — click for a new drawing"
-  onclick={() => os()?.roseShuffle?.()}
+  aria-label="Rose — drag to turn it, double-click for a new drawing"
+  ondblclick={() => os()?.roseShuffle?.()}
 >
   <canvas bind:this={canvas} class="rose-canvas" aria-hidden="true"></canvas>
   {#if !drawn}
