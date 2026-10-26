@@ -101,8 +101,9 @@ export interface ViewerContentVM {
 }
 
 export interface EphemeralContentVM {
-  kind: 'ephemeral-image' | 'ephemeral-folder';
+  kind: 'ephemeral-image' | 'ephemeral-markdown' | 'ephemeral-folder';
   src?: string;
+  html?: string;
   name: string;
   filePath: string;
   icon?: string;

@@ -12,7 +12,7 @@ Preview app — handles image and text/markdown file viewing. One viewer window 
 
 `SpawnForFile(filePath)` — resolves app ID via `apps.AppForFile()`, reads file content from filesystem, determines MIME type by extension:
 - `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp` → image viewer
-- `.md` → markdown (content stored as raw text, rendered to HTML by finder's `render.go`)
+- `.md` → markdown (content stored as raw text, rendered to HTML by `markdown/render.go`)
 - `.txt` and everything else → plain text
 
 `BuildContentVM(win, vm)` — builds `ViewerContentVM`:
@@ -29,4 +29,4 @@ Preview app — handles image and text/markdown file viewing. One viewer window 
 - Spawned by `command/open.go`, `main.go:openFile()`, and `main.go:finderOpenEntry()`
 - Both `viewer-image` and `viewer-text` share `TypeViewer` and `preview.png` icon
 - Frontend components: `src/lib/components/viewer/ImageViewer.svelte`, `src/lib/components/viewer/TextViewer.svelte`
-- Markdown content is raw text from filesystem — HTML rendering happens in `finder/render.go` via `cat` command, not here
+- Markdown content is raw text from filesystem — HTML rendering happens in `markdown/render.go` via `cat` command, not here

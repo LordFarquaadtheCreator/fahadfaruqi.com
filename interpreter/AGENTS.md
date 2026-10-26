@@ -30,7 +30,8 @@ Every state change calls `pushVM()` → full VM re-serialization → Svelte re-r
 | `desktop/` | Desktop icons VM | `desktop.go` |
 | `dock/` | Dock VM with running/active state | `dock.go` |
 | `ephemeral/` | Quick Look preview (spacebar) | `ephemeral.go` |
-| `finder/` | Finder window manager + VM + markdown render | `finder.go`, `viewmodel.go`, `render.go` |
+| `finder/` | Finder window manager + VM | `finder.go`, `viewmodel.go` |
+| `markdown/` | GFM → sanitised HTML, used by the Finder, the viewer and Quick Look | `render.go` |
 | `fs/` | In-memory filesystem | `fs.go`, `node.go`, `resolve.go` |
 | `menubar/` | Menu bar VM (menus, tray, clock) | `menubar.go` |
 | `response/` | JSON response types for shell commands | `response.go` |

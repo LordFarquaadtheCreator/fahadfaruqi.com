@@ -1,6 +1,7 @@
 # interpreter/finder/
 
-Finder window manager, ViewModel builder, and markdown renderer.
+Finder window manager and ViewModel builder. Markdown rendering lives in `interpreter/markdown/`, because
+the viewer and Quick Look need it too.
 
 ## Files
 
@@ -22,13 +23,9 @@ ViewModel structs:
 - `EntryVM` — `name`, `path`, `kind`, `icon`, `size`, `modified`
 
 `BuildContentVM(win, finder, fs)` — builds full finder content for a window:
-- `buildSidebar()` — 3 hardcoded sections (Recents, Favorites, Locations) with icons
+- `buildSidebar(path, fs)` — Favorites holds the home folders that exist, Locations holds the home; nothing is listed that would open an empty window
 - `buildBreadcrumb(path)` — splits path into segments with icons
-- Content entries from filesystem with icon paths
-
-### render.go
-
-Markdown rendering using `goldmark` + GFM extension + `bluemonday` UGCPolicy sanitization. Images allowed from `/static/`, `/images/`, `http(s)://`.
+- Content entries from filesystem with icon paths; a `.sh` is `kind: script` with the terminal's icon, because it runs rather than opens
 
 ## API (window.os.*)
 
@@ -37,19 +34,9 @@ Markdown rendering using `goldmark` + GFM extension + `bluemonday` UGCPolicy san
 - `os.finderBack(id)` / `os.finderForward(id)` — history navigation
 - `os.finderSetView(id, mode)` — switch icon/list/column/gallery
 - `os.finderSelect(id, name)` — highlight entry
-- `os.finderOpenEntry(id, path)` — double-click: dir = navigate, file = open in viewer
-
-## Sidebar Structure
-
-3 sections:
-1. **No title**: Recents, Shared
-2. **Favorites**: Applications, Desktop, Documents, Downloads
-3. **Locations**: iCloud Drive, Home (farquaad), Network
-
-Each item has `icon` path pointing to `/icons/` images.
+- `os.finderOpenEntry(id, path)` — double-click: a folder navigates in place, a file goes through `openPath` in `main.go`, the same path the desktop uses — a script runs in a terminal, an image opens its viewer, a markdown file opens the text viewer
 
 ## Constraints
 
 - Max 10 windows (FIFO eviction via `wm.Manager`)
 - Read-only: no edit, move, delete
-- Sidebar items are hardcoded, not derived from filesystem

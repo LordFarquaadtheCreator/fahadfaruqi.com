@@ -1013,6 +1013,68 @@ body {
   opacity: 1;
 }
 
+/* Quick Look on a document: a page in a sheet, scrolled, not a picture in a frame */
+.ephemeral-markdown {
+  padding: 18px 20px 34px;
+  align-items: stretch;
+  overflow-y: auto;
+}
+
+.ephemeral-markdown-page {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--mac-text);
+}
+
+.ephemeral-markdown-page h1 {
+  font-size: 19px;
+  line-height: 1.25;
+  margin: 0 0 10px;
+}
+
+.ephemeral-markdown-page h2 {
+  font-size: 14px;
+  margin: 16px 0 6px;
+}
+
+.ephemeral-markdown-page h3 {
+  font-size: 12px;
+  margin: 14px 0 4px;
+}
+
+.ephemeral-markdown-page p {
+  margin: 0 0 10px;
+}
+
+.ephemeral-markdown-page a {
+  color: var(--mac-accent);
+  text-decoration: none;
+}
+
+.ephemeral-markdown-page a:hover {
+  text-decoration: underline;
+}
+
+.ephemeral-markdown-page ul,
+.ephemeral-markdown-page ol {
+  margin: 0 0 10px;
+  padding-left: 20px;
+}
+
+.ephemeral-markdown-page li {
+  margin-bottom: 3px;
+}
+
+.ephemeral-markdown-page strong {
+  font-weight: 600;
+}
+
+.ephemeral-markdown-page hr {
+  border: none;
+  border-top: 1px solid var(--mac-separator);
+  margin: 14px 0;
+}
+
 .ephemeral-folder {
   flex-direction: row;
   justify-content: center;

@@ -3,8 +3,8 @@ package viewer
 import (
 	"encoding/json"
 	"interpreter/apps"
-	"interpreter/finder"
 	"interpreter/fs"
+	"interpreter/markdown"
 	"interpreter/wm"
 	"math"
 	"path"
@@ -57,7 +57,7 @@ func (vm *ViewerManager) SpawnForFile(filePath string) *wm.Window {
 		state.ImagePath = node.Meta.ImagePath
 	case ".md":
 		state.MimeType = "text/markdown"
-		state.Content = finder.RenderMarkdown(node.Content)
+		state.Content = markdown.Render(node.Content)
 	default:
 		state.MimeType = "text/plain"
 		state.Content = node.Content

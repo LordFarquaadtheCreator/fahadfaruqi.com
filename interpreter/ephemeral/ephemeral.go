@@ -5,6 +5,7 @@ import (
 	"interpreter/apps"
 	"interpreter/assets"
 	"interpreter/fs"
+	"interpreter/markdown"
 	"interpreter/wm"
 	"math"
 	"path"
@@ -16,6 +17,8 @@ type EphemeralState struct {
 	FileName  string
 	ImagePath string
 	IsDir     bool
+	// HTML is a document rendered for Quick Look: a markdown file shown as the page it describes.
+	HTML string
 }
 
 type EphemeralManager struct {
@@ -47,7 +50,20 @@ func (em *EphemeralManager) SpawnForFile(filePath string) *wm.Window {
 	app, _ := apps.Get("preview-ephemeral")
 	winW, winH := app.Width, app.Height
 
-	if !state.IsDir {
+	// Quick Look shows a document as a page: render it and give the sheet the shape of one. The
+	// sizes fall back to a page when the viewport has not been measured yet.
+	if !state.IsDir && markdown.IsDocument(filePath) {
+		if node, err := em.filesystem.Stat(filePath); err == nil {
+			state.HTML = markdown.Render(node.Content)
+		}
+		winW, winH = 520, 640
+		if vw, vh := em.wm.Viewport(); vw > 0 && vh > 0 {
+			winW = min(int(0.40*float64(vw)), 620)
+			winH = min(int(0.74*float64(vh)), 700)
+		}
+	}
+
+	if !state.IsDir && state.HTML == "" {
 		// Quick Look renders the compressed copy; the master is what the viewer opens.
 		state.ImagePath = node.Meta.ImagePath
 		if node.Meta.CompressedPath != "" {
@@ -120,8 +136,9 @@ func (em *EphemeralManager) GetState(id string) (*EphemeralState, bool) {
 }
 
 type EphemeralContentVM struct {
-	Kind     string `json:"kind"` // "ephemeral-image" | "ephemeral-folder"
+	Kind     string `json:"kind"` // "ephemeral-image" | "ephemeral-markdown" | "ephemeral-folder"
 	Src      string `json:"src,omitempty"`
+	HTML     string `json:"html,omitempty"`
 	Name     string `json:"name"`
 	FilePath string `json:"filePath"`
 	Icon     string `json:"icon,omitempty"`
@@ -138,12 +155,20 @@ func BuildContentVM(win *wm.Window, em *EphemeralManager) json.RawMessage {
 		FilePath: s.FilePath,
 	}
 
-	if s.IsDir {
+	switch {
+	case s.IsDir:
 		vm.Kind = "ephemeral-folder"
 		vm.Icon = assets.URL("/icons/folder.png")
-	} else {
+	case s.HTML != "":
+		vm.Kind = "ephemeral-markdown"
+		vm.HTML = s.HTML
+	case s.ImagePath != "":
 		vm.Kind = "ephemeral-image"
 		vm.Src = s.ImagePath
+	default:
+		// something with no picture and no page: show what it is, as Quick Look shows a document
+		vm.Kind = "ephemeral-folder"
+		vm.Icon = assets.URL("/icons/file.png")
 	}
 
 	b, _ := json.Marshal(vm)

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"interpreter/assets"
 	"interpreter/fs"
+	"interpreter/markdown"
 	"interpreter/wm"
 	"path"
 	"strings"
@@ -107,7 +108,7 @@ func BuildContentVM(win *wm.Window, fm *FinderManager, filesystem fs.FileSystem)
 		}
 		vm.Content = ContentVM{Kind: "folder", Entries: entries}
 	} else {
-		vm.Content = ContentVM{Kind: "markdown", HTML: RenderMarkdown(node.Content)}
+		vm.Content = ContentVM{Kind: "markdown", HTML: markdown.Render(node.Content)}
 	}
 
 	b, _ := json.Marshal(vm)

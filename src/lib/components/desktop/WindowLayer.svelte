@@ -33,7 +33,7 @@
         <ImageViewer content={win.content} />
       {:else if win.content.kind === 'viewer-text'}
         <TextViewer content={win.content} />
-      {:else if win.content.kind === 'ephemeral-image'}
+      {:else if win.content.kind === 'ephemeral-image' || win.content.kind === 'ephemeral-markdown' || win.content.kind === 'ephemeral-folder'}
         <EphemeralPreview content={win.content} />
       {:else if win.content.kind === 'splash'}
         <SplashApp content={win.content} />
