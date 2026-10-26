@@ -1,9 +1,9 @@
 package shell
 
 import (
-	"strings"
-	"interpreter/world"
 	"interpreter/session"
+	"interpreter/world"
+	"strings"
 )
 
 func Expand(tokens []string, w world.World, s *session.Session) []string {

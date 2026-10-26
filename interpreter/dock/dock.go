@@ -2,8 +2,8 @@ package dock
 
 import (
 	"encoding/json"
-	"interpreter/assets"
 	"interpreter/apps"
+	"interpreter/assets"
 	"interpreter/wm"
 )
 
@@ -79,7 +79,7 @@ func BuildVM(m *wm.Manager) DockVM {
 		Trash: DockItemVM{
 			AppID: "trash",
 			Name:  "Trash",
-			Icon: assets.URL("/icons/trash.png"),
+			Icon:  assets.URL("/icons/trash.png"),
 		},
 	}
 }

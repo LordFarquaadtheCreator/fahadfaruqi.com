@@ -24,9 +24,10 @@ func Load() World {
 
 	nodes := make(map[string]fs.Node)
 	env := map[string]string{
-		"HOME":  "~",
-		"USER":  "alex",
-		"SHELL": "/bin/zsh",
+		"HOME":     "~",
+		"USER":     "fahad",
+		"HOSTNAME": "mac",
+		"SHELL":    "/bin/zsh",
 	}
 
 	// First pass: create all nodes

@@ -13,17 +13,17 @@ import (
 
 // ViewerState holds per-window viewer state.
 type ViewerState struct {
-	FilePath string
-	FileName string
-	MimeType string
-	Content  string
+	FilePath  string
+	FileName  string
+	MimeType  string
+	Content   string
 	ImagePath string // for image files — URL to serve
 }
 
 // ViewerManager owns per-window viewer state.
 type ViewerManager struct {
-	wm        *wm.Manager
-	states    map[string]*ViewerState
+	wm         *wm.Manager
+	states     map[string]*ViewerState
 	filesystem fs.FileSystem
 }
 
@@ -84,7 +84,7 @@ func (vm *ViewerManager) SpawnForFile(filePath string) *wm.Window {
 			}
 
 			winW = int(imgW*scale + 0.5)
-			winH = int(imgH*scale + 0.5) + titlebar
+			winH = int(imgH*scale+0.5) + titlebar
 		}
 	}
 
@@ -104,11 +104,11 @@ func (vm *ViewerManager) Cleanup(id string) {
 
 // ViewerContentVM is the app-specific content for a viewer window.
 type ViewerContentVM struct {
-	Kind      string `json:"kind"` // "viewer-image" | "viewer-text"
-	Src       string `json:"src,omitempty"`
-	Name      string `json:"name"`
-	Content   string `json:"content,omitempty"`
-	IsMarkdown bool  `json:"isMarkdown,omitempty"`
+	Kind       string `json:"kind"` // "viewer-image" | "viewer-text"
+	Src        string `json:"src,omitempty"`
+	Name       string `json:"name"`
+	Content    string `json:"content,omitempty"`
+	IsMarkdown bool   `json:"isMarkdown,omitempty"`
 }
 
 // BuildContentVM builds viewer-specific content for a window.

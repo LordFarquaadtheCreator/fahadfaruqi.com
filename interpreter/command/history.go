@@ -2,8 +2,8 @@ package command
 
 import (
 	"interpreter/response"
-	"interpreter/world"
 	"interpreter/session"
+	"interpreter/world"
 )
 
 func History(args []string, w world.World, s *session.Session) response.Response {

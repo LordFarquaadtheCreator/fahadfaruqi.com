@@ -2,8 +2,8 @@ package ephemeral
 
 import (
 	"encoding/json"
-	"interpreter/assets"
 	"interpreter/apps"
+	"interpreter/assets"
 	"interpreter/fs"
 	"interpreter/wm"
 	"math"
@@ -39,9 +39,9 @@ func (em *EphemeralManager) SpawnForFile(filePath string) *wm.Window {
 
 	node, _ := em.filesystem.Stat(filePath)
 	state := &EphemeralState{
-		FilePath:  filePath,
-		FileName:  path.Base(filePath),
-		IsDir:     node.Type.IsDir(),
+		FilePath: filePath,
+		FileName: path.Base(filePath),
+		IsDir:    node.Type.IsDir(),
 	}
 
 	app, _ := apps.Get("preview-ephemeral")

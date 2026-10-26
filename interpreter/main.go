@@ -411,5 +411,5 @@ func (tr *terminalRunner) RunCommand(input string, s *session.Session) string {
 }
 
 func (tr *terminalRunner) TabComplete(input, cwd string) []string {
-	return terminal.Complete(input, cwd, w.FS)
+	return terminal.Complete(input, cwd, w.FS, shell.Commands())
 }

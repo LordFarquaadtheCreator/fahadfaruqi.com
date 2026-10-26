@@ -3,8 +3,8 @@ package command
 import (
 	"interpreter/fs"
 	"interpreter/response"
-	"interpreter/world"
 	"interpreter/session"
+	"interpreter/world"
 )
 
 /*
@@ -17,7 +17,7 @@ func Cat(args []string, w world.World, s *session.Session) response.Response {
 	}
 	if len(args) > 1 {
 		return response.Error("cat", "too many arguments",
-		s.CWD)
+			s.CWD)
 	}
 
 	// resolve path

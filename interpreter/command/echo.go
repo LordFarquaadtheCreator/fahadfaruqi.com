@@ -1,10 +1,10 @@
 package command
 
 import (
-	"strings"
 	"interpreter/response"
-	"interpreter/world"
 	"interpreter/session"
+	"interpreter/world"
+	"strings"
 )
 
 func Echo(args []string, w world.World, s *session.Session) response.Response {

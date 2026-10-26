@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"sort"
 	"strings"
 
 	"interpreter/command"
@@ -18,6 +19,16 @@ func Run(input string, w world.World, s *session.Session) string {
 
 	s.AppendHistory(input)
 	return response.Marshal(eval(input, w, s, 0))
+}
+
+// Commands is what the shell answers to, in the order completion should offer them.
+func Commands() []string {
+	names := make([]string, 0, len(command.Registry))
+	for name := range command.Registry {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	return names
 }
 
 // eval runs one line. depth counts how many scripts deep the line is, so that a script run from a

@@ -8,8 +8,9 @@ import (
 	"strings"
 )
 
-// Complete returns tab completion candidates for the given input.
-func Complete(input, cwd string, filesystem fs.FileSystem) []string {
+// Complete returns tab completion candidates for the given input. commands is what the shell can run,
+// which it owns — the terminal only asks.
+func Complete(input, cwd string, filesystem fs.FileSystem, commands []string) []string {
 	if input == "" {
 		return nil
 	}
@@ -21,7 +22,7 @@ func Complete(input, cwd string, filesystem fs.FileSystem) []string {
 
 	// Completing a command name
 	if len(tokens) == 1 && !strings.Contains(tokens[0], "/") {
-		return completeCommand(tokens[0])
+		return completeCommand(tokens[0], commands)
 	}
 
 	// Completing a path argument
@@ -33,8 +34,7 @@ func Complete(input, cwd string, filesystem fs.FileSystem) []string {
 	return completePath(lastToken, cwd, filesystem)
 }
 
-func completeCommand(partial string) []string {
-	commands := []string{"ls", "cd", "cat", "pwd", "echo", "env", "history", "clear", "open", "help", "apps"}
+func completeCommand(partial string, commands []string) []string {
 	var matches []string
 	for _, cmd := range commands {
 		if strings.HasPrefix(cmd, partial) {
@@ -65,7 +65,7 @@ func completePath(partial, cwd string, filesystem fs.FileSystem) []string {
 			}
 		}
 	} else if strings.HasPrefix(partial, "/") {
-		dirPath = "/" 
+		dirPath = "/"
 	} else if dirPart == "." || dirPart == "" {
 		dirPath = cwd
 	} else if dirPart == ".." {
