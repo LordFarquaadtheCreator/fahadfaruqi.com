@@ -1,27 +1,56 @@
-// The rose's geometry: 44 petal shells wrapped around a vertical axis, sampled into a cloud of
-// points that each carry their own surface normal. What mark a point becomes, and how bright it is,
-// is decided per frame in the renderer — in 3D that depends on where the camera and the light are,
-// not on one fixed view.
+// The rose, built exactly as the sketch builds it: a shadow map, a depth buffer, then one mark per
+// six-pixel cell decided by the light, the silhouette and the petal lips. The one addition is that
+// every mark remembers the 3D point it came from, so the renderer turns the drawing rather than
+// redrawing it.
+//
+// The buffers are coarser than the sketch's own — three art pixels to a buffer pixel, a quarter of
+// its surface samples — because detail that fine only ever decides which of two nearly identical
+// marks a cell gets. The mark set is the same, and the build is twenty times cheaper.
+
+export const ROSE_W = 900;
+export const ROSE_H = 1040;
+/** Camera units to art pixels. */
+export const ROSE_SCALE = 380;
+const BX = 470;
+const BY = 700;
+const CELL = 6;
+/** Buffer pixels per art pixel. */
+const STEP = 1;
+const BW = Math.ceil(ROSE_W / STEP);
+const BH = Math.ceil(ROSE_H / STEP);
+/** Samples across each petal and along it. */
+const NU = 220;
+const NV = 250;
+const STEM_LENGTH = 0.45;
+const N = 44;
+
+// the sketch's camera: tilted down into the bloom, leaning a little
+const AL = 0.8;
+const GM = 0.16;
+const CA = Math.cos(AL);
+const SA = Math.sin(AL);
+const CG = Math.cos(GM);
+const SG = Math.sin(GM);
+
+/** 0 cross, 1 dash, 2 dot, 3 bold cross. */
+export type MarkKind = 0 | 1 | 2 | 3;
+
+export interface RoseMark {
+	t: MarkKind;
+	/** Flower-local position: x right, y up the stem, z toward the viewer at yaw 0. */
+	x: number;
+	y: number;
+	z: number;
+	/** Half the stroke's length, in camera units. */
+	n: number;
+	/** Alpha bucket, 1..16 (16 is the bold register). */
+	b: number;
+}
 
 export interface Rose {
 	count: number;
-	/** Rose-local space: x right, y up the stem, z toward the viewer at yaw 0. */
-	x: Float32Array;
-	y: Float32Array;
-	z: Float32Array;
-	nx: Float32Array;
-	ny: Float32Array;
-	nz: Float32Array;
-	/** The petal the point belongs to: the wind swings each petal as one surface. */
-	petal: Int32Array;
+	marks: RoseMark[];
 }
-
-/** How many petals the bloom has. The wind loop counts them. */
-export const PETALS = 44;
-// Samples across each petal and along it: the surface density the old six-pixel screen grid gave,
-// but now on the surface itself, so the back of the bloom is as detailed as the front.
-const ACROSS = 14;
-const ALONG = 26;
 
 export function rng(seed: number) {
 	let s = seed;
@@ -53,6 +82,10 @@ export function vnoise(x: number, y: number) {
 	return lerp(lerp(hash(i, j), hash(i + 1, j), u), lerp(hash(i, j + 1), hash(i + 1, j + 1), u), v);
 }
 
+function clamp(x: number) {
+	return Math.min(1, Math.max(0, x));
+}
+
 interface Petal {
 	phi: number;
 	w: number;
@@ -72,11 +105,10 @@ interface Point {
 }
 
 export function buildRose(seed: number): Rose {
-	// The draw order is the sketch's own, so a seed still names the flower it always did.
 	const R = rng(seed);
 	const petals: Petal[] = [];
-	for (let i = 0; i < PETALS; i++) {
-		const t = i / (PETALS - 1),
+	for (let i = 0; i < N; i++) {
+		const t = i / (N - 1),
 			r0 = 0.02 + 0.08 * t,
 			tt = Math.pow(t, 0.9);
 		petals.push({
@@ -92,15 +124,14 @@ export function buildRose(seed: number): Rose {
 		});
 	}
 
-	// One petal's surface at (u across, v along). No camera in here: the flower is built in its own
-	// frame and the renderer supplies the view.
+	// one petal's surface in the flower's own frame
 	function pos(p: Petal, u: number, v: number, o: Point) {
 		const vv = Math.max(v, 0),
 			w = p.w * (0.5 + 0.5 * Math.sqrt(vv)),
 			phi = p.phi + u * w + 0.25 * p.tw * v;
 		let k = p.b1 - p.b0;
 		if (Math.abs(k) < 1e-3) k = 1e-3;
-		const bb = p.b0 + k * vv; // angle from vertical, grows along the petal
+		const bb = p.b0 + k * vv;
 		const rho =
 			p.r0 +
 			(p.L * (Math.cos(p.b0) - Math.cos(bb))) / k +
@@ -112,61 +143,322 @@ export function buildRose(seed: number): Rose {
 		o.z = rho * Math.cos(phi);
 	}
 
-	const total = PETALS * ACROSS * ALONG;
-	const rose: Rose = {
-		count: total,
-		x: new Float32Array(total),
-		y: new Float32Array(total),
-		z: new Float32Array(total),
-		nx: new Float32Array(total),
-		ny: new Float32Array(total),
-		nz: new Float32Array(total),
-		petal: new Int32Array(total)
-	};
+	// the sketch's camera: tilt into the bloom, lean, then an orthographic projection
+	function toCamera(p: Point, o: Point) {
+		const y2 = p.y * CA - p.z * SA,
+			z2 = p.z * CA + p.y * SA;
+		o.x = p.x * CG + y2 * SG;
+		o.y = -p.x * SG + y2 * CG;
+		o.z = z2;
+	}
 
+	const D4x = [1, -1, 0, 0],
+		D4y = [0, 0, 1, -1];
 	const A: Point = { x: 0, y: 0, z: 0 };
 	const B: Point = { x: 0, y: 0, z: 0 };
 	const C: Point = { x: 0, y: 0, z: 0 };
-	let n = 0;
-	for (let k = 0; k < PETALS; k++) {
-		const p = petals[k];
-		for (let iu = 0; iu < ACROSS; iu++) {
-			const u = -1 + (2 * iu) / (ACROSS - 1);
-			const vmax = 1 - 0.3 * u * u + 0.04 * Math.sin(u * 3 + p.ph);
-			for (let iv = 0; iv < ALONG; iv++) {
-				const v = (iv / (ALONG - 1)) * vmax;
-				pos(p, u, v, A);
-				pos(p, u + 0.01, v, B);
-				pos(p, u, v + 0.01, C);
-				const ax = B.x - A.x,
-					ay = B.y - A.y,
-					az = B.z - A.z,
-					bx = C.x - A.x,
-					by = C.y - A.y,
-					bz = C.z - A.z;
-				let nx = ay * bz - az * by,
-					ny = az * bx - ax * bz,
-					nz = ax * by - ay * bx;
-				const len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
-				nx /= len;
-				ny /= len;
-				nz /= len;
-				// point it away from the stem, so every petal's front face is its outside
-				if (nx * A.x + nz * A.z < 0) {
-					nx = -nx;
-					ny = -ny;
-					nz = -nz;
+	const CAM: Point = { x: 0, y: 0, z: 0 };
+	const CAM2: Point = { x: 0, y: 0, z: 0 };
+
+	// ---- 1. the light, and its own depth buffer
+	let Lx = -0.38,
+		Ly = 0.3,
+		Lz = 0.87;
+	const ll = Math.sqrt(Lx * Lx + Ly * Ly + Lz * Lz);
+	Lx /= ll;
+	Ly /= ll;
+	Lz /= ll;
+	let E1x = Lz,
+		E1z = -Lx;
+	const el = Math.sqrt(E1x * E1x + E1z * E1z);
+	E1x /= el;
+	E1z /= el;
+	const E2x = Ly * E1z,
+		E2y = Lz * E1x - Lx * E1z,
+		E2z = -Ly * E1x;
+	const SMW = 1600,
+		SMC = 800,
+		SMS = ROSE_SCALE,
+		SM = new Float32Array(SMW * SMW).fill(-1e9);
+
+	function eachSample(
+		withNormal: boolean,
+		cb: (idx: number, local: Point, cam: Point, petal: number, v: number, normal: Point | null) => void
+	) {
+		for (let k = 0; k < N; k++) {
+			const p = petals[k];
+			for (let iu = 0; iu <= NU; iu++) {
+				const u = -1 + (2 * iu) / NU,
+					vmax = 1 - 0.3 * u * u + 0.04 * Math.sin(u * 3 + p.ph);
+				for (let iv = 0; iv <= NV; iv++) {
+					const v = (iv / NV) * vmax;
+					const idx = (k * (NU + 1) + iu) * (NV + 1) + iv;
+					pos(p, u, v, A);
+					toCamera(A, CAM);
+					if (!withNormal) {
+						cb(idx, A, CAM, k, v, null);
+						continue;
+					}
+					pos(p, u + 0.01, v, B);
+					pos(p, u, v + 0.01, C);
+					const ax = B.x - A.x,
+						ay = B.y - A.y,
+						az = B.z - A.z,
+						bx = C.x - A.x,
+						by = C.y - A.y,
+						bz = C.z - A.z;
+					let nx = ay * bz - az * by,
+						ny = az * bx - ax * bz,
+						nz = ax * by - ay * bx;
+					const len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+					nx /= len;
+					ny /= len;
+					nz /= len;
+					// the sketch's rule: a petal's front faces the camera, so the inside of a curl
+					// is lit like the outside of it
+					if (nz < 0) {
+						nx = -nx;
+						ny = -ny;
+						nz = -nz;
+					}
+					cb(idx, A, CAM, k, v, { x: nx, y: ny, z: nz });
 				}
-				rose.x[n] = A.x;
-				rose.y[n] = A.y;
-				rose.z[n] = A.z;
-				rose.nx[n] = nx;
-				rose.ny[n] = ny;
-				rose.nz[n] = nz;
-				rose.petal[n] = k;
-				n++;
 			}
 		}
 	}
-	return rose;
+
+	eachSample(false, (_idx, _local, cam) => {
+		const sx = Math.round(SMC + (cam.x * E1x + cam.z * E1z) * SMS),
+			sy = Math.round(SMC - (cam.x * E2x + cam.y * E2y + cam.z * E2z) * SMS);
+		const d = cam.x * Lx + cam.y * Ly + cam.z * Lz;
+		for (let dy = 0; dy < 2; dy++)
+			for (let dx = 0; dx < 2; dx++) {
+				const j = (sy + dy) * SMW + sx + dx;
+				if (j >= 0 && j < SM.length && SM[j] < d) SM[j] = d;
+			}
+	});
+
+	const TAPS = [0, 0, 5, 0, -5, 0, 0, 5, 0, -5, 11, 0, -11, 0, 0, 11, 0, -11, 8, 8, -8, 8, 8, -8, -8, -8];
+	function litFrac(cam: Point) {
+		const sx = Math.round(SMC + (cam.x * E1x + cam.z * E1z) * SMS),
+			sy = Math.round(SMC - (cam.x * E2x + cam.y * E2y + cam.z * E2z) * SMS);
+		const d = cam.x * Lx + cam.y * Ly + cam.z * Lz + 0.03;
+		let n = 0;
+		for (let q = 0; q < 26; q += 2) {
+			const j = (sy + TAPS[q + 1]) * SMW + sx + TAPS[q];
+			if (j >= 0 && j < SM.length && SM[j] <= d) n++;
+		}
+		return n / 13;
+	}
+
+	// ---- 2. the depth buffer, with the flower-local point of whatever won each buffer pixel
+	const ZB = new Float32Array(BW * BH).fill(-1e9),
+		ID = new Int32Array(BW * BH).fill(-1);
+
+	// Only the winner's sample index is kept — one integer a pixel. Its position and normal are
+	// regenerated when the rules ask for them, which happens for a few thousand cells, not for
+	// every sample; writing seven float arrays per sample was most of the build's cost.
+	eachSample(true, (idx, _local, cam) => {
+		const ix = Math.floor((BX + cam.x * ROSE_SCALE) / STEP),
+			iy = Math.floor((BY - cam.y * ROSE_SCALE) / STEP);
+		if (ix < 0 || iy < 0 || ix >= BW - 1 || iy >= BH - 1) return;
+		for (let dy = 0; dy < 2; dy++)
+			for (let dx = 0; dx < 2; dx++) {
+				const j = (iy + dy) * BW + ix + dx;
+				if (ZB[j] < cam.z) {
+					ZB[j] = cam.z;
+					ID[j] = idx;
+				}
+			}
+	});
+
+	const PER = (NU + 1) * (NV + 1);
+	const petalOf = (idx: number) => Math.floor(idx / PER);
+	const SAMPLE: Point = { x: 0, y: 0, z: 0 };
+	const SAMPLE_N: Point = { x: 0, y: 0, z: 0 };
+	const SAMPLE_CAM: Point = { x: 0, y: 0, z: 0 };
+	// rebuild a sample from its index: the same pos() the sampler used
+	function sampleAt(idx: number, out: Point, outNormal: Point) {
+		const k = petalOf(idx);
+		const rem = idx - k * PER;
+		const iu = Math.floor(rem / (NV + 1));
+		const iv = rem - iu * (NV + 1);
+		const p = petals[k];
+		const u = -1 + (2 * iu) / NU;
+		const vmax = 1 - 0.3 * u * u + 0.04 * Math.sin(u * 3 + p.ph);
+		const v = (iv / NV) * vmax;
+		pos(p, u, v, out);
+		pos(p, u + 0.01, v, B);
+		pos(p, u, v + 0.01, C);
+		const ax = B.x - out.x,
+			ay = B.y - out.y,
+			az = B.z - out.z,
+			bx = C.x - out.x,
+			by = C.y - out.y,
+			bz = C.z - out.z;
+		let nx = ay * bz - az * by,
+			ny = az * bx - ax * bz,
+			nz = ax * by - ay * bx;
+		const len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+		nx /= len;
+		ny /= len;
+		nz /= len;
+		if (nz < 0) {
+			nx = -nx;
+			ny = -ny;
+			nz = -nz;
+		}
+		outNormal.x = nx;
+		outNormal.y = ny;
+		outNormal.z = nz;
+	}
+
+	// The buffer is sampled less densely than the sketch sampled it, so a few pixels inside the
+	// bloom stay empty; left alone they read as silhouette to the rules below, which turns quiet
+	// petals into a rash of crosses. Fill each hole from its deepest filled neighbour.
+	const holes: number[] = [],
+		sources: number[] = [];
+	for (let pass = 0; pass < 2; pass++) {
+	holes.length = 0;
+	sources.length = 0;
+	for (let y = 1; y < BH - 1; y++)
+		for (let x = 1; x < BW - 1; x++) {
+			const j = y * BW + x;
+			if (ID[j] >= 0) continue;
+			let best = -1;
+			for (let d = 0; d < 4; d++) {
+				const jj = y * BW + x + D4x[d] + D4y[d] * BW;
+				if (ID[jj] >= 0 && (best < 0 || ZB[jj] > ZB[best])) best = jj;
+			}
+			if (best < 0) continue;
+			holes.push(j);
+			sources.push(best);
+		}
+	// applied after the scan: filling in place would flood the empty background from the bloom's
+	// edge, one pixel per pass, until the whole frame read as flower
+	for (let i = 0; i < holes.length; i++) {
+		const j = holes[i],
+			best = sources[i];
+		ZB[j] = ZB[best];
+		ID[j] = ID[best];
+	}
+	}
+
+	function at(artX: number, artY: number) {
+		const bx = Math.floor(artX / STEP),
+			by = Math.floor(artY / STEP);
+		return bx < 0 || by < 0 || bx >= BW || by >= BH ? -1 : by * BW + bx;
+	}
+
+	// the lowest covered pixel near the middle is where the stem begins
+	let stemY = 0,
+		stemX0 = BX;
+	for (let yy = BH - 1; yy > 0 && !stemY; yy--)
+		for (let xx = Math.floor((BX - 80) / STEP); xx < Math.floor((BX + 80) / STEP); xx++)
+			if (ID[yy * BW + xx] >= 0) {
+				stemY = yy * STEP;
+				stemX0 = xx * STEP;
+				break;
+			}
+
+	// ---- 3. marks: one per six-pixel cell, first match wins, each carrying its own 3D point
+	const MK: RoseMark[] = [];
+	function rec(t: MarkKind, artX: number, artY: number, n: number, al: number) {
+		const b = t === 3 ? 16 : Math.round(clamp(al) * 15);
+		if (b < 1) return;
+		const j = at(artX, artY);
+		if (j < 0 || ID[j] < 0) return;
+		sampleAt(ID[j], SAMPLE, SAMPLE_N);
+		MK.push({ t, x: SAMPLE.x, y: SAMPLE.y, z: SAMPLE.z, n: n / ROSE_SCALE, b });
+	}
+	const plus = (x: number, y: number, n: number, al: number) => rec(0, x, y, n, al);
+	const dash = (x: number, y: number, len: number, al: number) => rec(1, x, y, len / 2, al);
+	const dot = (x: number, y: number, al: number) => rec(2, x, y, 0.7, al);
+	const bold = (x: number, y: number, n: number) => rec(3, x, y, n, 1);
+
+	const D4 = [
+		[1, 0],
+		[-1, 0],
+		[0, 1],
+		[0, -1]
+	];
+	const hi: number[][] = [];
+	const stemEnd = stemY + STEM_LENGTH * (ROSE_H - stemY);
+	for (let row = 0; row * CELL < ROSE_H; row++)
+		for (let col = 0; col * CELL < ROSE_W; col++) {
+			const px = col * CELL + CELL / 2 + (row % 2) * (CELL / 2),
+				py = row * CELL + CELL / 2,
+				h = hash(col, row),
+				i0 = at(px, py);
+			if (i0 < 0) continue;
+			if (ID[i0] < 0) {
+				// outside the bloom: a stem of crosses on the axis, dashes beside it
+				if (py > stemY - 10 && py < stemEnd) {
+					const sxn = stemX0 - 0.12 * (py - stemY) + 9 * Math.sin((py - stemY) / 60);
+					const lx = (px - BX) / ROSE_SCALE,
+						ly = (BY - py) / ROSE_SCALE;
+					if (Math.abs(px - sxn) < CELL / 2 + 0.01) {
+						const b = Math.round(clamp(0.7 + 0.3 * Math.sin(py * 0.07)) * 15);
+						if (b >= 1) MK.push({ t: 0, x: lx, y: ly, z: 0, n: 2.6 / ROSE_SCALE, b });
+					} else if (px < sxn && px > sxn - CELL * 1.6 && row % 3 === 0) {
+						const b = Math.round(0.35 * 15);
+						if (b >= 1) MK.push({ t: 1, x: lx, y: ly, z: 0, n: (CELL * 1.2) / 2 / ROSE_SCALE, b });
+					}
+				}
+				continue;
+			}
+			let sil = false,
+				lip = false,
+				occl = false;
+			const zi = ZB[i0];
+			for (let d = 0; d < 4; d++) {
+				const j = at(px + D4[d][0] * CELL * 0.9, py + D4[d][1] * CELL * 0.9);
+				if (j < 0 || ID[j] < 0) sil = true;
+				else if (petalOf(ID[j]) !== petalOf(ID[i0])) {
+					const dz = zi - ZB[j];
+					if (dz > 0.035) lip = true;
+					else if (dz < -0.035) occl = true;
+				}
+			}
+			sampleAt(ID[i0], SAMPLE, SAMPLE_N);
+			toCamera(SAMPLE, SAMPLE_CAM);
+			const nl = SAMPLE_N.x * Lx + SAMPLE_N.y * Ly + SAMPLE_N.z * Lz,
+				lam = Math.pow(clamp((nl + 0.45) / 1.45), 1.2) * (0.9 + 0.2 * vnoise(px * 0.05, py * 0.05)),
+				fill = Math.max(0, SAMPLE_N.x * 0.5 + SAMPLE_N.y * 0.2 + SAMPLE_N.z * 0.84);
+			const lit = litFrac(SAMPLE_CAM),
+				rim = Math.pow(1 - SAMPLE_N.z, 3) * 0.2;
+			let L = clamp(0.08 + 0.46 * lam * (0.4 + 0.6 * lit) + 0.1 * fill + rim);
+			if (occl) L *= 0.6;
+			if (sil) {
+				plus(px, py, 2.6, 0.5 + 0.5 * Math.max(L, 0.35));
+				continue;
+			}
+			if (lip) {
+				plus(px, py, 2.8, 0.55 + 0.45 * L);
+				if (L > 0.55) hi.push([px, py]);
+				continue;
+			}
+			if (L > 0.6) {
+				hi.push([px, py]);
+				dash(px, py, CELL * 3.4, 1);
+				continue;
+			}
+			if (L > 0.55) {
+				dash(px, py, CELL * (1.2 + 2.2 * L), 0.55 + 0.45 * L);
+				continue;
+			}
+			if (L > 0.42) {
+				dash(px, py, CELL * (0.9 + 1.4 * L), 0.3 + 0.7 * L);
+				continue;
+			}
+			if (L > 0.26) {
+				dash(px, py, CELL * 0.8, 0.25 + 0.8 * L);
+				if (h > 0.6) dot(px + CELL * 0.4, py + CELL * 0.45, 0.4);
+				continue;
+			}
+			if (L > 0.1 && h < L * 3.2) dot(px, py, 0.2 + L);
+		}
+	for (let q = 0; q < hi.length; q++) if (hash(q, 3) > 0.4) bold(hi[q][0], hi[q][1], 4.4);
+
+	return { count: MK.length, marks: MK };
 }
