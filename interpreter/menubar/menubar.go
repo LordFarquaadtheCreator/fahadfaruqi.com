@@ -12,28 +12,35 @@ type MenuBarVM struct {
 	ActiveApp string       `json:"activeApp"`
 	Menus     []MenuVM     `json:"menus"`
 	Clock     string       `json:"clock"`
+	Dark      bool         `json:"dark"`
 	Tray      []TrayItemVM `json:"tray"`
 }
 
+// ClockNow is the menu bar's own reading of the time, formatted the way the bar shows it. It is the
+// one place the format lives: the view asks for the string rather than assembling its own.
+func ClockNow() string {
+	return time.Now().Format("Mon Jan 2 3:04 PM")
+}
+
 type MenuVM struct {
-	Name   string     `json:"name"`
-	Items  []MenuItemVM `json:"items,omitempty"`
+	Name  string       `json:"name"`
+	Items []MenuItemVM `json:"items,omitempty"`
 }
 
 type MenuItemVM struct {
-	Label    string `json:"label"`
-	Shortcut string `json:"shortcut,omitempty"`
-	Separator bool  `json:"separator,omitempty"`
+	Label     string `json:"label"`
+	Shortcut  string `json:"shortcut,omitempty"`
+	Separator bool   `json:"separator,omitempty"`
 }
 
 type TrayItemVM struct {
 	Icon string `json:"icon"`
-	Name string `json:"name"`            // tooltip label
-	Text string `json:"text,omitempty"`  // shown beside the glyph, as the weather readout is
+	Name string `json:"name"`           // tooltip label
+	Text string `json:"text,omitempty"` // shown beside the glyph, as the weather readout is
 }
 
 // BuildVM builds the menu bar view model.
-func BuildVM(m *wm.Manager) MenuBarVM {
+func BuildVM(m *wm.Manager, dark bool) MenuBarVM {
 	activeApp := "Finder"
 	focusedID := m.FocusedID()
 	if focusedID != "" {
@@ -45,7 +52,7 @@ func BuildVM(m *wm.Manager) MenuBarVM {
 	}
 
 	menus := buildMenus(activeApp)
-	clock := time.Now().Format("Mon Jan 2 3:04 PM")
+	clock := ClockNow()
 	// Left to right, in the order a Mac keeps them: other apps' extras first, then the weather, then
 	// Focus, Now Playing, and the system items ending with Control Center against the clock.
 	tray := []TrayItemVM{
@@ -65,6 +72,7 @@ func BuildVM(m *wm.Manager) MenuBarVM {
 		ActiveApp: activeApp,
 		Menus:     menus,
 		Clock:     clock,
+		Dark:      dark,
 		Tray:      tray,
 	}
 }

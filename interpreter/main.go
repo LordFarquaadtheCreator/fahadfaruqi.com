@@ -75,6 +75,11 @@ func main() {
 		return nil
 	})
 
+	// the bar's clock: the view ticks every second and asks for the string, so the format lives here
+	os["clock"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		return menubar.ClockNow()
+	})
+
 	os["setTheme"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		dark = args[0].Bool()
 		pushVM()
@@ -385,7 +390,7 @@ func pushVM() {
 		ViewportW: vpW,
 		ViewportH: vpH,
 		Dock:      dock.BuildVM(w.WM),
-		MenuBar:   menubar.BuildVM(w.WM),
+		MenuBar:   menubar.BuildVM(w.WM, dark),
 		Desktop:   desktop.BuildVM(w.FS, dark),
 	}
 	b, err := json.Marshal(root)

@@ -1,21 +1,18 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import { os } from '$lib/os/osStore.svelte';
   import type { MenuBarVM } from '$lib/os/types';
 
-  let { menuBar, dark = true }: { menuBar: MenuBarVM; dark?: boolean } = $props();
+  let { menuBar }: { menuBar: MenuBarVM } = $props();
 
   let openMenu = $state<number | null>(null);
-  let clock = $state('');
+  // The bar's reading of the time: seeded from the view model, then asked for again each second.
+  // The model owns the format, so there is only one place that decides what a menu bar clock reads.
+  // svelte-ignore state_referenced_locally
+  let clock = $state(menuBar.clock);
 
   function updateClock() {
-    const now = new Date();
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    let h = now.getHours();
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
-    const m = now.getMinutes().toString().padStart(2, '0');
-    clock = `${days[now.getDay()]} ${months[now.getMonth()]} ${now.getDate()} ${h}:${m} ${ampm}`;
+    clock = os()?.clock?.() ?? clock;
   }
 
   let timer: ReturnType<typeof setInterval>;
@@ -33,7 +30,7 @@
 </script>
 
 <!-- macOS inks the menu bar to suit the wallpaper behind it: dark glyphs over a light one -->
-<div class="menubar" class:light={!dark}>
+<div class="menubar" class:light={!menuBar.dark}>
   <div class="menubar-left">
     <button class="menu-item apple-logo" class:active={openMenu === 0} onclick={() => toggleMenu(0)} aria-label="Apple menu">
       <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor">

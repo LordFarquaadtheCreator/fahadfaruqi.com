@@ -137,6 +137,7 @@ export interface MenuBarVM {
   activeApp: string;
   menus: MenuVM[];
   clock: string;
+  dark: boolean;
   tray: TrayItemVM[];
 }
 
