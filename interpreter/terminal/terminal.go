@@ -102,6 +102,24 @@ func (tm *TerminalManager) RunCommand(id, input string) string {
 	return output
 }
 
+// Interrupt records the line a visitor abandoned with Ctrl-C: the prompt as they had typed it, then
+// the shell's own ^C, which is how a shell that never ran the command would read.
+func (tm *TerminalManager) Interrupt(id, input string) {
+	s, ok := tm.states[id]
+	if !ok {
+		return
+	}
+	s.History = append(s.History, TerminalEntry{Input: input, Output: echoText("^C"), CWD: s.Session.CWD})
+}
+
+func echoText(text string) string {
+	b, _ := json.Marshal(struct {
+		Type    string            `json:"type"`
+		Payload map[string]string `json:"payload"`
+	}{Type: "echo", Payload: map[string]string{"text": text}})
+	return string(b)
+}
+
 func (tm *TerminalManager) TabComplete(id, input string) []string {
 	s, ok := tm.states[id]
 	if !ok {

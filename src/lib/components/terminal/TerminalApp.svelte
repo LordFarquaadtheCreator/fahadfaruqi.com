@@ -46,6 +46,18 @@
   }
 
   function onKeydown(e: KeyboardEvent) {
+    // Ctrl-C, as a shell has it: the line is abandoned, never run. (Cmd-C stays the browser's copy.)
+    if (e.ctrlKey && !e.metaKey && (e.key === 'c' || e.key === 'C')) {
+      e.preventDefault();
+      const abandoned = input;
+      input = '';
+      historyIdx = -1;
+      os()?.terminalInterrupt?.(win.id, abandoned);
+      requestAnimationFrame(() => {
+        if (scrollRef) scrollRef.scrollTop = scrollRef.scrollHeight;
+      });
+      return;
+    }
     if (e.key === 'Enter') {
       e.preventDefault();
       runCommand();

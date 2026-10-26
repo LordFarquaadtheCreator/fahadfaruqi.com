@@ -39,7 +39,17 @@
     const unsub = subscribe((v) => { vm = v; });
     const onResize = () => setViewport(window.innerWidth, window.innerHeight);
     window.addEventListener('resize', onResize);
+    // A key belongs to whatever the visitor is typing into: without this, the space bar never
+    // reached a single input on the desktop.
+    const isTyping = (target: EventTarget | null) => {
+      const el = target as HTMLElement | null;
+      if (!el) return false;
+      const tag = el.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable;
+    };
+
     const onKey = (e: KeyboardEvent) => {
+      if (isTyping(e.target)) return;
       if (e.key === 'Escape') {
         os()?.closeFocused?.();
         return;

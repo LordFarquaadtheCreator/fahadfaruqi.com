@@ -256,6 +256,12 @@ func main() {
 		return output
 	})
 
+	os["terminalInterrupt"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		w.Terminal.Interrupt(args[0].String(), args[1].String())
+		pushVM()
+		return nil
+	})
+
 	os["terminalComplete"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		candidates := w.Terminal.TabComplete(args[0].String(), args[1].String())
 		b, _ := json.Marshal(candidates)
