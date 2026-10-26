@@ -38,16 +38,38 @@ func BuildVM(m *wm.Manager) DockVM {
 		runningApps[win.AppID] = true
 	}
 
+	listed := make(map[string]bool, len(apps.DockOrder))
 	for _, appID := range apps.DockOrder {
 		app, ok := apps.Get(appID)
 		if !ok {
 			continue
 		}
+		listed[app.ID] = true
 		items = append(items, DockItemVM{
 			AppID:   app.ID,
 			Name:    app.Name,
 			Icon:    app.Icon,
 			Running: runningApps[app.ID],
+			Active:  app.ID == activeAppID,
+		})
+	}
+
+	// A dock's job is to show what is open, so an app the visitor launched that the fixed order does
+	// not list — the rose, a script's terminal — joins it, in the order its windows were opened.
+	for _, win := range m.Windows() {
+		if listed[win.AppID] {
+			continue
+		}
+		app, ok := apps.Get(win.AppID)
+		if !ok {
+			continue
+		}
+		listed[win.AppID] = true
+		items = append(items, DockItemVM{
+			AppID:   app.ID,
+			Name:    app.Name,
+			Icon:    app.Icon,
+			Running: true,
 			Active:  app.ID == activeAppID,
 		})
 	}
