@@ -9,6 +9,9 @@
   import WindowLayer from './WindowLayer.svelte';
 
   let vm = $state<RootVM | null>(null);
+  // the menu bar inks itself to suit the wallpaper, so the theme has to be reactive, not a read of
+  // the DOM at render time
+  let isDarkMode = $state(false);
 
   function isDark(): boolean {
     const theme = document.documentElement.getAttribute('data-theme') || 'system';
@@ -26,7 +29,10 @@
       document.documentElement.setAttribute('data-theme', envTheme);
     }
 
-    const syncTheme = () => os()?.setTheme?.(isDark());
+    const syncTheme = () => {
+      isDarkMode = isDark();
+      os()?.setTheme?.(isDarkMode);
+    };
     syncTheme();
 
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -88,7 +94,7 @@
 
 {#if vm}
   <Wallpaper src={vm.desktop.wallpaper} />
-  <MenuBar menuBar={vm.menuBar} />
+  <MenuBar menuBar={vm.menuBar} dark={isDarkMode} />
   <DesktopIcons icons={vm.desktop.icons} />
   <WindowLayer windows={vm.windows} focusedId={vm.focusedId} />
   {#if vm?.windows?.some((w) => w.ephemeral)}

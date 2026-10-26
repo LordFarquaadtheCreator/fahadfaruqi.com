@@ -28,7 +28,8 @@ type MenuItemVM struct {
 
 type TrayItemVM struct {
 	Icon string `json:"icon"`
-	Name string `json:"name"` // tooltip label
+	Name string `json:"name"`            // tooltip label
+	Text string `json:"text,omitempty"`  // shown beside the glyph, as the weather readout is
 }
 
 // BuildVM builds the menu bar view model.
@@ -45,11 +46,19 @@ func BuildVM(m *wm.Manager) MenuBarVM {
 
 	menus := buildMenus(activeApp)
 	clock := time.Now().Format("Mon Jan 2 3:04 PM")
+	// Left to right, in the order a Mac keeps them: other apps' extras first, then the weather, then
+	// Focus, Now Playing, and the system items ending with Control Center against the clock.
 	tray := []TrayItemVM{
-		{Icon: "search", Name: "Search"},
-		{Icon: "controls", Name: "Control Center"},
+		{Icon: "extras-leaf", Name: "Obsidian"},
+		{Icon: "extras-dots", Name: "Hermes"},
+		{Icon: "weather", Name: "Weather", Text: "49°F"},
+		{Icon: "extras-keys", Name: "1Password"},
+		{Icon: "dnd", Name: "Focus"},
+		{Icon: "nowplaying", Name: "Now Playing"},
 		{Icon: "wifi", Name: "Wi-Fi"},
 		{Icon: "battery-full", Name: "Battery"},
+		{Icon: "search", Name: "Spotlight"},
+		{Icon: "controls", Name: "Control Center"},
 	}
 
 	return MenuBarVM{

@@ -154,6 +154,7 @@ export interface MenuItemVM {
 export interface TrayItemVM {
   icon: string;
   name: string;
+  text?: string;
 }
 
 export interface DesktopVM {

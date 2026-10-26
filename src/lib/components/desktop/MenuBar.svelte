@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import type { MenuBarVM } from '$lib/os/types';
 
-  let { menuBar }: { menuBar: MenuBarVM } = $props();
+  let { menuBar, dark = true }: { menuBar: MenuBarVM; dark?: boolean } = $props();
 
   let openMenu = $state<number | null>(null);
   let clock = $state('');
@@ -32,7 +32,8 @@
   }
 </script>
 
-<div class="menubar">
+<!-- macOS inks the menu bar to suit the wallpaper behind it: dark glyphs over a light one -->
+<div class="menubar" class:light={!dark}>
   <div class="menubar-left">
     <button class="menu-item apple-logo" class:active={openMenu === 0} onclick={() => toggleMenu(0)} aria-label="Apple menu">
       <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor">
@@ -54,31 +55,63 @@
     {#each menuBar.tray as item}
       <span class="tray-icon" data-icon={item.icon}>
         <span class="tray-tooltip">{item.name}</span>
-        {#if item.icon === 'search'}
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5">
+        {#if item.icon === 'extras-leaf'}
+          <svg width="13" height="16" viewBox="0 0 13 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+            <path d="M2 14.5C2 8 5 3 11 2"/>
+            <path d="M11 2c0 4.5-2.5 7.5-6.5 8.5"/>
+          </svg>
+        {:else if item.icon === 'extras-dots'}
+          <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor">
+            <rect x="0.6" y="0.6" width="16.8" height="11.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="5.4" cy="6.5" r="1.3"/>
+            <circle cx="9" cy="6.5" r="1.3"/>
+            <circle cx="12.6" cy="6.5" r="1.3"/>
+          </svg>
+        {:else if item.icon === 'weather'}
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor">
+            <path d="M8.6 0.6a7.2 7.2 0 1 0 5.9 10.9A7.9 7.9 0 0 1 8.6 0.6z"/>
+          </svg>
+        {:else if item.icon === 'extras-keys'}
+          <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor">
+            <rect x="0" y="2.2" width="4.6" height="8.6" rx="2.3" opacity="0.95"/>
+            <rect x="6.7" y="2.2" width="4.6" height="8.6" rx="2.3" opacity="0.95"/>
+            <rect x="13.4" y="2.2" width="4.6" height="8.6" rx="2.3" opacity="0.95"/>
+          </svg>
+        {:else if item.icon === 'dnd'}
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M9.3 0.6a7.6 7.6 0 1 0 6 11.3A8.3 8.3 0 0 1 9.3 0.6z"/>
+          </svg>
+        {:else if item.icon === 'nowplaying'}
+          <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.35">
+            <circle cx="7" cy="7" r="6.2"/>
+            <path d="M5.6 4.2l4.4 2.8-4.4 2.8z" fill="currentColor" stroke="none"/>
+          </svg>
+        {:else if item.icon === 'search'}
+          <svg width="16" height="16" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.7">
             <circle cx="6" cy="6" r="4.5"/>
             <line x1="9.5" y1="9.5" x2="13" y2="13" stroke-linecap="round"/>
           </svg>
         {:else if item.icon === 'controls'}
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3">
+          <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="5" cy="5" r="2.5"/>
             <line x1="7" y1="5" x2="13" y2="5" stroke-linecap="round"/>
             <circle cx="11" cy="11" r="2.5"/>
             <line x1="3" y1="11" x2="9" y2="11" stroke-linecap="round"/>
           </svg>
         {:else if item.icon === 'wifi'}
-          <svg width="17" height="15" viewBox="0 0 17 15" fill="currentColor">
+          <svg width="18" height="16" viewBox="0 0 17 15" fill="currentColor">
             <path d="M8.5 1C5.2 1 2.2 2.2 0 4.2L1.5 5.7C3.3 4.1 5.8 3.1 8.5 3.1s5.2 1 7 2.6L17 4.2C14.8 2.2 11.8 1 8.5 1z"/>
             <path d="M8.5 4.6C6.2 4.6 4.1 5.5 2.6 7L4.1 8.5C5.2 7.5 6.8 6.9 8.5 6.9s3.3 0.6 4.4 1.6L14.4 7C12.9 5.5 10.8 4.6 8.5 4.6z"/>
             <path d="M8.5 8.2C7 8.2 5.7 8.8 4.8 9.8L8.5 13.5L12.2 9.8C11.3 8.8 10 8.2 8.5 8.2z"/>
           </svg>
         {:else if item.icon === 'battery-full'}
-          <svg width="22" height="12" viewBox="0 0 22 12" fill="currentColor">
-            <rect x="0.5" y="1" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1"/>
-            <rect x="2" y="2.5" width="15" height="7" rx="1"/>
+          <svg width="23" height="13" viewBox="0 0 22 12" fill="currentColor">
+            <rect x="0.6" y="1.1" width="18" height="9.8" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            <rect x="2.2" y="2.7" width="14.8" height="6.6" rx="1.2"/>
             <rect x="19.5" y="3.5" width="2" height="5" rx="1"/>
           </svg>
         {/if}
+        {#if item.text}<span class="tray-text">{item.text}</span>{/if}
       </span>
     {/each}
     <span class="clock">{clock}</span>
