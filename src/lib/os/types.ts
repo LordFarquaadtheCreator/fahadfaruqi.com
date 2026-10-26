@@ -23,7 +23,13 @@ export interface WindowVM {
   minimized: boolean;
   maximized: boolean;
   ephemeral: boolean;
-  content: FinderContentVM | TerminalContentVM | ViewerContentVM | EphemeralContentVM | SplashContentVM;
+  content:
+    | FinderContentVM
+    | TerminalContentVM
+    | ViewerContentVM
+    | EphemeralContentVM
+    | SplashContentVM
+    | RoseContentVM;
 }
 
 export interface FinderContentVM {
@@ -105,6 +111,11 @@ export interface SplashContentVM {
   appId: string;
   name: string;
   icon: string;
+}
+
+export interface RoseContentVM {
+  kind: 'rose';
+  seed: number;
 }
 
 export interface DockVM {

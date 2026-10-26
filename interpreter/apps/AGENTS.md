@@ -6,7 +6,7 @@ App registry and file association system. Central source of truth for what apps 
 
 ### registry.go
 
-Defines `AppType` constants: `TypeFinder`, `TypeTerminal`, `TypeViewer`, `TypePlaceholder`, `TypeEditor`.
+Defines `AppType` constants: `TypeFinder`, `TypeTerminal`, `TypeViewer`, `TypePlaceholder`, `TypeEditor`, `TypeRose`.
 
 `App` struct: `ID`, `Name`, `Icon` (path like `/icons/finder.png`), `Type`, `Width`, `Height`.
 

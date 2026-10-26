@@ -11,6 +11,7 @@ const (
 	TypeEphemeral   AppType = "ephemeral"
 	TypePlaceholder AppType = "placeholder"
 	TypeEditor      AppType = "editor"
+	TypeRose        AppType = "rose"
 )
 
 type App struct {
@@ -41,12 +42,13 @@ var Registry = map[string]App{
 	"whatsapp":     {ID: "whatsapp", Name: "WhatsApp", Icon: assets.URL("/icons/whatsapp.png"), Type: TypePlaceholder, Width: 800, Height: 500},
 	"imsg":         {ID: "imsg", Name: "Messages", Icon: assets.URL("/icons/imsg.png"), Type: TypePlaceholder, Width: 800, Height: 500},
 	"browseros":    {ID: "browseros", Name: "BrowserOS", Icon: assets.URL("/icons/browseros.png"), Type: TypePlaceholder, Width: 1000, Height: 650},
+	"rose":         {ID: "rose", Name: "Rose", Icon: assets.URL("/icons/rose.png"), Type: TypeRose, Width: 560, Height: 700},
 }
 
 // DockOrder defines which apps appear in the dock and in what order.
 var DockOrder = []string{
 	"finder", "terminal", "obsidian", "slack", "spotify", "steam",
-	"devin", "zed", "xcode", "figma", "hermes", "affinity", "whatsapp", "imsg", "browseros",
+	"devin", "zed", "xcode", "figma", "hermes", "affinity", "whatsapp", "imsg", "browseros", "rose",
 }
 
 func Get(id string) (App, bool) {

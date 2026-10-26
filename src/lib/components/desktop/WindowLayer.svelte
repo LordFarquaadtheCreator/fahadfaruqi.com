@@ -7,6 +7,7 @@
   import ImageViewer from '$lib/components/viewer/ImageViewer.svelte';
   import TextViewer from '$lib/components/viewer/TextViewer.svelte';
   import EphemeralPreview from '$lib/components/viewer/EphemeralPreview.svelte';
+  import RoseApp from '$lib/components/rose/RoseApp.svelte';
   import SplashApp from '$lib/components/placeholder/SplashApp.svelte';
 
   let { windows, focusedId }: { windows: WindowVM[]; focusedId: string } = $props();
@@ -36,6 +37,8 @@
         <EphemeralPreview content={win.content} />
       {:else if win.content.kind === 'splash'}
         <SplashApp content={win.content} />
+      {:else if win.content.kind === 'rose'}
+        <RoseApp content={win.content} />
       {/if}
     </Window>
   {/each}

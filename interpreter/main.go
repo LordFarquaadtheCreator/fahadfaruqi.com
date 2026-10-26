@@ -10,6 +10,7 @@ import (
 	"interpreter/ephemeral"
 	"interpreter/finder"
 	"interpreter/menubar"
+	"interpreter/rose"
 	"interpreter/session"
 	"interpreter/shell"
 	"interpreter/terminal"
@@ -91,6 +92,8 @@ func main() {
 			w.Finder.Spawn("~")
 		case apps.TypeTerminal:
 			w.Terminal.Spawn()
+		case apps.TypeRose:
+			w.Rose.Spawn()
 		case apps.TypePlaceholder, apps.TypeEditor:
 			w.WM.Spawn(string(app.Type), app.ID, app.Name, app.Width, app.Height)
 		default:
@@ -282,10 +285,20 @@ func main() {
 			w.Finder.Spawn("~")
 		case apps.TypeTerminal:
 			w.Terminal.Spawn()
+		case apps.TypeRose:
+			w.Rose.Spawn()
 		default:
 			w.WM.Spawn(string(app.Type), app.ID, app.Name, app.Width, app.Height)
 		}
 		pushVM()
+		return nil
+	})
+
+	// Rose: a new drawing for the focused window.
+	os["roseShuffle"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		if w.Rose.Shuffle(w.WM.FocusedID()) {
+			pushVM()
+		}
 		return nil
 	})
 
@@ -300,6 +313,7 @@ func cleanupWindow(id string) {
 	w.Terminal.Cleanup(id)
 	w.Viewer.Cleanup(id)
 	w.Ephemeral.Cleanup(id)
+	w.Rose.Cleanup(id)
 }
 
 // buildContent dispatches to the right app-specific content builder.
@@ -313,6 +327,8 @@ func buildContent(win *wm.Window) json.RawMessage {
 		return viewer.BuildContentVM(win, w.Viewer)
 	case string(apps.TypeEphemeral):
 		return ephemeral.BuildContentVM(win, w.Ephemeral)
+	case string(apps.TypeRose):
+		return rose.BuildContentVM(win, w.Rose)
 	default:
 		// placeholder, editor
 		return buildSplashContent(win)

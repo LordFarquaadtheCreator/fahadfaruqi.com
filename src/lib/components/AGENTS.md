@@ -9,6 +9,7 @@ components/
 ├── desktop/     # Desktop chrome: menubar, dock, wallpaper, icons, window layer
 ├── finder/      # Finder app window content
 ├── terminal/    # Terminal app window content
+├── rose/        # Rose app: the procedural drawing, rebuilt from the VM's seed
 ├── viewer/      # Preview app: image + text/markdown viewers
 ├── window/      # Generic window chrome (titlebar, traffic lights, resize)
 └── placeholder/ # Splash screen for apps without implementation
@@ -30,6 +31,7 @@ components/
 - `'viewer-image'` → `ImageViewer.svelte`
 - `'viewer-text'` → `TextViewer.svelte`
 - `'splash'` → `SplashApp.svelte`
+- `'rose'` → `RoseApp.svelte`
 
 ## CSS
 

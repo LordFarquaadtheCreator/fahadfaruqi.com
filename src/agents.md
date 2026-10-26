@@ -20,6 +20,7 @@ Go WASM (interpreter/) → RootVM JSON → osStore → Svelte components → use
     - `desktop/` — Menubar, dock, wallpaper, icons, window layer
     - `finder/` — Finder app
     - `terminal/` — Terminal app
+    - `rose/` — Rose app (procedural drawing; the seed is the app's state, in Go)
     - `viewer/` — Preview app (image + text/markdown)
     - `window/` — Generic window chrome
     - `placeholder/` — Splash for unimplemented apps

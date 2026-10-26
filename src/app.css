@@ -1060,6 +1060,40 @@ body {
   color: var(--mac-text-secondary);
 }
 
+/* ── Rose ── */
+.rose-app {
+  flex: 1;
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: #000;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+.rose-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The drawing is built off the main thread; Chrome needs a moment, so say so. */
+.rose-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mac-text-tertiary);
+  pointer-events: none;
+}
+
 /* ── Dock ── */
 .dock {
   position: fixed;

@@ -7,6 +7,7 @@ import (
 	"interpreter/ephemeral"
 	"interpreter/finder"
 	"interpreter/fs"
+	"interpreter/rose"
 	"interpreter/viewer"
 	"interpreter/wm"
 	"strings"
@@ -102,6 +103,7 @@ func Load() World {
 		Finder:    finder.NewFinderManager(manager, filesystem),
 		Viewer:    viewer.NewViewerManager(manager, filesystem),
 		Ephemeral: ephemeral.NewEphemeralManager(manager, filesystem),
+		Rose:      rose.NewRoseManager(manager),
 	}
 	return w
 }
