@@ -56,10 +56,10 @@ func (em *EphemeralManager) SpawnForFile(filePath string) *wm.Window {
 		if node, err := em.filesystem.Stat(filePath); err == nil {
 			state.HTML = markdown.Render(node.Content)
 		}
-		winW, winH = 520, 640
+		winW, winH = 660, 700
 		if vw, vh := em.wm.Viewport(); vw > 0 && vh > 0 {
-			winW = min(int(0.40*float64(vw)), 620)
-			winH = min(int(0.74*float64(vh)), 700)
+			winW = min(int(0.58*float64(vw)), 820)
+			winH = min(int(0.82*float64(vh)), 820)
 		}
 	}
 

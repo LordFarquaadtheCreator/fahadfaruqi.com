@@ -58,9 +58,9 @@ func TestQuickLookFitsADocumentSheet(t *testing.T) {
 	if win.Width <= 0 || win.Height <= 0 {
 		t.Fatalf("opened at %dx%d", win.Width, win.Height)
 	}
-	// a page is taller than it is wide, and never wider than the sheet's 620pt cap
-	if win.Width > 620 {
-		t.Errorf("document sheet is %d wide, want at most 620", win.Width)
+	// a page is taller than it is wide, and never wider than the sheet's 820pt cap
+	if win.Width > 820 {
+		t.Errorf("document sheet is %d wide, want at most 820", win.Width)
 	}
 	if win.Height <= win.Width {
 		t.Errorf("document sheet is %dx%d, want a page", win.Width, win.Height)

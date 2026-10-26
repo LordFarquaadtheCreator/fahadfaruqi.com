@@ -14,6 +14,23 @@
 </script>
 
 <div class="window-layer">
+  <!-- Quick Look's dim belongs to this layer: rendered outside it, the backdrop painted over every
+       window — the sheet included, so its wheel events and its button never arrived. -->
+  {#if windows?.some((w) => w.ephemeral)}
+    <div
+      class="ephemeral-backdrop"
+      onclick={() => os()?.ephemeralClose?.()}
+      onkeydown={(e) => {
+        if (e.key === ' ') {
+          e.preventDefault();
+          os()?.ephemeralClose?.();
+        }
+      }}
+      role="button"
+      tabindex="-1"
+      aria-label="Close preview"
+    ></div>
+  {/if}
   {#each windows as win (win.id)}
     <Window
       window={win}

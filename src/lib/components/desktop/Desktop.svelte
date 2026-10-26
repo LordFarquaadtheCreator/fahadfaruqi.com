@@ -91,15 +91,5 @@
   <MenuBar menuBar={vm.menuBar} />
   <DesktopIcons icons={vm.desktop.icons} />
   <WindowLayer windows={vm.windows} focusedId={vm.focusedId} />
-  {#if vm?.windows?.some((w) => w.ephemeral)}
-    <div
-      class="ephemeral-backdrop"
-      onclick={() => os()?.ephemeralClose?.()}
-      onkeydown={(e) => { if (e.key === ' ') { e.preventDefault(); os()?.ephemeralClose?.(); } }}
-      role="button"
-      tabindex={-1}
-      aria-label="Close preview"
-    ></div>
-  {/if}
   <Dock dock={vm.dock} />
 {/if}

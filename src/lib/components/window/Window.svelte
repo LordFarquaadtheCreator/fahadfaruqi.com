@@ -123,7 +123,5 @@
   <div class="window-content">
     {@render children()}
   </div>
-  {#if !win.ephemeral}
-    <div class="resize-handle" role="separator" onpointerdown={onResizeStart}></div>
-  {/if}
+  <div class="resize-handle" role="separator" onpointerdown={onResizeStart}></div>
 </div>
