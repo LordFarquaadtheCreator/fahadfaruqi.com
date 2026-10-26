@@ -24,6 +24,9 @@ type TerminalEntry struct {
 type TerminalState struct {
 	Session *session.Session
 	History []TerminalEntry
+	// OpenURL is set by a script that opens a page: the window that ran it asks the browser for a
+	// tab. It is the script's effect, so it belongs to the state, not to the view.
+	OpenURL string
 }
 
 // TerminalManager owns per-window terminal state.
@@ -51,6 +54,31 @@ func (tm *TerminalManager) Spawn() *wm.Window {
 		History: make([]TerminalEntry, 0),
 	}
 	return win
+}
+
+// SpawnScript opens a terminal window that has already run an executable shell script: one entry
+// of history in the window's own voice, and the page the script asks for.
+func (tm *TerminalManager) SpawnScript(scriptPath, url string) *wm.Window {
+	win := tm.Spawn()
+	state := tm.states[win.ID]
+	state.OpenURL = url
+	state.History = append(state.History, TerminalEntry{
+		Input:  scriptPath,
+		Output: textResponse("Opened " + url),
+		CWD:    "~",
+	})
+	return win
+}
+
+// textResponse is the shell's own "open" response shape, so the transcript renders like any other
+// command's output.
+func textResponse(text string) string {
+	b, _ := json.Marshal(struct {
+		Type    string            `json:"type"`
+		Payload map[string]string `json:"payload"`
+		CWD     string            `json:"cwd"`
+	}{Type: "open", Payload: map[string]string{"text": text}, CWD: "~"})
+	return string(b)
 }
 
 func (tm *TerminalManager) RunCommand(id, input string) string {
@@ -96,6 +124,7 @@ type TerminalContentVM struct {
 	Kind    string          `json:"kind"` // "terminal"
 	CWD     string          `json:"cwd"`
 	History []TerminalEntry `json:"history"`
+	OpenURL string          `json:"openUrl,omitempty"`
 }
 
 // BuildContentVM builds terminal-specific content for a window.
@@ -108,6 +137,7 @@ func BuildContentVM(win *wm.Window, tm *TerminalManager) json.RawMessage {
 		Kind:    "terminal",
 		CWD:     s.Session.CWD,
 		History: s.History,
+		OpenURL: s.OpenURL,
 	}
 	b, _ := json.Marshal(vm)
 	return b

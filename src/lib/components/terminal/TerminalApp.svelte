@@ -17,6 +17,16 @@
 
   let input = $state('');
   let scrollRef = $state<HTMLDivElement | null>(null);
+
+  // A window that ran a script carries the page the script asked for: open it once, in the tab the
+  // visitor's own click paid for, and forget it — a later VM push must not open another.
+  let opened = false;
+  $effect(() => {
+    const url = content.openUrl;
+    if (!url || opened) return;
+    opened = true;
+    window.open(url, '_blank', 'noopener');
+  });
   let inputRef = $state<HTMLInputElement | null>(null);
   let historyIdx = $state(-1);
   let savedInput = '';

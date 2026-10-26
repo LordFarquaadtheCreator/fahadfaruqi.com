@@ -108,7 +108,9 @@ func main() {
 			return nil
 		}
 		appID := apps.AppForFile(path.Base(filePath))
-		if appID == "viewer-image" || appID == "viewer-text" {
+		if appID == "script" {
+			w.Terminal.SpawnScript(filePath, scriptTarget(filePath))
+		} else if appID == "viewer-image" || appID == "viewer-text" {
 			w.Viewer.SpawnForFile(filePath)
 		} else if appID != "" {
 			app, _ := apps.Get(appID)
@@ -288,6 +290,22 @@ func main() {
 	js.Global().Set("os", js.ValueOf(os))
 
 	select {}
+}
+
+// scriptTarget reads the page an executable script asks for: the URL on its first `open <url>`
+// line, which is the same line a real zsh script would use.
+func scriptTarget(filePath string) string {
+	node, err := w.FS.Stat(filePath)
+	if err != nil {
+		return ""
+	}
+	for _, line := range strings.Split(node.Content, "\n") {
+		fields := strings.Fields(line)
+		if len(fields) >= 2 && fields[0] == "open" && strings.HasPrefix(fields[1], "http") {
+			return fields[1]
+		}
+	}
+	return ""
 }
 
 // spawnApp opens an app by id: the one place that knows how each app type is created. It reports

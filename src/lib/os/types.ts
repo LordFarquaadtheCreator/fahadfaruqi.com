@@ -82,6 +82,8 @@ export interface TerminalContentVM {
   kind: 'terminal';
   cwd: string;
   history: TerminalEntry[];
+  /** Set by a script window: the page it asks the browser for. */
+  openUrl?: string;
 }
 
 export interface TerminalEntry {

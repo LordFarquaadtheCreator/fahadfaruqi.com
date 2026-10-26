@@ -12,6 +12,7 @@ const (
 	TypePlaceholder AppType = "placeholder"
 	TypeEditor      AppType = "editor"
 	TypeRose        AppType = "rose"
+	TypeScript      AppType = "script"
 )
 
 type App struct {
@@ -43,6 +44,7 @@ var Registry = map[string]App{
 	"imsg":         {ID: "imsg", Name: "Messages", Icon: assets.URL("/icons/imsg.png"), Type: TypePlaceholder, Width: 800, Height: 500},
 	"browseros":    {ID: "browseros", Name: "BrowserOS", Icon: assets.URL("/icons/browseros.png"), Type: TypePlaceholder, Width: 1000, Height: 650},
 	"rose":         {ID: "rose", Name: "Rose", Icon: assets.URL("/icons/rose.png"), Type: TypeRose, Width: 560, Height: 700},
+	"script":       {ID: "script", Name: "zsh", Icon: assets.URL("/icons/iterm.png"), Type: TypeScript, Width: 640, Height: 400},
 }
 
 // DockOrder defines which apps appear in the dock and in what order.

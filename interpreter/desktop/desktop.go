@@ -6,6 +6,7 @@ import (
 	"interpreter/assets"
 	"interpreter/fs"
 	"path"
+	"strings"
 )
 
 // DesktopVM is the desktop icons view model.
@@ -35,6 +36,8 @@ func BuildVM(filesystem fs.FileSystem, dark bool) DesktopVM {
 		iconPath := assets.URL("/icons/file.png")
 		if child.Type.IsDir() {
 			iconPath = assets.URL("/icons/folder.png")
+		} else if strings.HasSuffix(strings.ToLower(paths[i]), ".sh") {
+			iconPath = assets.URL("/icons/iterm.png") // an executable: it opens a terminal
 		} else if child.Meta.MimeType != "" {
 			if isImageType(child.Meta.MimeType) {
 				iconPath = assets.URL("/icons/file.png")

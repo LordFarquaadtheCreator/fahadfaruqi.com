@@ -14,6 +14,7 @@ var Extensions = map[string]string{
 	".webp": "viewer-image",
 	".md":   "viewer-text",
 	".txt":  "viewer-text",
+	".sh":   "script",
 }
 
 // AppForFile resolves which app should open a given filename based on its extension.
