@@ -113,7 +113,8 @@
       <div class="terminal-welcome">
         Welcome to iTerm — type <span class="terminal-cmd">help</span> for commands.
         <br />
-        Read-only filesystem. Try <span class="terminal-cmd">ls</span>, <span class="terminal-cmd">cat readme.md</span>, or <span class="terminal-cmd">open resume/</span>.
+        Read-only filesystem. Try <span class="terminal-cmd">ls Desktop</span>, <span class="terminal-cmd">cat Desktop/About/about.md</span>, or
+        <span class="terminal-cmd">open Desktop/Contact</span>.
       </div>
     {/if}
 

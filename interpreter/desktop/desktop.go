@@ -24,10 +24,10 @@ type DesktopIconVM struct {
 }
 
 // BuildVM builds the desktop view model from the filesystem.
-// Shows top-level non-hidden items in home directory as desktop icons.
+// The desktop shows what the visitor's own desktop would: the contents of ~/Desktop, not home.
 // dark selects the wallpaper variant.
 func BuildVM(filesystem fs.FileSystem, dark bool) DesktopVM {
-	children, paths, _ := filesystem.Children("~", false)
+	children, paths, _ := filesystem.Children("~/Desktop", false)
 	var icons []DesktopIconVM
 
 	col := 0
