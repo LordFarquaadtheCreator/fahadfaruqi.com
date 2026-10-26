@@ -5,6 +5,8 @@ import (
 	"interpreter/apps"
 	"interpreter/session"
 	"interpreter/wm"
+	"path"
+	"strings"
 )
 
 // CommandRunner runs shell commands. Implemented by world.World to avoid import cycles.
@@ -56,29 +58,24 @@ func (tm *TerminalManager) Spawn() *wm.Window {
 	return win
 }
 
-// SpawnScript opens a terminal window that has already run an executable shell script: one entry
-// of history in the window's own voice, and the page the script asks for.
-func (tm *TerminalManager) SpawnScript(scriptPath, url string) *wm.Window {
+// SpawnScript opens a terminal window standing in the script's own folder, and runs it there the
+// way the visitor would: ./gallery.sh. The window's transcript and the page it asks for are then
+// the shell's own doing, not a story told on its behalf.
+func (tm *TerminalManager) SpawnScript(scriptPath string) *wm.Window {
 	win := tm.Spawn()
-	state := tm.states[win.ID]
-	state.OpenURL = url
-	state.History = append(state.History, TerminalEntry{
-		Input:  scriptPath,
-		Output: textResponse("Opened " + url),
-		CWD:    "~",
-	})
+	dir, base := path.Split(scriptPath)
+	if dir != "" {
+		tm.states[win.ID].Session.SetCWD(strings.TrimSuffix(dir, "/"))
+	}
+	tm.RunCommand(win.ID, "./"+base)
 	return win
 }
 
-// textResponse is the shell's own "open" response shape, so the transcript renders like any other
-// command's output.
-func textResponse(text string) string {
-	b, _ := json.Marshal(struct {
-		Type    string            `json:"type"`
-		Payload map[string]string `json:"payload"`
-		CWD     string            `json:"cwd"`
-	}{Type: "open", Payload: map[string]string{"text": text}, CWD: "~"})
-	return string(b)
+// OpenPage records the page a script asked the browser for, on the window that ran it.
+func (tm *TerminalManager) OpenPage(id, url string) {
+	if s, ok := tm.states[id]; ok {
+		s.OpenURL = url
+	}
 }
 
 func (tm *TerminalManager) RunCommand(id, input string) string {
@@ -87,6 +84,7 @@ func (tm *TerminalManager) RunCommand(id, input string) string {
 		return `{"type":"error","payload":{"command":"","message":"terminal not found"}}`
 	}
 	cwd := s.Session.CWD
+	s.Session.WindowID = id
 	output := tm.runner.RunCommand(input, s.Session)
 
 	// Check if command was clear — wipe history instead of recording

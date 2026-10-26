@@ -6,13 +6,28 @@ import (
 	"interpreter/session"
 	"interpreter/world"
 	"path"
+	"strings"
 )
+
+func isURL(target string) bool {
+	return strings.HasPrefix(target, "http://") || strings.HasPrefix(target, "https://")
+}
 
 func Open(args []string, w world.World, s *session.Session) response.Response {
 	if len(args) == 0 {
 		return response.Error("open", "usage: open <path>", s.CWD)
 	}
 	target := args[0]
+	if isURL(target) {
+		if w.Terminal != nil && s.WindowID != "" {
+			w.Terminal.OpenPage(s.WindowID, target)
+		}
+		return response.Response{
+			Type:    response.Open,
+			Payload: response.TextPayload{Text: "Opened " + target},
+			CWD:     s.CWD,
+		}
+	}
 	absPath, err := w.FS.Resolve(s.CWD, target, w.Env)
 	if err != nil {
 		return response.Error("open", err.Error(), s.CWD)

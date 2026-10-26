@@ -4,6 +4,9 @@ type Session struct {
 	CWD     string
 	Vars    map[string]string
 	History []string
+	// WindowID is the terminal this session runs in, so a command can act on its window — the open
+	// command asks the browser for a tab through it.
+	WindowID string
 }
 
 func New(env map[string]string) *Session {

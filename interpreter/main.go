@@ -295,27 +295,13 @@ func openPath(filePath string) string {
 	}
 	switch appID := apps.AppForFile(path.Base(filePath)); appID {
 	case "script":
-		w.Terminal.SpawnScript(filePath, scriptTarget(filePath))
+		w.Terminal.SpawnScript(filePath)
 	case "viewer-image", "viewer-text":
 		w.Viewer.SpawnForFile(filePath)
 	case "":
 	default:
 		app, _ := apps.Get(appID)
 		w.WM.Spawn(string(app.Type), app.ID, path.Base(filePath), app.Width, app.Height)
-	}
-	return ""
-}
-
-func scriptTarget(filePath string) string {
-	node, err := w.FS.Stat(filePath)
-	if err != nil {
-		return ""
-	}
-	for _, line := range strings.Split(node.Content, "\n") {
-		fields := strings.Fields(line)
-		if len(fields) >= 2 && fields[0] == "open" && strings.HasPrefix(fields[1], "http") {
-			return fields[1]
-		}
 	}
 	return ""
 }
