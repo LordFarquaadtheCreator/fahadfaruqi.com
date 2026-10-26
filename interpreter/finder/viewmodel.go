@@ -6,6 +6,7 @@ import (
 	"interpreter/fs"
 	"interpreter/wm"
 	"path"
+	"strings"
 )
 
 // FinderContentVM is the app-specific content for a Finder window.
@@ -21,7 +22,7 @@ type FinderContentVM struct {
 }
 
 type SidebarSectionVM struct {
-	Title string           `json:"title"` // "", "Favorites", "Locations"
+	Title string          `json:"title"` // "", "Favorites", "Locations"
 	Items []SidebarItemVM `json:"items"`
 }
 
@@ -68,7 +69,7 @@ func BuildContentVM(win *wm.Window, fm *FinderManager, filesystem fs.FileSystem)
 		SelectedEntry: s.SelectedEntry,
 		CanBack:       s.CanBack(),
 		CanForward:    s.CanForward(),
-		Sidebar:       buildSidebar(s.Path),
+		Sidebar:       buildSidebar(s.Path, filesystem),
 		Breadcrumb:    buildBreadcrumb(s.Path),
 	}
 
@@ -84,6 +85,10 @@ func BuildContentVM(win *wm.Window, fm *FinderManager, filesystem fs.FileSystem)
 			if child.Type.IsDir() {
 				kind = "dir"
 				icon = assets.URL("/icons/folder.png")
+			} else if strings.HasSuffix(strings.ToLower(paths[i]), ".sh") {
+				// an executable opens a terminal, so it wears the terminal's icon here too
+				kind = "script"
+				icon = assets.URL("/icons/iterm.png")
 			} else if child.Meta.ThumbPath != "" {
 				icon = child.Meta.ThumbPath
 			} else if child.Meta.ImagePath != "" {
@@ -109,32 +114,24 @@ func BuildContentVM(win *wm.Window, fm *FinderManager, filesystem fs.FileSystem)
 	return b
 }
 
-func buildSidebar(currentPath string) []SidebarSectionVM {
+// The sidebar offers only places that exist. It used to list Recents, Shared, iCloud and Network,
+// none of which is in this filesystem, so every one of them led to an empty window.
+func buildSidebar(currentPath string, filesystem fs.FileSystem) []SidebarSectionVM {
+	folder := assets.URL("/icons/folder.png")
+	item := func(name, p string) SidebarItemVM {
+		return SidebarItemVM{Name: name, Path: p, Icon: folder, Active: currentPath == p}
+	}
+
+	var favorites []SidebarItemVM
+	for _, name := range []string{"Applications", "Desktop", "Documents", "Downloads", "Movies", "Music", "Pictures", "Public"} {
+		if filesystem.Exists("~/" + name) {
+			favorites = append(favorites, item(name, "~/"+name))
+		}
+	}
+
 	return []SidebarSectionVM{
-		{
-			Title: "",
-			Items: []SidebarItemVM{
-				{Name: "Recents", Path: "~/Recents", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Recents"},
-				{Name: "Shared", Path: "~/Shared", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Shared"},
-			},
-		},
-		{
-			Title: "Favorites",
-			Items: []SidebarItemVM{
-				{Name: "Applications", Path: "~/Applications", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Applications"},
-				{Name: "Desktop", Path: "~/Desktop", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Desktop"},
-				{Name: "Documents", Path: "~/Documents", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Documents"},
-				{Name: "Downloads", Path: "~/Downloads", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Downloads"},
-			},
-		},
-		{
-			Title: "Locations",
-			Items: []SidebarItemVM{
-				{Name: "iCloud Drive", Path: "~/iCloud", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/iCloud"},
-				{Name: "farquaad", Path: "~", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~"},
-				{Name: "Network", Path: "~/Network", Icon: assets.URL("/icons/folder.png"), Active: currentPath == "~/Network"},
-			},
-		},
+		{Title: "Favorites", Items: favorites},
+		{Title: "Locations", Items: []SidebarItemVM{item("farquaad", "~")}},
 	}
 }
 
@@ -198,7 +195,7 @@ func splitCleanPath(p string) []string {
 		}
 	}
 	if start < len(p) {
-			parts = append(parts, p[start:])
+		parts = append(parts, p[start:])
 	}
 	return parts
 }

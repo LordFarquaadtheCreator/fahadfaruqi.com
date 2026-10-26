@@ -31,11 +31,11 @@ var (
 
 // RootVM is the full desktop view model pushed to JS on every state change.
 type RootVM struct {
-	Windows   []wm.WindowVM    `json:"windows"`
-	FocusedID string           `json:"focusedId"`
-	ViewportW int              `json:"viewportW"`
-	ViewportH int              `json:"viewportH"`
-	Dock      dock.DockVM      `json:"dock"`
+	Windows   []wm.WindowVM     `json:"windows"`
+	FocusedID string            `json:"focusedId"`
+	ViewportW int               `json:"viewportW"`
+	ViewportH int               `json:"viewportH"`
+	Dock      dock.DockVM       `json:"dock"`
 	MenuBar   menubar.MenuBarVM `json:"menuBar"`
 	Desktop   desktop.DesktopVM `json:"desktop"`
 }
@@ -91,30 +91,8 @@ func main() {
 	})
 
 	os["openFile"] = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		filePath := args[0].String()
-		// a desktop icon can name an app instead of a file
-		if strings.HasPrefix(filePath, apps.AppPathPrefix) {
-			if !spawnApp(strings.TrimPrefix(filePath, apps.AppPathPrefix)) {
-				return "unknown app: " + filePath
-			}
-			return nil
-		}
-		if !w.FS.Exists(filePath) {
-			return "path does not exist: " + filePath
-		}
-		if w.FS.IsDir(filePath) {
-			w.Finder.Spawn(filePath)
-			pushVM()
-			return nil
-		}
-		appID := apps.AppForFile(path.Base(filePath))
-		if appID == "script" {
-			w.Terminal.SpawnScript(filePath, scriptTarget(filePath))
-		} else if appID == "viewer-image" || appID == "viewer-text" {
-			w.Viewer.SpawnForFile(filePath)
-		} else if appID != "" {
-			app, _ := apps.Get(appID)
-			w.WM.Spawn(string(app.Type), app.ID, path.Base(filePath), app.Width, app.Height)
+		if msg := openPath(args[0].String()); msg != "" {
+			return msg
 		}
 		pushVM()
 		return nil
@@ -210,13 +188,9 @@ func main() {
 			pushVM()
 			return nil
 		}
-		// File — open in viewer
-		appID := apps.AppForFile(path.Base(entryPath))
-		if appID == "viewer-image" || appID == "viewer-text" {
-			w.Viewer.SpawnForFile(entryPath)
-		} else if appID != "" {
-			app, _ := apps.Get(appID)
-			w.WM.Spawn(string(app.Type), app.ID, path.Base(entryPath), app.Width, app.Height)
+		// a file opens the way it opens from the desktop: a script runs, an image opens its viewer
+		if msg := openPath(entryPath); msg != "" {
+			return msg
 		}
 		pushVM()
 		return nil
@@ -300,6 +274,38 @@ func main() {
 
 // scriptTarget reads the page an executable script asks for: the URL on its first `open <url>`
 // line, which is the same line a real zsh script would use.
+// openPath is the one place that decides what opening something means: a folder gets a Finder
+// window, an executable runs in a terminal, an image or a page gets its viewer, anything else its
+// app. The desktop and the Finder both come through here, so a file behaves the same wherever the
+// visitor clicks it. It returns a message when the path cannot be opened.
+func openPath(filePath string) string {
+	// a desktop icon can name an app instead of a file
+	if strings.HasPrefix(filePath, apps.AppPathPrefix) {
+		if !spawnApp(strings.TrimPrefix(filePath, apps.AppPathPrefix)) {
+			return "unknown app: " + filePath
+		}
+		return ""
+	}
+	if !w.FS.Exists(filePath) {
+		return "path does not exist: " + filePath
+	}
+	if w.FS.IsDir(filePath) {
+		w.Finder.Spawn(filePath)
+		return ""
+	}
+	switch appID := apps.AppForFile(path.Base(filePath)); appID {
+	case "script":
+		w.Terminal.SpawnScript(filePath, scriptTarget(filePath))
+	case "viewer-image", "viewer-text":
+		w.Viewer.SpawnForFile(filePath)
+	case "":
+	default:
+		app, _ := apps.Get(appID)
+		w.WM.Spawn(string(app.Type), app.ID, path.Base(filePath), app.Width, app.Height)
+	}
+	return ""
+}
+
 func scriptTarget(filePath string) string {
 	node, err := w.FS.Stat(filePath)
 	if err != nil {

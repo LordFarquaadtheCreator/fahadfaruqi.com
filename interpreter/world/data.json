@@ -2,7 +2,14 @@
   "~": {
     "type": "dir",
     "children": [
-      "~/Desktop"
+      "~/Desktop",
+      "~/Applications",
+      "~/Documents",
+      "~/Downloads",
+      "~/Movies",
+      "~/Music",
+      "~/Pictures",
+      "~/Public"
     ],
     "hidden": false
   },
@@ -198,6 +205,41 @@
   "~/Desktop/gallery.sh": {
     "type": "file",
     "content": "#!/bin/zsh\n# the photographs live in the browser\nopen https://art.fahadfaruqi.com\n",
+    "hidden": false
+  },
+  "~/Applications": {
+    "type": "dir",
+    "children": [],
+    "hidden": false
+  },
+  "~/Documents": {
+    "type": "dir",
+    "children": [],
+    "hidden": false
+  },
+  "~/Downloads": {
+    "type": "dir",
+    "children": [],
+    "hidden": false
+  },
+  "~/Movies": {
+    "type": "dir",
+    "children": [],
+    "hidden": false
+  },
+  "~/Music": {
+    "type": "dir",
+    "children": [],
+    "hidden": false
+  },
+  "~/Pictures": {
+    "type": "dir",
+    "children": [],
+    "hidden": false
+  },
+  "~/Public": {
+    "type": "dir",
+    "children": [],
     "hidden": false
   }
 }
