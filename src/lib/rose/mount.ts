@@ -1,4 +1,4 @@
-import { ROSE_H, ROSE_SCALE, ROSE_W, type Rose } from './build';
+import { PETALS, ROSE_H, ROSE_SCALE, ROSE_W, hash, type Rose, vnoise } from './build';
 import RoseWorker from './rose.worker?worker&inline';
 
 const DPR_CAP = 2;
@@ -14,14 +14,57 @@ const SG = Math.sin(GM);
 const BX = 470;
 const BY = 700;
 
+// The light stands still in the room, upper left and in front, exactly as the sketch lit it. The
+// flower turns through it.
+let LX = -0.38,
+	LY = 0.3,
+	LZ = 0.87;
+const LL = Math.sqrt(LX * LX + LY * LY + LZ * LZ);
+LX /= LL;
+LY /= LL;
+LZ /= LL;
+
+function clamp(x: number) {
+	return Math.min(1, Math.max(0, x));
+}
+
+// A 256-entry table for x^1.2, because this runs twelve thousand times a frame and Math.pow does
+// not — the bucket it feeds is an integer, so interpolating would be wasted precision.
+const POW12 = new Float32Array(257);
+for (let i = 0; i <= 256; i++) POW12[i] = Math.pow(i / 256, 1.2);
+
+/** The sketch's light formula, evaluated on a camera-space normal. */
+function lightOf(nx: number, ny: number, nz: number, lit: number, noise: number) {
+	const lam = POW12[(clamp((nx * LX + ny * LY + nz * LZ + 0.45) / 1.45) * 256) | 0] * noise;
+	const fill = Math.max(0, nx * 0.5 + ny * 0.2 + nz * 0.84);
+	const k = 1 - Math.max(0, nz);
+	const rim = k * k * k * 0.2;
+	return clamp(0.08 + 0.46 * lam * (0.4 + 0.6 * lit) + 0.1 * fill + rim);
+}
+
+/** A mark's normal turned into camera space for a given yaw and tilt: the lean does not change
+ *  how much light the normal takes, because the lamp's z axis and the lean's axis coincide. */
+function cameraNormal(nx: number, ny: number, nz: number, cy: number, sy: number, cA: number, sA: number, out: number[]) {
+	const x1 = nx * cy + nz * sy;
+	const z1 = -nx * sy + nz * cy;
+	const y2 = ny * cA - z1 * sA;
+	const z2 = z1 * cA + ny * sA;
+	const cx = x1 * CG + y2 * SG;
+	const cyy = -x1 * SG + y2 * CG;
+	out[0] = cx;
+	out[1] = cyy;
+	out[2] = z2;
+}
+
 const YAW_PER_PX = 0.008;
 const PITCH_PER_PX = 0.006;
 const PITCH_MIN = -0.55;
 const PITCH_MAX = 1.2;
 
-// Occlusion is decided on a coarse grid in screen pixels: enough to keep the far side of the bloom
-// behind the near one.
-const OCCLUSION_CELL = 5;
+// Occlusion is decided on a fine grid in screen pixels, then grown by one cell: marks are sparse on
+// screen, so without that growth the back of the flower shows through the gaps between the front
+// ones. Two CSS pixels, because a coarser cell cannot separate a petal from the one behind it.
+const OCCLUSION_CELL = 2;
 const DEPTH_EPSILON = 0.02;
 
 /**
@@ -39,7 +82,11 @@ export function mountRose(
 	const ctx = got;
 
 	let disposed = false;
+	let raf = 0;
 	let rose: Rose | null = null;
+	// read here, not at module scope: the module is also evaluated during the prerender, where
+	// there is no matchMedia
+	const quiet = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	// the view
 	let yaw = 0;
@@ -56,11 +103,14 @@ export function mountRose(
 	let gridW = 1;
 	let gridH = 1;
 	let depthGrid = new Float32Array(1);
+	let depthGrown = new Float32Array(1);
 	let unit = 6;
 
 	let pxBuf = new Float32Array(1);
 	let pyBuf = new Float32Array(1);
 	let depthBuf = new Float32Array(1);
+	let bucketBuf = new Uint8Array(1);
+	let restLight = new Float32Array(1);
 
 	// The drawing no longer animates: it is redrawn when the view changes, not sixty times a second.
 
@@ -82,7 +132,10 @@ export function mountRose(
 		cellPx = Math.max(2, OCCLUSION_CELL * dpr);
 		gridW = Math.ceil(w / cellPx) + 1;
 		gridH = Math.ceil(h / cellPx) + 1;
-		if (depthGrid.length !== gridW * gridH) depthGrid = new Float32Array(gridW * gridH);
+		if (depthGrid.length !== gridW * gridH) {
+			depthGrid = new Float32Array(gridW * gridH);
+			depthGrown = new Float32Array(gridW * gridH);
+		}
 		unit = k; // mark lengths are built in art pixels
 		return true;
 	}
@@ -92,11 +145,41 @@ export function mountRose(
 		pxBuf = new Float32Array(count);
 		pyBuf = new Float32Array(count);
 		depthBuf = new Float32Array(count);
+		bucketBuf = new Uint8Array(count);
+		// what the lamp gave each mark at rest: the drawing's own shading, in camera space at last
+		restLight = new Float32Array(count);
+		const sA0 = Math.sin(AL),
+			cA0 = Math.cos(AL);
+		const n: number[] = [0, 0, 0];
+		for (let i = 0; i < count; i++) {
+			const m = rose!.marks[i];
+			cameraNormal(m.nx, m.ny, m.nz, 1, 0, cA0, sA0, n);
+			restLight[i] = Math.max(0.02, lightOf(n[0], n[1], n[2], m.lit, m.noise));
+		}
 	}
 
-	function draw() {
+	function draw(now: number) {
 		const data = rose;
 		if (!data || !layout()) return;
+
+		const t = now / 1000;
+		// the sketch's opening cycle: one shared nine-second period, outer petals leading, each
+		// petal swinging out from the base and coming back — in 3D, about the axis across its radius
+		const AMAX = 0.11;
+		const cosK = new Float32Array(PETALS);
+		const sinK = new Float32Array(PETALS);
+		for (let k = 0; k < PETALS; k++) {
+			const r = hash(k, 23),
+				T = 9,
+				ph = ((((t - 2.4 * (1 - k / (PETALS - 1)) - 0.1 * r) % T) + T) % T) / T,
+				wv = 0.5 - 0.5 * Math.cos(2 * Math.PI * ph),
+				e = wv * wv * (3 - 2 * wv);
+			const breathe =
+				e * (0.75 + 0.5 * vnoise(k * 0.03 + 5, t * 0.25)) * (1 + 0.12 * Math.sin(t * 1.1 + k * 0.15));
+			const ang = breathe * AMAX;
+			cosK[k] = Math.cos(ang);
+			sinK[k] = Math.sin(ang);
+		}
 
 		const cy = Math.cos(yaw),
 			sy = Math.sin(yaw);
@@ -109,21 +192,65 @@ export function mountRose(
 		const n = marks.length;
 		depthGrid.fill(-1e9);
 
-		// pass 1: turn, project, and keep the nearest depth per occlusion cell
+		// pass 1: swing, turn, project, light; keep the nearest depth per occlusion cell
 		for (let i = 0; i < n; i++) {
 			const m = marks[i];
-			// spin about the flower's own axis
-			const x1 = m.x * cy + m.z * sy;
-			const z1 = -m.x * sy + m.z * cy;
-			// the sketch's tilt, then its lean
-			const y2 = m.y * cA - z1 * sA;
-			const z2 = z1 * cA + m.y * sA;
+			// the petal's swing, about a horizontal axis across its radius
+			let px = m.x,
+				py = m.y,
+				pz = m.z;
+			let nx = m.nx,
+				ny = m.ny,
+				nz = m.nz;
+			if (m.spread > 0.001) {
+				// the angle is per petal, so recover it from the mark's own axis: every petal shares
+				// one axis, and the spread scales that petal's angle
+				const pk = m.petal;
+				const c = 1 + (cosK[pk] - 1) * m.spread;
+				const s = sinK[pk] * m.spread;
+				// Rodrigues about (ax, ay, az)
+				const d = m.ax * px + m.ay * py + m.az * pz;
+				const cxp = m.ay * pz - m.az * py,
+					cyp = m.az * px - m.ax * pz,
+					czp = m.ax * py - m.ay * px;
+				px = px * c + cxp * s + m.ax * d * (1 - c);
+				py = py * c + cyp * s + m.ay * d * (1 - c);
+				pz = pz * c + czp * s + m.az * d * (1 - c);
+				const dn = m.ax * nx + m.ay * ny + m.az * nz;
+				const cxn = m.ay * nz - m.az * ny,
+					cyn = m.az * nx - m.ax * nz,
+					czn = m.ax * ny - m.ay * nx;
+				nx = nx * c + cxn * s + m.ax * dn * (1 - c);
+				ny = ny * c + cyn * s + m.ay * dn * (1 - c);
+				nz = nz * c + czn * s + m.az * dn * (1 - c);
+			}
+			// spin about the flower's own axis, then the sketch's camera
+			const x1 = px * cy + pz * sy;
+			const z1 = -px * sy + pz * cy;
+			const n1x = nx * cy + nz * sy;
+			const n1z = -nx * sy + nz * cy;
+
+			const y2 = py * cA - z1 * sA;
+			const z2 = z1 * cA + py * sA;
+			const nx2 = n1x;
+			const ny2 = ny * cA - n1z * sA;
+			const nz2 = n1z * cA + ny * sA;
+
 			const cx3 = x1 * CG + y2 * SG;
 			const cy3 = -x1 * SG + y2 * CG;
+			const ncx = nx2 * CG + ny2 * SG;
+			const ncy = -nx2 * SG + ny2 * CG;
 
 			pxBuf[i] = ox + (BX + cx3 * ROSE_SCALE) * k;
 			pyBuf[i] = oy + (BY - cy3 * ROSE_SCALE) * k;
 			depthBuf[i] = z2;
+
+			// The lamp stands still in the room; the flower turns through it, so each mark's ink is
+			// scaled by the light it catches now against the light it caught at rest. At rest the
+			// ratio is one and the drawing is exactly the drawing; turned, the marks that face the
+			// lamp carry the ink and the ones that leave it fade out.
+			const ratio = lightOf(ncx, ncy, nz2, m.lit, m.noise) / restLight[i];
+			bucketBuf[i] = Math.max(0, Math.min(16, Math.round(m.b * Math.pow(ratio, 1.5))));
 
 			const gx = (pxBuf[i] / cellPx) | 0,
 				gy = (pyBuf[i] / cellPx) | 0;
@@ -132,6 +259,27 @@ export function mountRose(
 				if (depthGrid[gi] < z2) depthGrid[gi] = z2;
 			}
 		}
+
+		// the nearest depth within one cell of each cell: marks sit in the gaps between other marks,
+		// so a one-cell lookup would let the far side of the bloom through
+		// separable: the three-wide maximum along the row, then down the column
+		for (let gy = 0; gy < gridH; gy++) {
+			const row = gy * gridW;
+			for (let gx = 0; gx < gridW; gx++) {
+				let best = depthGrid[row + gx];
+				if (gx > 0 && depthGrid[row + gx - 1] > best) best = depthGrid[row + gx - 1];
+				if (gx < gridW - 1 && depthGrid[row + gx + 1] > best) best = depthGrid[row + gx + 1];
+				depthGrown[row + gx] = best;
+			}
+		}
+		for (let gx = 0; gx < gridW; gx++)
+			for (let gy = 0; gy < gridH; gy++) {
+				const i = gy * gridW + gx;
+				let best = depthGrown[i];
+				if (gy > 0 && depthGrown[i - gridW] > best) best = depthGrown[i - gridW];
+				if (gy < gridH - 1 && depthGrown[i + gridW] > best) best = depthGrown[i + gridW];
+				depthGrid[i] = best;
+			}
 
 		// pass 2: the marks this view can see, drawn as the drawing draws them
 		const paths: Path2D[] = [];
@@ -146,7 +294,9 @@ export function mountRose(
 			const x = pxBuf[i],
 				y = pyBuf[i];
 			const len = m.n * ROSE_SCALE * unit;
-			const path = paths[m.b];
+			const bkt = bucketBuf[i];
+			if (bkt < 1) continue;
+			const path = paths[bkt];
 			if (m.t === 0 || m.t === 3) {
 				path.moveTo(x - len, y);
 				path.lineTo(x + len, y);
@@ -197,7 +347,13 @@ export function mountRose(
 		pitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, pitch + (event.clientY - lastY) * PITCH_PER_PX));
 		lastX = event.clientX;
 		lastY = event.clientY;
-		draw();
+		if (quiet) draw(performance.now());
+	}
+
+	function tick(now: number) {
+		if (disposed) return;
+		draw(now);
+		raf = requestAnimationFrame(tick);
 	}
 
 	function onPointerUp(event: PointerEvent) {
@@ -206,7 +362,9 @@ export function mountRose(
 		canvas.classList.remove('rose-canvas--dragging');
 	}
 
-	const observer = new ResizeObserver(() => draw());
+	const observer = new ResizeObserver(() => {
+		if (!rose || quiet) draw(performance.now());
+	});
 	observer.observe(canvas);
 
 	canvas.addEventListener('pointerdown', onPointerDown);
@@ -220,13 +378,15 @@ export function mountRose(
 		rose = event.data;
 		ensureScratch(rose.count);
 		worker.terminate();
-		draw();
+		if (quiet) draw(0);
+		else raf = requestAnimationFrame(tick);
 		onDrawn();
 	};
 	worker.postMessage({ seed });
 
 	return () => {
 		disposed = true;
+		cancelAnimationFrame(raf);
 		canvas.removeEventListener('pointerdown', onPointerDown);
 		canvas.removeEventListener('pointermove', onPointerMove);
 		canvas.removeEventListener('pointerup', onPointerUp);
