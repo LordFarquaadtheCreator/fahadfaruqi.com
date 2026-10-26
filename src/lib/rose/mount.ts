@@ -28,32 +28,17 @@ function clamp(x: number) {
 	return Math.min(1, Math.max(0, x));
 }
 
-// A 256-entry table for x^1.2, because this runs twelve thousand times a frame and Math.pow does
-// not — the bucket it feeds is an integer, so interpolating would be wasted precision.
-const POW12 = new Float32Array(257);
-for (let i = 0; i <= 256; i++) POW12[i] = Math.pow(i / 256, 1.2);
+/** Where the lamp stands in the window, in fractions of its width and height, and how far its reach
+ *  falls off. Fixed to the viewport: turning the flower never moves it. */
+const LAMP_X = 0.34;
+const LAMP_Y = 0.26;
+const LAMP_FALLOFF = 0.75;
 
-/** The sketch's light formula, evaluated on a camera-space normal. */
-function lightOf(nx: number, ny: number, nz: number, lit: number, noise: number) {
-	const lam = POW12[(clamp((nx * LX + ny * LY + nz * LZ + 0.45) / 1.45) * 256) | 0] * noise;
-	const fill = Math.max(0, nx * 0.5 + ny * 0.2 + nz * 0.84);
-	const k = 1 - Math.max(0, nz);
-	const rim = k * k * k * 0.2;
-	return clamp(0.08 + 0.46 * lam * (0.4 + 0.6 * lit) + 0.1 * fill + rim);
-}
-
-/** A mark's normal turned into camera space for a given yaw and tilt: the lean does not change
- *  how much light the normal takes, because the lamp's z axis and the lean's axis coincide. */
-function cameraNormal(nx: number, ny: number, nz: number, cy: number, sy: number, cA: number, sA: number, out: number[]) {
-	const x1 = nx * cy + nz * sy;
-	const z1 = -nx * sy + nz * cy;
-	const y2 = ny * cA - z1 * sA;
-	const z2 = z1 * cA + ny * sA;
-	const cx = x1 * CG + y2 * SG;
-	const cyy = -x1 * SG + y2 * CG;
-	out[0] = cx;
-	out[1] = cyy;
-	out[2] = z2;
+/** The light a mark catches, from where it lands on the canvas alone. */
+function lampAt(u: number, v: number) {
+	const dx = (u - LAMP_X) * 1.15;
+	const dy = (v - LAMP_Y) * 0.85;
+	return clamp(1 - LAMP_FALLOFF * Math.sqrt(dx * dx + dy * dy));
 }
 
 const YAW_PER_PX = 0.008;
@@ -110,9 +95,7 @@ export function mountRose(
 	let pyBuf = new Float32Array(1);
 	let depthBuf = new Float32Array(1);
 	let bucketBuf = new Uint8Array(1);
-	let restLight = new Float32Array(1);
 
-	// The drawing no longer animates: it is redrawn when the view changes, not sixty times a second.
 
 	function layout(): boolean {
 		const cssW = canvas.clientWidth;
@@ -146,21 +129,13 @@ export function mountRose(
 		pyBuf = new Float32Array(count);
 		depthBuf = new Float32Array(count);
 		bucketBuf = new Uint8Array(count);
-		// what the lamp gave each mark at rest: the drawing's own shading, in camera space at last
-		restLight = new Float32Array(count);
-		const sA0 = Math.sin(AL),
-			cA0 = Math.cos(AL);
-		const n: number[] = [0, 0, 0];
-		for (let i = 0; i < count; i++) {
-			const m = rose!.marks[i];
-			cameraNormal(m.nx, m.ny, m.nz, 1, 0, cA0, sA0, n);
-			restLight[i] = Math.max(0.02, lightOf(n[0], n[1], n[2], m.lit, m.noise));
-		}
 	}
 
 	function draw(now: number) {
 		const data = rose;
 		if (!data || !layout()) return;
+		const cw = canvas.width,
+			ch = canvas.height;
 
 		const t = now / 1000;
 		// the sketch's opening cycle: one shared nine-second period, outer petals leading, each
@@ -199,9 +174,6 @@ export function mountRose(
 			let px = m.x,
 				py = m.y,
 				pz = m.z;
-			let nx = m.nx,
-				ny = m.ny,
-				nz = m.nz;
 			if (m.spread > 0.001) {
 				// the angle is per petal, so recover it from the mark's own axis: every petal shares
 				// one axis, and the spread scales that petal's angle
@@ -216,41 +188,26 @@ export function mountRose(
 				px = px * c + cxp * s + m.ax * d * (1 - c);
 				py = py * c + cyp * s + m.ay * d * (1 - c);
 				pz = pz * c + czp * s + m.az * d * (1 - c);
-				const dn = m.ax * nx + m.ay * ny + m.az * nz;
-				const cxn = m.ay * nz - m.az * ny,
-					cyn = m.az * nx - m.ax * nz,
-					czn = m.ax * ny - m.ay * nx;
-				nx = nx * c + cxn * s + m.ax * dn * (1 - c);
-				ny = ny * c + cyn * s + m.ay * dn * (1 - c);
-				nz = nz * c + czn * s + m.az * dn * (1 - c);
 			}
 			// spin about the flower's own axis, then the sketch's camera
 			const x1 = px * cy + pz * sy;
 			const z1 = -px * sy + pz * cy;
-			const n1x = nx * cy + nz * sy;
-			const n1z = -nx * sy + nz * cy;
 
 			const y2 = py * cA - z1 * sA;
 			const z2 = z1 * cA + py * sA;
-			const nx2 = n1x;
-			const ny2 = ny * cA - n1z * sA;
-			const nz2 = n1z * cA + ny * sA;
 
 			const cx3 = x1 * CG + y2 * SG;
 			const cy3 = -x1 * SG + y2 * CG;
-			const ncx = nx2 * CG + ny2 * SG;
-			const ncy = -nx2 * SG + ny2 * CG;
 
 			pxBuf[i] = ox + (BX + cx3 * ROSE_SCALE) * k;
 			pyBuf[i] = oy + (BY - cy3 * ROSE_SCALE) * k;
 			depthBuf[i] = z2;
 
-			// The lamp stands still in the room; the flower turns through it, so each mark's ink is
-			// scaled by the light it catches now against the light it caught at rest. At rest the
-			// ratio is one and the drawing is exactly the drawing; turned, the marks that face the
-			// lamp carry the ink and the ones that leave it fade out.
-			const ratio = lightOf(ncx, ncy, nz2, m.lit, m.noise) / restLight[i];
-			bucketBuf[i] = Math.max(0, Math.min(16, Math.round(m.b * Math.pow(ratio, 1.5))));
+			// The lamp is fixed to the window, not to the flower: how bright a mark is depends on
+			// where it lands on the canvas and on nothing else, so turning the bloom slides its
+			// petals through a still light and the bright side never travels with it.
+			const lamp = lampAt(pxBuf[i] / cw, pyBuf[i] / ch);
+			bucketBuf[i] = Math.max(0, Math.min(16, Math.round(m.b * lamp)));
 
 			const gx = (pxBuf[i] / cellPx) | 0,
 				gy = (pyBuf[i] / cellPx) | 0;

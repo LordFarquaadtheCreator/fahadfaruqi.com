@@ -42,19 +42,10 @@ export interface RoseMark {
 	x: number;
 	y: number;
 	z: number;
-	/** Flower-local surface normal: the renderer relights with it as the flower turns. */
-	nx: number;
-	ny: number;
-	nz: number;
 	/** Half the stroke's length, in camera units. */
 	n: number;
 	/** Alpha bucket, 1..16 (16 is the bold register). */
 	b: number;
-	/** How much of the mark the lamp could reach, from the shadow map: a property of the light, not
-	 *  of the view, so it holds as the flower turns. */
-	lit: number;
-	/** The sketch's texture noise at this cell. */
-	noise: number;
 	/** The petal it belongs to, the axis that petal swings about, and how far out it sits. */
 	petal: number;
 	ax: number;
@@ -430,17 +421,11 @@ export function buildRose(seed: number): Rose {
 			// the petal swings about a horizontal axis across its own radius: that is the motion
 			// the sketch's hinge produced, and it opens the bloom outward the same way in 3D
 			const phi = petals[k].phi;
-			toCamera(SAMPLE, SAMPLE_CAM);
 			MK.push({
 				t,
-				lit: litFrac(SAMPLE_CAM),
-				noise: 0.9 + 0.2 * vnoise(artX * 0.05, artY * 0.05),
 				x: SAMPLE.x,
 				y: SAMPLE.y,
 				z: SAMPLE.z,
-				nx: SAMPLE_N.x,
-				ny: SAMPLE_N.y,
-				nz: SAMPLE_N.z,
 				n: n / ROSE_SCALE,
 				b,
 				petal: k,
@@ -479,11 +464,11 @@ export function buildRose(seed: number): Rose {
 						if (Math.abs(px - sxn) < CELL / 2 + 0.01) {
 							const b = Math.round(clamp(0.7 + 0.3 * Math.sin(py * 0.07)) * 15);
 							if (b >= 1)
-								MK.push({ t: 0, lit: 1, noise: 1, x: lx, y: ly, z: 0, nx: 0, ny: 0, nz: 1, n: 2.6 / ROSE_SCALE, b, petal: 0, ax: 0, ay: 1, az: 0, spread: 0 });
+								MK.push({ t: 0, x: lx, y: ly, z: 0, n: 2.6 / ROSE_SCALE, b, petal: 0, ax: 0, ay: 1, az: 0, spread: 0 });
 						} else if (px < sxn && px > sxn - CELL * 1.6 && row % 3 === 0) {
 							const b = Math.round(0.35 * 15);
 							if (b >= 1)
-								MK.push({ t: 1, lit: 1, noise: 1, x: lx, y: ly, z: 0, nx: 0, ny: 0, nz: 1, n: (CELL * 1.2) / 2 / ROSE_SCALE, b, petal: 0, ax: 0, ay: 1, az: 0, spread: 0 });
+								MK.push({ t: 1, x: lx, y: ly, z: 0, n: (CELL * 1.2) / 2 / ROSE_SCALE, b, petal: 0, ax: 0, ay: 1, az: 0, spread: 0 });
 						}
 					}
 					continue;
